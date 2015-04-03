@@ -25,9 +25,27 @@ vars.eta_turb = [0.90 0.90];
 vars.eta_nozz = [0.95 0.95];
 vars.P_04_over_03 = [0.95 0.95];
 
-% Part 2
+%Other useful stuff
 vars.k = 1.4;
 vars.c_p = 1005; % J / kg * K
+
+%Pre fan and compressor calculations
+vars.Po_0=vars.P_0_static.*(1+((vars.k-1)/2)*vars.Ma.^2).^(vars.k/(vars.k-1));
+vars.P0_2=vars.P_02_over_00.*vars.Po_0;
+vars.To_0=vars.T_0_static.*(1+((vars.k-1)/2).*vars.Ma.^2);
+vars.To_2=vars.To_0;
+vars.To_13_s=vars.To_2.*(vars.P_ratio_fan).^((vars.k-1)/vars.k);
+vars.To_13=vars.To_2+(vars.To_13_s-vars.To_2)./vars.eta_fan;
+vars.Po_3=vars.P0_2.*vars.P_ratio_overall;
+
+
+
+
+
+
+
+
+
 
 
 
