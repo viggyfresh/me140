@@ -39,7 +39,22 @@ vars.T_013=vars.T_02+(vars.T_013s-vars.T_02)./vars.eta_fan;
 vars.P_013=vars.P_02.*vars.P_ratio_fan;
 
 %Compressor
-vars = compressor(vars) %this only works with a function on Richie's computer
+vars = compressor(vars);
+
+%Combustor
+vars.P_04 = vars.P_04_over_03.*vars.P_03;
+
+%mdots
+vars.m_dot_bp = vars.m_dot.*10./11;
+vars.m_dot_core = vars.m_dot./11;
+
+%Turbine
+vars = turbine(vars);
+
+%Nozzle
+vars.T_07 = vars.T_05;
+vars.P_07 = vars.P_05
+
 
 
 
