@@ -30,14 +30,16 @@ vars.k = 1.4;
 vars.c_p = 1005; % J / kg * K
 
 %Pre fan and compressor calculations
-vars.Po_0=vars.P_0_static.*(1+((vars.k-1)/2)*vars.Ma.^2).^(vars.k/(vars.k-1));
-vars.P0_2=vars.P_02_over_00.*vars.Po_0;
-vars.To_0=vars.T_0_static.*(1+((vars.k-1)/2).*vars.Ma.^2);
-vars.To_2=vars.To_0;
-vars.To_13_s=vars.To_2.*(vars.P_ratio_fan).^((vars.k-1)/vars.k);
-vars.To_13=vars.To_2+(vars.To_13_s-vars.To_2)./vars.eta_fan;
-vars.Po_3=vars.P0_2.*vars.P_ratio_overall;
+vars.P_00=vars.P_0_static.*(1+((vars.k-1)/2)*vars.Ma.^2).^(vars.k/(vars.k-1));
+vars.P_02=vars.P_02_over_00.*vars.P_00;
+vars.T_00=vars.T_0_static.*(1+((vars.k-1)/2).*vars.Ma.^2);
+vars.T_02=vars.T_00;
+vars.T_013s=vars.T_02.*(vars.P_ratio_fan).^((vars.k-1)/vars.k);
+vars.T_013=vars.T_02+(vars.T_013s-vars.T_02)./vars.eta_fan;
+vars.P_013=vars.P_02.*vars.P_ratio_fan;
 
+%Compressor
+vars = compressor(vars) %this only works with a function on Richie's computer
 
 
 
