@@ -28,6 +28,7 @@ vars.P_04_over_03 = [0.95 0.95];
 %Other useful stuff
 vars.k = 1.4;
 vars.c_p = 1005; % J / kg * K
+vars.R = 287;
 
 %Pre fan and compressor calculations
 vars.P_00=vars.P_0_static.*(1+((vars.k-1)/2)*vars.Ma.^2).^(vars.k/(vars.k-1));
@@ -53,10 +54,22 @@ vars = turbine(vars);
 
 %Nozzle
 vars.T_07 = vars.T_05;
-vars.P_07 = vars.P_05
+vars.P_07 = vars.P_05;
+vars.P_8 = vars.P_0_static;
 
+vars.Ma_8s = sqrt((2./(vars.k-1)).*((vars.P_07./vars.P_8).^((vars.k-1)./vars.k)-1));
+vars.T_8s = vars.T_07./(1+(vars.k-1)./2.*vars.Ma_8s.^2);
+vars.T_8 = vars.T_07-vars.eta_nozz.*(vars.T_07-vars.T_8s);
+vars.U_8 = sqrt(2.*vars.c_p.*(vars.T_07-vars.T_8))
 
+%Don't know if thus us right, but the speed matches that of Robbie's group
+%right now
 
+% %intial velocity
+% vars.U_0 = vars.Ma.*sqrt(vars.k.*vars.R.*vars.T_0_static);
+% vars.F_thrust = vars.m_dot_core.*(vars.U_8-vars.U_0) % what about bypass
+% part?
+% 
 
 
 
