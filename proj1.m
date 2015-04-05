@@ -62,13 +62,13 @@ vars.T_8s = vars.T_07./(1+(vars.k-1)./2.*vars.Ma_8s.^2);
 vars.T_8 = vars.T_07-vars.eta_nozz.*(vars.T_07-vars.T_8s);
 vars.U_8 = sqrt(2.*vars.c_p.*(vars.T_07-vars.T_8))
 
-%Don't know if thus us right, but the speed matches that of Robbie's group
+%Don't know if this is right, but the speed matches that of Robbie's group
 %right now
 
 % %intial velocity
 % vars.U_0 = vars.Ma.*sqrt(vars.k.*vars.R.*vars.T_0_static);
-% vars.F_thrust = vars.m_dot_core.*(vars.U_8-vars.U_0) % what about bypass
-% part?
+%need to dund U_18
+% vars.F_thrust = vars.m_dot_core.*(vars.U_8)+vars.m_dot_bp.*vars.U_18-vars.m_dot.*vars.U_0
 % 
 
 
