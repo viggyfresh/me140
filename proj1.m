@@ -29,6 +29,7 @@ vars.P_04_over_03 = [0.95 0.95];
 vars.k = 1.4;
 vars.c_p = 1005; % J / kg * K
 vars.R = 287;
+vars.lhv=42.8 * 10^6; %J/kg
 
 %Pre fan and compressor calculations
 vars.P_00=vars.P_0_static.*(1+((vars.k-1)/2)*vars.Ma.^2).^(vars.k/(vars.k-1));
@@ -44,6 +45,7 @@ vars = compressor(vars);
 
 %Combustor
 vars.P_04 = vars.P_04_over_03.*vars.P_03;
+vars.q_dot = vars.c_p*(vars.T_04-vars.T_03);
 
 %mdots
 vars.m_dot_bp = vars.m_dot.*10./11;
@@ -72,10 +74,13 @@ vars.U_18 = sqrt(2.*vars.c_p.*(vars.T_013-vars.T_18));
 %intial velocity
 vars.U_0 = vars.Ma.*sqrt(vars.k.*vars.R.*vars.T_0_static);
 
-%Thrust
- vars.F_thrust = vars.m_dot_core.*vars.U_8+vars.m_dot_bp.*vars.U_18-vars.m_dot.*vars.U_0
+%Thrust and specific thrust
+vars.F_thrust = vars.m_dot_core.*vars.U_8+vars.m_dot_bp.*vars.U_18-vars.m_dot.*vars.U_0;
+vars.spec_thrust=vars.F_thrust./vars.m_dot;
 
-
+%Thrust-specific fuel consumption
+vars.m_dot_fuel=vars.q_dot./vars.lhv;
+vars.tsfc=vars.m_dot./vars.F_thrust
 
 
 
