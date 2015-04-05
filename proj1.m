@@ -52,24 +52,29 @@ vars.m_dot_core = vars.m_dot./11;
 %Turbine
 vars = turbine(vars);
 
-%Nozzle
+%Core Nozzle
 vars.T_07 = vars.T_05;
 vars.P_07 = vars.P_05;
 vars.P_8 = vars.P_0_static;
-
 vars.Ma_8s = sqrt((2./(vars.k-1)).*((vars.P_07./vars.P_8).^((vars.k-1)./vars.k)-1));
 vars.T_8s = vars.T_07./(1+(vars.k-1)./2.*vars.Ma_8s.^2);
 vars.T_8 = vars.T_07-vars.eta_nozz.*(vars.T_07-vars.T_8s);
-vars.U_8 = sqrt(2.*vars.c_p.*(vars.T_07-vars.T_8))
+vars.U_8 = sqrt(2.*vars.c_p.*(vars.T_07-vars.T_8));
 
-%Don't know if this is right, but the speed matches that of Robbie's group
-%right now
+%BP Nozzle
 
-% %intial velocity
-% vars.U_0 = vars.Ma.*sqrt(vars.k.*vars.R.*vars.T_0_static);
-%need to dund U_18
-% vars.F_thrust = vars.m_dot_core.*(vars.U_8)+vars.m_dot_bp.*vars.U_18-vars.m_dot.*vars.U_0
-% 
+vars.P_18 = vars.P_0_static;
+vars.Ma_18s = sqrt((2./(vars.k-1)).*((vars.P_013./vars.P_18).^((vars.k-1)./vars.k)-1));
+vars.T_18s = vars.T_013./(1+(vars.k-1)./2.*vars.Ma_18s.^2);
+vars.T_18 = vars.T_013-vars.eta_nozz.*(vars.T_013-vars.T_18s);
+vars.U_18 = sqrt(2.*vars.c_p.*(vars.T_013-vars.T_18));
+
+%intial velocity
+vars.U_0 = vars.Ma.*sqrt(vars.k.*vars.R.*vars.T_0_static);
+
+%Thrust
+ vars.F_thrust = vars.m_dot_core.*vars.U_8+vars.m_dot_bp.*vars.U_18-vars.m_dot.*vars.U_0
+
 
 
 
