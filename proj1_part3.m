@@ -32,8 +32,8 @@ vars.lhv= 42.8 * 10^6; %J/kg
 
 %Pre fan and compressor calculations
 for i=1:2
-    [pressRatio_0_static(i),tempRatio_0_static(i),~]=th_var(vars.Ma(i),...
-        vars.T_0_static(i),0);
+    [pressRatio_0_static(i),tempRatio_0_static(i),~]=the_var(vars.Ma(i),...
+        vars.T_0_static(i));
 end
 vars.P_00=vars.P_0_static.*pressRatio_0_static;
 vars.P_02=vars.P_02_over_00.*vars.P_00;
