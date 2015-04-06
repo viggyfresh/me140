@@ -45,7 +45,7 @@ vars.T_013=var_cp_comp(vars.T_02,vars.T_013s,vars.eta_fan);
 vars.P_013=vars.P_02.*vars.P_ratio_fan;
 
 %Compressor
-vars = compressor_var(vars);
+vars = compressor_var(vars)
 
 %Combustor
 vars.P_04 = vars.P_04_over_03.*vars.P_03;

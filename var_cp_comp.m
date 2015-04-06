@@ -1,19 +1,23 @@
-function [T] = var_cp(T1,T2s,eta_compfan)
+function [T] = var_cp_comp(T1,T2s,eta_compfan)
 
-R = 286.9;
-cp_2_calc = 0;
-cp_2_guess = 500;
-cp_avg_s = 1/2 .* ( sp_heats(T1) + sp_heats(T2s) );
+dT=.01;
+T=T1;
+numerator=0;
 
-count = 0;
-while abs(cp_2_calc-cp_2_guess)>0.01
-    cp_2_guess = cp_2_calc;
-    cp_avg = 1/2 .* ( sp_heats(T1) + cp_2_guess );
-    T2_calc = T1 + (cp_avg_s.*(T2s-T1))./(cp_avg.*eta_compfan);
-    cp_2_calc = sp_heats(T2_calc);
-    count = count+1;
+while T<T2s
+    T=T+dT;
+    increment = sp_heats(T) .* dT;
+    numerator = numerator + increment;
 end
-cp = cp_2_calc;
-T = T2_calc;
+
+target=numerator./eta_compfan;
+T=T1;
+left=0;
+
+while left<target
+    T=T+dT;
+    increment=sp_heats(T).*dT;
+    left=left+increment;
+end
 end
 
