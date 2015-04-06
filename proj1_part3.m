@@ -26,17 +26,21 @@ vars.eta_nozz = [0.95 0.95];
 vars.P_04_over_03 = [0.95 0.95];
 
 %Other useful stuff
-vars.k = 1.4;
 vars.c_p = 1005; % J / kg * K
 vars.R = 287;
 vars.lhv= 42.8 * 10^6; %J/kg
 
 %Pre fan and compressor calculations
-vars.P_00=vars.P_0_static.*(1+((vars.k-1)/2)*vars.Ma.^2).^(vars.k/(vars.k-1));
+for i=1:2
+    [pressRatio_0_static(i),tempRatio_0_static(i),~]=th_var(vars.Ma(i),...
+        vars.T_0_static(i),0);
+end
+vars.P_00=vars.P_0_static.*pressRatio_0_static;
 vars.P_02=vars.P_02_over_00.*vars.P_00;
-vars.T_00=vars.T_0_static.*(1+((vars.k-1)/2).*vars.Ma.^2);
+vars.T_00=vars.T_0_static.*tempRatio_0_static;
 vars.T_02=vars.T_00;
-vars.T_013s=vars.T_02.*(vars.P_ratio_fan).^((vars.k-1)/vars.k);
+
+vars.T_013s=var_cp(vars.T_02,vars.P_ratio_fan);
 vars.T_013=vars.T_02+(vars.T_013s-vars.T_02)./vars.eta_fan;
 vars.P_013=vars.P_02.*vars.P_ratio_fan;
 
