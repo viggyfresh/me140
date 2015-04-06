@@ -41,11 +41,11 @@ vars.T_00=vars.T_0_static.*tempRatio_0_static;
 vars.T_02=vars.T_00;
 
 vars.T_013s=var_cp(vars.T_02,vars.P_ratio_fan);
-vars.T_013=vars.T_02+(vars.T_013s-vars.T_02)./vars.eta_fan;
+vars.T_013=var_cp_comp(vars.T_02,vars.T_013s,vars.eta_fan);
 vars.P_013=vars.P_02.*vars.P_ratio_fan;
 
 %Compressor
-vars = compressor(vars);
+vars = compressor_var(vars);
 
 %Combustor
 vars.P_04 = vars.P_04_over_03.*vars.P_03;
