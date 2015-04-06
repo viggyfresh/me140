@@ -64,7 +64,6 @@ vars.T_8 = vars.T_07-vars.eta_nozz.*(vars.T_07-vars.T_8s);
 vars.U_8 = sqrt(2.*vars.c_p.*(vars.T_07-vars.T_8));
 
 %BP Nozzle
-
 vars.P_18 = vars.P_0_static;
 vars.Ma_18s = sqrt((2./(vars.k-1)).*((vars.P_013./vars.P_18).^((vars.k-1)./vars.k)-1));
 vars.T_18s = vars.T_013./(1+(vars.k-1)./2.*vars.Ma_18s.^2);
@@ -80,15 +79,6 @@ vars.spec_thrust=vars.F_thrust./vars.m_dot;
 
 %Thrust-specific fuel consumption
 vars.m_dot_fuel=vars.q_dot./vars.lhv;
-vars.tsfc=vars.m_dot./vars.F_thrust
-
-
-
-
-
-
-
-
-
+vars.tsfc=vars.m_dot_fuel./vars.F_thrust
 
 
