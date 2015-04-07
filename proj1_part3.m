@@ -140,6 +140,7 @@ text(vars.entropy_states(:,1), vars.temp_states(:,1), labels, 'VerticalAlignment
 xlabel('Entropy (J/K)');
 ylabel('Temperature (K)');
 title ('T-S Graph for Cruise Core Flow');
+set(gcf, 'color', 'white');
 
 %Plot for cruise BP
 figure;
@@ -150,6 +151,7 @@ text(vars.entropy_bp(:,1), vars.temp_bp(:,1), labels, 'VerticalAlignment','botto
 xlabel('Entropy (J/K)');
 ylabel('Temperature (K)');
 title ('T-S Graph for Cruise Bypass Flow');
+set(gcf, 'color', 'white');
 
 %Plot for SLS core
 figure;
@@ -160,6 +162,7 @@ text(vars.entropy_states(:,2), vars.temp_states(:,2), labels, 'VerticalAlignment
 xlabel('Entropy (J/K)');
 ylabel('Temperature (K)');
 title ('T-S Graph for SLS Core Flow');
+set(gcf, 'color', 'white');
 
 %Plot for SLS BP
 figure;
@@ -170,6 +173,7 @@ text(vars.entropy_bp(:,2), vars.temp_bp(:,2), labels, 'VerticalAlignment','botto
 xlabel('Entropy (J/K)');
 ylabel('Temperature (K)');
 title ('T-S Graph for SLS Bypass Flow');
+set(gcf, 'color', 'white');
 
 
 %four plots:
