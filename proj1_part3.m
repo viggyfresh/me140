@@ -71,7 +71,7 @@ vars.m_dot_core = vars.m_dot./11;
 vars = turbine_var(vars);
 
 %Calculate entropy change from 4 to 5
-vars.deltaS_4to5=deltaS_var_cp(vars.T_04,vars.T_05,vars.P_04,vars.P_05)
+vars.deltaS_4to5=deltaS_var_cp(vars.T_04,vars.T_05,vars.P_04,vars.P_05);
 
 %Core Nozzle
 vars.T_07 = vars.T_05;
@@ -110,19 +110,67 @@ vars.tsfc=vars.m_dot_fuel./vars.F_thrust;
 entropy_state0=[0 0];
 entropy_state2=entropy_state0+vars.deltaS_0to2;
 entropy_state13=entropy_state2+vars.deltaS_2to13;
-entropy_state18=entropy_state13+vars.deltaS_13to18;
 entropy_state3=entropy_state13+vars.deltaS_13to3;
 entropy_state4=entropy_state3+vars.deltaS_3to4;
 entropy_state5=entropy_state4+vars.deltaS_4to5;
 entropy_state8=entropy_state5+vars.deltaS_5to8;
 
-vars.entropy_states=[entropy_state0 entropy_state2 entropy_state13 ...
-    entropy_state18 entropy_state3 entropy_state4 entropy_state5 entropy_state8];
 
-vars.temp_states=[vars.T_0_static vars.T_02 vars.T_013 vars.T_18 vars.T_03...
-    vars.T_04 vars.T_05 vars.T_8];
+% Keep bypass separate
+entropy_state18=entropy_state13+vars.deltaS_13to18;
+
+%Vectors
+vars.entropy_states=[entropy_state0; entropy_state2; entropy_state13; ...
+    entropy_state3; entropy_state4; entropy_state5; entropy_state8];
+
+vars.temp_states=[vars.T_0_static; vars.T_02; vars.T_013; vars.T_03;...
+    vars.T_04; vars.T_05; vars.T_8];
+
+vars.entropy_bp = [entropy_state0; entropy_state2; entropy_state13; entropy_state18];
+vars.temp_bp = [vars.T_0_static; vars.T_02; vars.T_013; vars.T_18];
 
 vars
+
+%Plot for cruise core
+figure;
+labels = cellstr(num2str([0 2 13 3 4 5 8]'));
+plot(vars.entropy_states(:,1), vars.temp_states(:,1),'LineStyle', '--','marker','.','Markersize',20,'color', 'k');
+text(vars.entropy_states(:,1), vars.temp_states(:,1), labels, 'VerticalAlignment','bottom', ...
+                             'HorizontalAlignment','right');
+xlabel('Entropy (J/K)');
+ylabel('Temperature (K)');
+title ('T-S Graph for Cruise Core Flow');
+
+%Plot for cruise BP
+figure;
+labels = cellstr(num2str([0 2 13 18]'));
+plot(vars.entropy_bp(:,1), vars.temp_bp(:,1),'LineStyle', '--','marker','.','Markersize',20,'color', 'k');
+text(vars.entropy_bp(:,1), vars.temp_bp(:,1), labels, 'VerticalAlignment','bottom', ...
+                             'HorizontalAlignment','right');
+xlabel('Entropy (J/K)');
+ylabel('Temperature (K)');
+title ('T-S Graph for Cruise Bypass Flow');
+
+%Plot for SLS core
+figure;
+labels = cellstr(num2str([0 2 13 3 4 5 8]'));
+plot(vars.entropy_states(:,2), vars.temp_states(:,2), 'LineStyle', '--', 'marker','.','Markersize',20,'color', 'r');
+text(vars.entropy_states(:,2), vars.temp_states(:,2), labels, 'VerticalAlignment','bottom', ...
+                             'HorizontalAlignment','right');
+xlabel('Entropy (J/K)');
+ylabel('Temperature (K)');
+title ('T-S Graph for SLS Core Flow');
+
+%Plot for SLS BP
+figure;
+labels = cellstr(num2str([0 2 13 18]'));
+plot(vars.entropy_bp(:,2), vars.temp_bp(:,2), 'LineStyle', '--', 'marker','.','Markersize',20,'color', 'r');
+text(vars.entropy_bp(:,2), vars.temp_bp(:,2), labels, 'VerticalAlignment','bottom', ...
+                             'HorizontalAlignment','right');
+xlabel('Entropy (J/K)');
+ylabel('Temperature (K)');
+title ('T-S Graph for SLS Bypass Flow');
+
 
 %four plots:
     %core flow for Cruise and SLS
