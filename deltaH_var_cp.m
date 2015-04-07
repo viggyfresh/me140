@@ -1,4 +1,4 @@
-function [ deltaH ] = var_deltaH_cp( T1,T2 )
+function [ deltaH ] = deltaH_var_cp( T1,T2 )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 

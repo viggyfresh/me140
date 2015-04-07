@@ -49,14 +49,14 @@ vars = compressor_var(vars);
 
 %Combustor
 vars.P_04 = vars.P_04_over_03.*vars.P_03;
-vars.q_dot = var_cp_combust(vars.T_03,vars.T_04)
+vars.q_dot = deltaH_var_cp(vars.T_03, vars.T_04)
 
 %mdots
 vars.m_dot_bp = vars.m_dot.*10./11;
 vars.m_dot_core = vars.m_dot./11;
 
 %Turbine
-vars = turbine(vars);
+vars = turbine_var(vars);
 
 %Core Nozzle
 vars.T_07 = vars.T_05;
