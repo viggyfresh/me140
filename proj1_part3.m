@@ -65,7 +65,6 @@ vars.P_8 = vars.P_0_static;
 vars.T_8s = var_cp_neg(vars.T_07, vars.P_8./vars.P_07);
 vars.T_8 = var_cp_nozz(vars.T_07, vars.T_8s, vars.eta_nozz);
 vars.U_8 = sqrt(2.*deltaH_var_cp(vars.T_8, vars.T_07));
-%%%%%%Caroline confirmed U_8 was in the right range
 
 %BP Nozzle
 vars.P_18 = vars.P_0_static;
@@ -86,5 +85,20 @@ vars.m_dot_fuel=vars.q_dot./vars.lhv;
 vars.tsfc=vars.m_dot_fuel./vars.F_thrust;
 
 vars
+
+
+
+
+%%%%%%%%%%%%%%Plotting (for part 4)%%%%%%%%%%%%%%%%%%%%
+
+%four plots:
+    %core flow for Cruise and SLS
+    %bypass flow for Cruise and SLS
+
+    
+% see deltaS.m function
+
+
+
 
 
