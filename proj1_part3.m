@@ -40,16 +40,16 @@ vars.P_02=vars.P_02_over_00.*vars.P_00;
 vars.T_00=vars.T_0_static.*tempRatio_0_static;
 vars.T_02=vars.T_00;
 
-vars.T_013s=var_cp(vars.T_02,vars.P_ratio_fan);
+[vars.T_013s]=var_cp(vars.T_02,vars.P_ratio_fan);
 vars.T_013=var_cp_comp(vars.T_02,vars.T_013s,vars.eta_fan);
 vars.P_013=vars.P_02.*vars.P_ratio_fan;
 
 %Compressor
-vars = compressor_var(vars)
+vars = compressor_var(vars);
 
 %Combustor
 vars.P_04 = vars.P_04_over_03.*vars.P_03;
-vars.q_dot = vars.c_p*(vars.T_04-vars.T_03);
+vars.q_dot = var_cp_combust(vars.T_03,vars.T_04)
 
 %mdots
 vars.m_dot_bp = vars.m_dot.*10./11;
