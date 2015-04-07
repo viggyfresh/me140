@@ -2,22 +2,24 @@ function [T] = var_cp_comp(T1,T2s,eta_compfan)
 
 dT=.01;
 T=T1;
-numerator=0;
+numerator=[0 0];
 
-while T<T2s
-    T=T+dT;
-    increment = sp_heats(T) .* dT;
-    numerator = numerator + increment;
-end
+for i=1:2
+    while T(i)<T2s(i)
+        T(i)=T(i)+dT;
+        increment = sp_heats(T(i)) .* dT;
+        numerator(i) = numerator(i) + increment;
+    end
 
-target=numerator./eta_compfan;
-T=T1;
-left=0;
+    target(i)=numerator(i)./eta_compfan(i);
+    T(i)=T1(i);
+    left=0;
 
-while left<target
-    T=T+dT;
-    increment=sp_heats(T).*dT;
-    left=left+increment;
+    while left<target(i)
+        T(i)=T(i)+dT;
+        increment=sp_heats(T(i)).*dT;
+        left=left+increment;
+    end
 end
 end
 

@@ -49,14 +49,14 @@ vars = compressor_var(vars);
 
 %Combustor
 vars.P_04 = vars.P_04_over_03.*vars.P_03;
-vars.q_dot = deltaH_var_cp(vars.T_03, vars.T_04)
+vars.q_dot = deltaH_var_cp(vars.T_03, vars.T_04);
 
 %mdots
 vars.m_dot_bp = vars.m_dot.*10./11;
 vars.m_dot_core = vars.m_dot./11;
 
 %Turbine
-vars = turbine_var(vars);
+vars = turbine_var(vars)
 
 %Core Nozzle
 vars.T_07 = vars.T_05;
@@ -83,6 +83,6 @@ vars.spec_thrust=vars.F_thrust./vars.m_dot;
 
 %Thrust-specific fuel consumption
 vars.m_dot_fuel=vars.q_dot./vars.lhv;
-vars.tsfc=vars.m_dot_fuel./vars.F_thrust
+vars.tsfc=vars.m_dot_fuel./vars.F_thrust;
 
 

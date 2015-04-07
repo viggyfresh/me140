@@ -16,4 +16,3 @@ vars.T_05s = (vars.c_p.*vars.T_04-(vars.c_p.*vars.T_04-vars.c_p.*vars.T_05)./var
 vars.P_05 = vars.P_04.*(vars.T_05s./vars.T_04).^(vars.k./(vars.k-1));
 
 end
-

@@ -8,12 +8,14 @@ target=R*log(P2_over_P1);
 
 T2=T1;
 dT=0.01;
-cp_int=0;
-while (cp_int < target)
-    T2 = T2 + dT;
-    dcp_int = sp_heats(T2).*(dT./T2);
-    cp_int = cp_int + dcp_int;
-end 
+cp_int=[0 0];
+for i=1:2
+    while (cp_int(i) < target(i))
+        T2(i) = T2(i) + dT;
+        dcp_int = sp_heats(T2(i)).*(dT./T2(i));
+        cp_int(i) = cp_int(i) + dcp_int;
+    end 
+end
 
 % while abs(cp_2_calc-cp_2_guess)>0.01
 %     cp_2_guess = cp_2_calc;
