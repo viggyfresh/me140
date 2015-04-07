@@ -14,7 +14,7 @@ vars.T_05 = T_given_deltaH(vars.T_04, deltah);
 
 vars.T_05s = var_cp_turb(vars.T_04, vars.T_05, vars.eta_turb);
 
-vars.P_05 = P_given_T_var_cp(vars.T_04, vars.T_05, vars.P_04);
+vars.P_05 = P_given_T_var_cp(vars.T_04, vars.T_05s, vars.P_04);
 
 
 end

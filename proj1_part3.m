@@ -64,16 +64,17 @@ vars.P_07 = vars.P_05;
 vars.P_8 = vars.P_0_static;
 vars.T_8s = var_cp_neg(vars.T_07, vars.P_8./vars.P_07);
 vars.T_8 = var_cp_nozz(vars.T_07, vars.T_8s, vars.eta_nozz);
-vars.U_8 = sqrt(2.*deltaH_var_cp(vars.T_8, vars.T_07))
+vars.U_8 = sqrt(2.*deltaH_var_cp(vars.T_8, vars.T_07));
+%%%%%%Caroline confirmed U_8 was in the right range
 
 %BP Nozzle
 vars.P_18 = vars.P_0_static;
-vars.Ma_18s = sqrt((2./(vars.k-1)).*((vars.P_013./vars.P_18).^((vars.k-1)./vars.k)-1));
-vars.T_18s = vars.T_013./(1+(vars.k-1)./2.*vars.Ma_18s.^2);
-vars.T_18 = vars.T_013-vars.eta_nozz.*(vars.T_013-vars.T_18s);
-vars.U_18 = sqrt(2.*vars.c_p.*(vars.T_013-vars.T_18));
+vars.T_18s = var_cp_neg(vars.T_013, vars.P_18./vars.P_013);
+vars.T_18 = var_cp_nozz(vars.T_013, vars.T_18s, vars.eta_nozz);
+vars.U_18 = sqrt(2.*deltaH_var_cp(vars.T_18, vars.T_013));
 
 %intial velocity
+[~,~,vars.k,~] = sp_heats(vars.T_0_static);
 vars.U_0 = vars.Ma.*sqrt(vars.k.*vars.R.*vars.T_0_static);
 
 %Thrust and specific thrust
@@ -83,5 +84,7 @@ vars.spec_thrust=vars.F_thrust./vars.m_dot;
 %Thrust-specific fuel consumption
 vars.m_dot_fuel=vars.q_dot./vars.lhv;
 vars.tsfc=vars.m_dot_fuel./vars.F_thrust;
+
+vars
 
 
