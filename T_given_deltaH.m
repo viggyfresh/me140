@@ -11,7 +11,7 @@ for i = 1:2
         T(i)=T(i)-dT;
         increment=sp_heats(T(i)).*dT;
         left(i)=left(i)-increment;
-        print = left(i) - target(i)
+        print = left(i) - target(i);
     end
 end
 
