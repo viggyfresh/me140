@@ -1,17 +1,17 @@
-function [T] = var_cp_turb(T1,T2,eta_turb)
+function [T] = var_cp_nozz(T1,T2s,eta_nozz)
 
 dT=.01;
-T=T2; %because T2<T1
-numerator=[0 0];
+T=T2s; %because T2<T1
+denominator=[0 0];
 
 for i=1:2
     while T(i)<T1(i)
         T(i)=T(i)+dT;
         increment = sp_heats(T(i)) .* dT;
-        numerator(i) = numerator(i) + increment;
+        denominator(i) = denominator(i) + increment;
     end
 
-    target(i)=-numerator(i)./eta_turb(i);
+    target(i)=-denominator(i).*eta_nozz(i);
     T(i)=T1(i);
     left=0;
 

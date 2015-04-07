@@ -56,16 +56,15 @@ vars.m_dot_bp = vars.m_dot.*10./11;
 vars.m_dot_core = vars.m_dot./11;
 
 %Turbine
-vars = turbine_var(vars)
+vars = turbine_var(vars);
 
 %Core Nozzle
 vars.T_07 = vars.T_05;
 vars.P_07 = vars.P_05;
 vars.P_8 = vars.P_0_static;
-vars.Ma_8s = sqrt((2./(vars.k-1)).*((vars.P_07./vars.P_8).^((vars.k-1)./vars.k)-1));
-vars.T_8s = vars.T_07./(1+(vars.k-1)./2.*vars.Ma_8s.^2);
-vars.T_8 = vars.T_07-vars.eta_nozz.*(vars.T_07-vars.T_8s);
-vars.U_8 = sqrt(2.*vars.c_p.*(vars.T_07-vars.T_8));
+vars.T_8s = var_cp_neg(vars.T_07, vars.P_8./vars.P_07);
+vars.T_8 = var_cp_nozz(vars.T_07, vars.T_8s, vars.eta_nozz);
+vars.U_8 = sqrt(2.*deltaH_var_cp(vars.T_8, vars.T_07))
 
 %BP Nozzle
 vars.P_18 = vars.P_0_static;
