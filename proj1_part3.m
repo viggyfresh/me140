@@ -44,12 +44,24 @@ vars.T_02=vars.T_00;
 vars.T_013=var_cp_comp(vars.T_02,vars.T_013s,vars.eta_fan);
 vars.P_013=vars.P_02.*vars.P_ratio_fan;
 
+%Calculate entropy change from 0 to 2
+vars.deltaS_0to2=deltaS_var_cp(vars.T_00,vars.T_02,vars.P_00,vars.P_02);
+
+%Calculate entropy change from 2 to 13
+vars.deltaS_2to13=deltaS_var_cp(vars.T_02,vars.T_013,vars.P_02,vars.P_013);
+
 %Compressor
 vars = compressor_var(vars);
+
+%Calculate entropy change from 13 to 3
+vars.deltaS_13to3=deltaS_var_cp(vars.T_013,vars.T_03,vars.P_013,vars.P_03);
 
 %Combustor
 vars.P_04 = vars.P_04_over_03.*vars.P_03;
 vars.q_dot = deltaH_var_cp(vars.T_03, vars.T_04);
+
+%Calculate entropy change from 3 to 4
+vars.deltaS_3to4=deltaS_var_cp(vars.T_03,vars.T_04,vars.P_03,vars.P_04);
 
 %mdots
 vars.m_dot_bp = vars.m_dot.*10./11;
@@ -57,6 +69,9 @@ vars.m_dot_core = vars.m_dot./11;
 
 %Turbine
 vars = turbine_var(vars);
+
+%Calculate entropy change from 4 to 5
+vars.deltaS_4to5=deltaS_var_cp(vars.T_04,vars.T_05,vars.P_04,vars.P_05)
 
 %Core Nozzle
 vars.T_07 = vars.T_05;
@@ -72,6 +87,12 @@ vars.T_18s = var_cp_neg(vars.T_013, vars.P_18./vars.P_013);
 vars.T_18 = var_cp_nozz(vars.T_013, vars.T_18s, vars.eta_nozz);
 vars.U_18 = sqrt(2.*deltaH_var_cp(vars.T_18, vars.T_013));
 
+%Calculate entropy change from 7 to 8
+vars.deltaS_5to8=deltaS_var_cp(vars.T_07,vars.T_8,vars.P_07,vars.P_8);
+
+%Calculate entrop change from 13 to 18
+vars.deltaS_13to18=deltaS_var_cp(vars.T_013,vars.T_18,vars.P_013,vars.P_18);
+
 %intial velocity
 [~,~,vars.k,~] = sp_heats(vars.T_0_static);
 vars.U_0 = vars.Ma.*sqrt(vars.k.*vars.R.*vars.T_0_static);
@@ -84,12 +105,24 @@ vars.spec_thrust=vars.F_thrust./vars.m_dot;
 vars.m_dot_fuel=vars.q_dot./vars.lhv;
 vars.tsfc=vars.m_dot_fuel./vars.F_thrust;
 
-vars
-
-
-
-
 %%%%%%%%%%%%%%Plotting (for part 4)%%%%%%%%%%%%%%%%%%%%
+
+entropy_state0=[0 0];
+entropy_state2=entropy_state0+vars.deltaS_0to2;
+entropy_state13=entropy_state2+vars.deltaS_2to13;
+entropy_state18=entropy_state13+vars.deltaS_13to18;
+entropy_state3=entropy_state13+vars.deltaS_13to3;
+entropy_state4=entropy_state3+vars.deltaS_3to4;
+entropy_state5=entropy_state4+vars.deltaS_4to5;
+entropy_state8=entropy_state5+vars.deltaS_5to8;
+
+vars.entropy_states=[entropy_state0 entropy_state2 entropy_state13 ...
+    entropy_state18 entropy_state3 entropy_state4 entropy_state5 entropy_state8];
+
+vars.temp_states=[vars.T_0_static vars.T_02 vars.T_013 vars.T_18 vars.T_03...
+    vars.T_04 vars.T_05 vars.T_8];
+
+vars
 
 %four plots:
     %core flow for Cruise and SLS
