@@ -43,13 +43,13 @@ vars.P_013=vars.P_02.*vars.P_ratio_fan;
 %Compressor
 vars = compressor(vars);
 
-%Combustor
-vars.P_04 = vars.P_04_over_03.*vars.P_03;
-vars.q_dot = vars.c_p*(vars.T_04-vars.T_03);
-
 %mdots
 vars.m_dot_bp = vars.m_dot.*10./11;
 vars.m_dot_core = vars.m_dot./11;
+
+%Combustor
+vars.P_04 = vars.P_04_over_03.*vars.P_03;
+vars.q_dot = vars.m_dot_core.*vars.c_p.*(vars.T_04-vars.T_03);
 
 %Turbine
 vars = turbine(vars);
