@@ -32,7 +32,8 @@ vars.R = 287;
 vars.lhv= 42.8 * 10^6; %J/kg
 
 %Pre fan and compressor calculations
-vars.P_00=vars.P_0_static.*(1+((vars.k-1)/2)*vars.Ma.^2).^(vars.k/(vars.k-1));
+vars.P_00=vars.P_0_static.*(1+((vars.k-1)/2)*vars.Ma.^2)...
+          .^(vars.k/(vars.k-1));
 vars.P_02=vars.P_02_over_00.*vars.P_00;
 vars.T_00=vars.T_0_static.*(1+((vars.k-1)/2).*vars.Ma.^2);
 vars.T_02=vars.T_00;
@@ -58,14 +59,16 @@ vars = turbine(vars);
 vars.T_07 = vars.T_05;
 vars.P_07 = vars.P_05;
 vars.P_8 = vars.P_0_static;
-vars.Ma_8s = sqrt((2./(vars.k-1)).*((vars.P_07./vars.P_8).^((vars.k-1)./vars.k)-1));
+vars.Ma_8s = sqrt((2./(vars.k-1)).*((vars.P_07./vars.P_8)...
+             .^((vars.k-1)./vars.k)-1));
 vars.T_8s = vars.T_07./(1+(vars.k-1)./2.*vars.Ma_8s.^2);
 vars.T_8 = vars.T_07-vars.eta_nozz.*(vars.T_07-vars.T_8s);
 vars.U_8 = sqrt(2.*vars.c_p.*(vars.T_07-vars.T_8));
 
 %BP Nozzle
 vars.P_18 = vars.P_0_static;
-vars.Ma_18s = sqrt((2./(vars.k-1)).*((vars.P_013./vars.P_18).^((vars.k-1)./vars.k)-1));
+vars.Ma_18s = sqrt((2./(vars.k-1)).*((vars.P_013./vars.P_18)...
+              .^((vars.k-1)./vars.k)-1));
 vars.T_18s = vars.T_013./(1+(vars.k-1)./2.*vars.Ma_18s.^2);
 vars.T_18 = vars.T_013-vars.eta_nozz.*(vars.T_013-vars.T_18s);
 vars.U_18 = sqrt(2.*vars.c_p.*(vars.T_013-vars.T_18));
@@ -74,7 +77,8 @@ vars.U_18 = sqrt(2.*vars.c_p.*(vars.T_013-vars.T_18));
 vars.U_0 = vars.Ma.*sqrt(vars.k.*vars.R.*vars.T_0_static);
 
 %Thrust and specific thrust
-vars.F_thrust = vars.m_dot_core.*vars.U_8+vars.m_dot_bp.*vars.U_18-vars.m_dot.*vars.U_0;
+vars.F_thrust = vars.m_dot_core.*vars.U_8+vars.m_dot_bp.*...
+                vars.U_18-vars.m_dot.*vars.U_0;
 vars.spec_thrust=vars.F_thrust./vars.m_dot;
 
 %Thrust-specific fuel consumption

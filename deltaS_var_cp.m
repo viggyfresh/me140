@@ -5,9 +5,6 @@ T = T1;
 dT = 0.01;
 cp_int = [0 0];
 
-%Do we need to edit this function for the case that T2 is smaller than T1?
-%The while loop below wont trip for that case as is (I don't think)
-
 for i=1:2
     
     if T1(i)<T2(i)

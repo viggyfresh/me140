@@ -1,7 +1,4 @@
 function [ vars ] = compressor_var( vars )
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
-% 
 
 P03_over_P02 = vars.P_ratio_overall;
 P013_over_P02 = vars.P_ratio_fan;

@@ -1,5 +1,5 @@
 function [T] = var_cp_neg(T1,P2_over_P1)
-%when P2<P1
+
 R = 286.9;
 cp_2_calc = 0;
 cp_2_guess = 500;

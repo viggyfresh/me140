@@ -1,5 +1,4 @@
 function [P2] = P_given_T_var_cp(T1, T2s, P1)
-%T2 < T1 for turbine
 
 R = 286.9;
 T = T2s;
