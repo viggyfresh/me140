@@ -136,7 +136,7 @@ vars
 figure;
 labels = {'0'; '02'; '013'; '03'; '04'; '05'; '8'};
 plot(vars.entropy_states(:,1), vars.temp_states(:,1),'LineStyle', '--','marker','.','Markersize',20,'color', 'k');
-text(vars.entropy_states(:,1), vars.temp_states(:,1), labels, 'VerticalAlignment','bottom', 'HorizontalAlignment','left');
+text(vars.entropy_states(:,1), vars.temp_states(:,1), labels, 'VerticalAlignment','bottom', 'HorizontalAlignment','left', 'Fontsize', 14);
 xlabel('Entropy - Entropy state0 (J/K)', 'FontSize',14);
 ylabel('Temperature (K)', 'FontSize',14);
 title ('T-S Graph for Cruise Core Flow', 'FontSize',14);
@@ -144,9 +144,9 @@ set(gcf, 'color', 'white');
 
 %Plot for cruise BP
 figure;
-labels = {'0'; '02'; '013'; '018'};
+labels = {'0'; '02'; '013'; '18'};
 plot(vars.entropy_bp(:,1), vars.temp_bp(:,1),'LineStyle', '--','marker','.','Markersize',20,'color', 'k');
-text(vars.entropy_bp(:,1), vars.temp_bp(:,1), labels, 'VerticalAlignment','bottom','HorizontalAlignment','left');
+text(vars.entropy_bp(:,1), vars.temp_bp(:,1), labels, 'VerticalAlignment','bottom','HorizontalAlignment','left','Fontsize', 14);
 xlabel('Entropy - Entropy state0 (J/K)','FontSize',14);
 ylabel('Temperature (K)','FontSize',14);
 title ('T-S Graph for Cruise Bypass Flow','FontSize',14);
@@ -156,7 +156,7 @@ set(gcf, 'color', 'white');
 figure;
 labels = {'0'; '02'; '013'; '03'; '04'; '05'; '8'};
 plot(vars.entropy_states(:,2), vars.temp_states(:,2), 'LineStyle', '--', 'marker','.','Markersize',20,'color', 'r');
-text(vars.entropy_states(:,2), vars.temp_states(:,2), labels, 'VerticalAlignment','bottom', 'HorizontalAlignment','left');
+text(vars.entropy_states(:,2), vars.temp_states(:,2), labels, 'VerticalAlignment','bottom', 'HorizontalAlignment','left', 'Fontsize', 14);
 xlabel('Entropy - Entropy state0 (J/K)','FontSize',14);
 ylabel('Temperature (K)','FontSize',14);
 title ('T-S Graph for SLS Core Flow','FontSize',14);
@@ -164,9 +164,9 @@ set(gcf, 'color', 'white');
 
 %Plot for SLS BP
 figure;
-labels = {'0'; '02'; '013'; '018'};
+labels = {'0'; '02'; '013'; '18'};
 plot(vars.entropy_bp(:,2), vars.temp_bp(:,2), 'LineStyle', '--', 'marker','.','Markersize',20,'color', 'r');
-text(vars.entropy_bp(:,2), vars.temp_bp(:,2), labels, 'VerticalAlignment','bottom','HorizontalAlignment','left');
+text(vars.entropy_bp(:,2), vars.temp_bp(:,2), labels, 'VerticalAlignment','bottom','HorizontalAlignment','left','Fontsize', 14);
 xlabel('Entropy - Entropy state0 (J/K)','FontSize',14);
 ylabel('Temperature (K)','FontSize',14);
 title ('T-S Graph for SLS Bypass Flow','FontSize',14);
