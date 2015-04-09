@@ -131,12 +131,16 @@ vars.temp_bp = [vars.T_0_static; vars.T_02; vars.T_013; vars.T_18];
 
 vars
 
+%four plots:
+%core flow for Cruise and SLS
+%bypass flow for Cruise and SLS
+
 %Plot for cruise core
 figure;
 labels = cellstr(num2str([0 2 13 3 4 5 8]'));
 plot(vars.entropy_states(:,1), vars.temp_states(:,1),'LineStyle', '--','marker','.','Markersize',20,'color', 'k');
 text(vars.entropy_states(:,1), vars.temp_states(:,1), labels, 'VerticalAlignment','bottom', ...
-                             'HorizontalAlignment','right');
+    'HorizontalAlignment','right');
 xlabel('Entropy (J/K)');
 ylabel('Temperature (K)');
 title ('T-S Graph for Cruise Core Flow');
@@ -147,7 +151,7 @@ figure;
 labels = cellstr(num2str([0 2 13 18]'));
 plot(vars.entropy_bp(:,1), vars.temp_bp(:,1),'LineStyle', '--','marker','.','Markersize',20,'color', 'k');
 text(vars.entropy_bp(:,1), vars.temp_bp(:,1), labels, 'VerticalAlignment','bottom', ...
-                             'HorizontalAlignment','right');
+    'HorizontalAlignment','right');
 xlabel('Entropy (J/K)');
 ylabel('Temperature (K)');
 title ('T-S Graph for Cruise Bypass Flow');
@@ -158,7 +162,7 @@ figure;
 labels = cellstr(num2str([0 2 13 3 4 5 8]'));
 plot(vars.entropy_states(:,2), vars.temp_states(:,2), 'LineStyle', '--', 'marker','.','Markersize',20,'color', 'r');
 text(vars.entropy_states(:,2), vars.temp_states(:,2), labels, 'VerticalAlignment','bottom', ...
-                             'HorizontalAlignment','right');
+    'HorizontalAlignment','right');
 xlabel('Entropy (J/K)');
 ylabel('Temperature (K)');
 title ('T-S Graph for SLS Core Flow');
@@ -169,18 +173,13 @@ figure;
 labels = cellstr(num2str([0 2 13 18]'));
 plot(vars.entropy_bp(:,2), vars.temp_bp(:,2), 'LineStyle', '--', 'marker','.','Markersize',20,'color', 'r');
 text(vars.entropy_bp(:,2), vars.temp_bp(:,2), labels, 'VerticalAlignment','bottom', ...
-                             'HorizontalAlignment','right');
+    'HorizontalAlignment','right');
 xlabel('Entropy (J/K)');
 ylabel('Temperature (K)');
 title ('T-S Graph for SLS Bypass Flow');
 set(gcf, 'color', 'white');
 
 
-%four plots:
-    %core flow for Cruise and SLS
-    %bypass flow for Cruise and SLS
-
-    
 % see deltaS.m function
 
 

@@ -45,7 +45,7 @@ vars = compressor(vars);
 
 %Combustor
 vars.P_04 = vars.P_04_over_03.*vars.P_03;
-vars.q_dot = vars.c_p*(vars.T_04-vars.T_03);
+vars.q_dot = vars.c_p.*(vars.T_04-vars.T_03);
 
 %mdots
 vars.m_dot_bp = vars.m_dot.*10./11;
