@@ -47,5 +47,5 @@ Ma2=getMach(T2,dp2,airFlow,A2);
 Ma3=getMach(T3,dp2,airFlow,A3);
 Ma4=getMach(T4,dp2,airFlow,A4);
 Ma5=getMach(T5,dp2,airFlow,A5);
-Ma8=getMach(T8,dp2,airFlow,A6)
+Ma8=getMach(T8,dp2,airFlow,A6);
 
