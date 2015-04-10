@@ -43,9 +43,11 @@ AF=18.5*((M_O2+(79/21)*M_N2))/(12*M_C+26*M_H);
 airFlow=fuelFlow*AF;
 
 %Find mach number in order to find static and stagnation temperature values
-Ma2=getMach(T2, dp2, airFlow, A2, 0.68);
-Ma3=getMach(T3, pt3, airFlow, A3, 0.68);
-Ma4=getMach(T4, p4, airFlow, A4, 0.68);
-Ma5=getMach(T5, pt5, airFlow, A5, 0.86);
-Ma8=getMach(T8, pt8, airFlow, A8, 0.68);
+for i=1:6
+    Ma2=getMach(T2(i), dp2(i), airFlow, A2, 0.68);
+    Ma3=getMach(T3(i), pt3(i), airFlow, A3, 0.68);
+    Ma4=getMach(T4(i), p4(i), airFlow, A4, 0.68);
+    Ma5=getMach(T5(i), pt5(i), airFlow, A5, 0.86);
+    Ma8=getMach(T8(i), pt8(i), airFlow, A8, 0.68);
+end
 
