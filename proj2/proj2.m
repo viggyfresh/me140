@@ -37,7 +37,8 @@ M_C=12.011;
 M_H=1.008;
 
 %Calculate air/fuel ratio
-AF=18.5*((M_O2+(79/21)*M_N2))/(12*M_C+26*M_H);
+
+%AF_s=18.5*((M_O2+(79/21)*M_N2))/(12*M_C+26*M_H);
 
 %Find air mass flow
 airFlow=fuelFlow*AF;

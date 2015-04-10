@@ -19,6 +19,7 @@ while (1)
             (c / 3) .* (To.^3 - T.^3) + (d / 4) .* (To.^4 - T.^4))
         I2 = (a .* log (To ./ T) + b .* (To - T) + (c / 2) .* (To.^2 - T.^2) ...
              + (d / 3) .* (To.^3 - T.^3))
+        % what do we use instead of c_p_ave?
         c_p_ave = I1 ./ (To - T)
         Po_over_P = exp(I2);
         lhs = mfp
@@ -26,7 +27,7 @@ while (1)
         Ma = -0.01
         [~, ~, k, ~] = sp_heats(T)
         while (abs(lhs - rhs) / lhs > 0.1)
-            Ma = Ma + 0.001;
+            Ma = Ma + 0.01;
             rhs = Ma .* sqrt(k) .* (1 + (k * R * Ma^2 / (2 * c_p_ave)))^(0.5) ...
                 ./ Po_over_P
             
