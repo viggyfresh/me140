@@ -59,7 +59,7 @@ for i=1:6
     %Ma2=getMach(T2(i), dp2(i), airFlow, A2, 0.68);
     Ma3(i) = getMach(T3(i), pt3(i), m_dot(i), A3, 0.68)
     %Ma4=getMach(T4(i), p4(i), airFlow, A4, 0.68);
-    Ma5(i) = getMach(T5(i), pt5(i), m_dot(i), A5, 0.86)
-    Ma8(i) = getMach(T8(i), pt8(i), m_dot(i), A8, 0.68)
+    %Ma5(i) = getMach(T5(i), pt5(i), m_dot(i), A5, 0.86)
+    %Ma8(i) = getMach(T8(i), pt8(i), m_dot(i), A8, 0.68)
 end
 
