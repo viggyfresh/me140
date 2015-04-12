@@ -49,7 +49,7 @@ airFlow = fuelFlow*AF_ratio;
 [~, ~, k, R] = sp_heats(T2);
 Po2_over_P = Po2 ./ (Po2 - dp2);
 
-Ma_2 = sqrt((Po2_over_P.^((k - 1) ./ k) - 1) .* (2 ./ (k - 1)))
+Ma_2 = sqrt((Po2_over_P.^((k - 1) ./ k) - 1) .* (2 ./ (k - 1)));
 
 %T2_actual = T2 ./ (1 + (rf_cross .* ((k - 1) ./ 2) .* Ma_2.^2))
 %U_2 = sqrt(k .* R .* T2_actual) .* Ma_2
@@ -61,10 +61,11 @@ m_dot = rho_2 .* U_2 .* A2;
 %Find mach number in order to find static and stagnation temperature values
 for i=1:6
     
-    %Ma2=getMach(T2(i), dp2(i), m_dot, A2, 0.68);
-    %Ma3(i) = getMach(T3(i), pt3(i), m_dot(i), A3, 0.68)
-    %Ma4=getMach(T4(i), p4(i), m_dot, A4, 0.68);
-    Ma5(i) = getMach(T5(i), pt5(i), m_dot(i), A5, 0.86)
+    %Ma2=getMach(T2(i), dp2(i), m_dot(i), A2, 0.68)
+    Ma3(i) = getMach(T3(i), pt3(i), m_dot(i), A3, 0.68)
+    %assume static = stagnation pressure at station 4 due to low Ma
+    %Ma4(i) = getMach(T4(i), p4(i), m_dot(i), A4, 0.68)
+    %Ma5(i) = getMach(T5(i), pt5(i), m_dot(i), A5, 0.86)
     %Ma8(i) = getMach(T8(i), pt8(i), m_dot(i), A8, 0.68)
 end
 
