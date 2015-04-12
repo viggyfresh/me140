@@ -1,13 +1,10 @@
-function [Ma] = getMach(Tm, Po, m_dot, A, RF)
-
-
-%%OLD CODE
+function [Ma, To, T] = stationAnalysis(Tm, Po, m_dot, A, RF)
 
 To = Tm;
 To_guess = Inf;
 
 R = 286.9;
-a = 28.11;  
+a = 28.11;
 b = 0.1967*10^-2;
 c = 0.4802*10^-5;
 d = -1.966*10^-9;
@@ -33,25 +30,22 @@ while (1)
             [Po_over_P2, To_over_T, rhs] = the_var(Ma, T);
             %             rhs = Ma .* sqrt(k) .* (1 + (k * R * Ma^2 / (2 * c_p_ave)))^(0.5) ...
             %                  ./ Po_over_P;
-            
-            
         end
         T_guess = Tm ./ (1 + (RF * k * R * Ma^2 / (2 * c_p_ave))); %%might need to remove cp_avg
-%         To_over_T = (Tm ./ T - 1)./RF+1; %don't know if this works
-%         T_guess = To / To_over_T;
+        % To_over_T = (Tm ./ T - 1)./RF+1; %don't know if this works
+        % T_guess = To / To_over_T;
         if (abs(T - T_guess) / T < 0.01)
             break;
         end
         T = T_guess;
     end
-    
-     To_guess = T * (1 + (k * R * Ma^2 / (2 * c_p_ave))); %%might need to remove cp_avg
-%     To_guess = T .* To_over_T;
+
+    To_guess = T * (1 + (k * R * Ma^2 / (2 * c_p_ave))); %%might need to remove cp_avg
+    % To_guess = T .* To_over_T;
     if (abs(To - To_guess) / To < 0.01)
         break;
     end
     To = To_guess;
-    
 end
 end
 
