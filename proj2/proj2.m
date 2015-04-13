@@ -52,7 +52,6 @@ airFlow = m_dot_fuel * AF_ratio;
 
 %Time to actually find air m_dot, Ma, U, and rho at state 2
 %Assumption - since Ma will be small, T2 = T2_measured ~= T2_actual
-
 [~, ~, k, R] = sp_heats(Tm2);
 Po2_over_P = Po2 ./ (Po2 - dp2);
 Ma_2 = sqrt((Po2_over_P.^((k - 1) ./ k) - 1) .* (2 ./ (k - 1)));
@@ -141,5 +140,3 @@ axes(ax(3)); ylabel('Air-Fuel Ratio');
 title('Mass Flow Rates vs. Spool Speed')
 xlabel('Spool Speed (RPM)');
 set(gcf,'color','w');
-
-
