@@ -132,4 +132,14 @@ title('Mass Flow Rates vs. Spool Speed')
 xlabel('Spool Speed (RPM)');
 set(gcf,'color','w');
 
+%Calculate net thrust
+Ft_calc = (m_dot .* (U8 - U2)) + (P8 * A8) - (P2 * A2);
 
+%Plot calculated and measured net thrust vs. rpm (by station)
+figure;
+plot(rpm, Ft_calc, rpm, thrust);
+xlabel('Spool Speed (RPM)');
+ylabel('Thrust (N)');
+title('Thrust vs. Spool Speed');
+legend('Calculated Thrust', 'Measured Thrust');
+set(gcf,'color','w');
