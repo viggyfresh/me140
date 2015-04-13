@@ -99,6 +99,9 @@ Ft_calc = (m_dot .* (U8-U2)) + (P8-P2)*A8;
 thrust_sp = Ft_calc ./ m_dot;
 TSFC = m_dot_fuel ./ Ft_calc;
 
+%Marker size var
+markerSize = 25;
+
 %Plot stagnation temperature vs. rmp (by station)
 figure;
 plot(rpm, To2, rpm, To3, rpm, To4, rpm, To5, rpm, To8, 'marker', '.', 'MarkerSize', 23);
@@ -175,5 +178,19 @@ ylabel('Thrust-specific Fuel Consumption');
 title('Thrust-Specific Fuel Consumption vs. Spool Speed');
 set(gcf,'color','w');
 
+%Find Q_dot into system and work out of turbine
+Q_dot = m_dot .* deltaH_var_cp(T3, T4, length(rpm));
+W_net = -m_dot .* (deltaH_var_cp(T5, T8, length(rpm)) - deltaH_var_cp(T2,...
+    T3, length(rpm))); 
+eta = W_net ./ Q_dot;
+
+%Plot thermal efficiency vs. spool speed
+figure;
+plot(rpm, eta*100);
+xlabel('Spool Speed (RPM)');
+ylabel('Thermal Efficiency (%)');
+title('Thermal Efficiency vs. Spool Speed');
+set(gcf,'color','w');
 
 plotfixer;
+
