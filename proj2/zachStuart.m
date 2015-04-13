@@ -27,8 +27,7 @@ while (1)
         [~, ~, k, ~] = sp_heats(T);
         while (abs(lhs - rhs) / lhs > 0.05)
             Ma = Ma + 0.001;
-            [Po_over_P2, To_over_T, rhs] = the_var(Ma, T);
-            rhs
+            [~, ~, rhs] = the_var(Ma, T);
             %             rhs = Ma .* sqrt(k) .* (1 + (k * R * Ma^2 / (2 * c_p_ave)))^(0.5) ...
             %                  ./ Po_over_P;
         end
