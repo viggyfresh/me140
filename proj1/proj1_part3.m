@@ -140,15 +140,6 @@ vars
 
 %Plot for cruise core
 figure;
-<<<<<<< HEAD
-labels = cellstr(num2str([0 2 13 3 4 5 8]'));
-plot(vars.entropy_states(:,1), vars.temp_states(:,1),'LineStyle', '--','marker','.','Markersize',20,'color', 'k');
-text(vars.entropy_states(:,1), vars.temp_states(:,1), labels, 'VerticalAlignment','bottom', ...
-    'HorizontalAlignment','right');
-xlabel('Entropy (J/K)');
-ylabel('Temperature (K)');
-title ('T-S Graph for Cruise Core Flow');
-=======
 labels = {'0'; '02'; '013'; '03'; '04'; '05'; '8'};
 plot(vars.entropy_states(:,1), vars.temp_states(:,1),...
      'LineStyle', '--','marker','.','Markersize',20,'color', 'k');
@@ -158,20 +149,10 @@ text(vars.entropy_states(:,1), vars.temp_states(:,1),...
 xlabel('\Deltas (referenced from state 0) (J/kg*K)', 'FontSize',14);
 ylabel('Temperature (K)', 'FontSize',14);
 title ('T-s Graph for Cruise Core Flow', 'FontSize',14);
->>>>>>> 4b188b81c63a757f6e63127124087a55337bceb9
 set(gcf, 'color', 'white');
 
 %Plot for cruise BP
 figure;
-<<<<<<< HEAD
-labels = cellstr(num2str([0 2 13 18]'));
-plot(vars.entropy_bp(:,1), vars.temp_bp(:,1),'LineStyle', '--','marker','.','Markersize',20,'color', 'k');
-text(vars.entropy_bp(:,1), vars.temp_bp(:,1), labels, 'VerticalAlignment','bottom', ...
-    'HorizontalAlignment','right');
-xlabel('Entropy (J/K)');
-ylabel('Temperature (K)');
-title ('T-S Graph for Cruise Bypass Flow');
-=======
 labels = {'0'; '02'; '013'; '18'};
 plot(vars.entropy_bp(:,1), vars.temp_bp(:,1),'LineStyle', '--','marker',...
      '.','Markersize',20,'color', 'k');
@@ -180,21 +161,10 @@ text(vars.entropy_bp(:,1), vars.temp_bp(:,1), labels,...
      'Fontsize', 14);
 xlabel('\Deltas (referenced from state 0) (J/kg*K)', 'FontSize',14);
 ylabel('Temperature (K)','FontSize',14);
-title ('T-s Graph for Cruise Bypass Flow', 'FontSize',14);
->>>>>>> 4b188b81c63a757f6e63127124087a55337bceb9
 set(gcf, 'color', 'white');
 
 %Plot for SLS core
 figure;
-<<<<<<< HEAD
-labels = cellstr(num2str([0 2 13 3 4 5 8]'));
-plot(vars.entropy_states(:,2), vars.temp_states(:,2), 'LineStyle', '--', 'marker','.','Markersize',20,'color', 'r');
-text(vars.entropy_states(:,2), vars.temp_states(:,2), labels, 'VerticalAlignment','bottom', ...
-    'HorizontalAlignment','right');
-xlabel('Entropy (J/K)');
-ylabel('Temperature (K)');
-title ('T-S Graph for SLS Core Flow');
-=======
 labels = {'0'; '02'; '013'; '03'; '04'; '05'; '8'};
 plot(vars.entropy_states(:,2), vars.temp_states(:,2), 'LineStyle', '--',...
      'marker','.','Markersize',20,'color', 'r');
@@ -204,26 +174,10 @@ text(vars.entropy_states(:,2), vars.temp_states(:,2), labels,...
 xlabel('\Deltas (referenced from state 0) (J/kg*K)', 'FontSize',14);
 ylabel('Temperature (K)','FontSize',14);
 title ('T-s Graph for SLS Core Flow', 'FontSize',14);
->>>>>>> 4b188b81c63a757f6e63127124087a55337bceb9
 set(gcf, 'color', 'white');
 
 %Plot for SLS BP
 figure;
-<<<<<<< HEAD
-labels = cellstr(num2str([0 2 13 18]'));
-plot(vars.entropy_bp(:,2), vars.temp_bp(:,2), 'LineStyle', '--', 'marker','.','Markersize',20,'color', 'r');
-text(vars.entropy_bp(:,2), vars.temp_bp(:,2), labels, 'VerticalAlignment','bottom', ...
-    'HorizontalAlignment','right');
-xlabel('Entropy (J/K)');
-ylabel('Temperature (K)');
-title ('T-S Graph for SLS Bypass Flow');
-set(gcf, 'color', 'white');
-
-
-% see deltaS.m function
-
-
-=======
 labels = {'0'; '02'; '013'; '18'};
 plot(vars.entropy_bp(:,2), vars.temp_bp(:,2), 'LineStyle', '--',...
      'marker','.','Markersize',20,'color', 'r');
@@ -234,9 +188,5 @@ xlabel('\Deltas (referenced from state 0) (J/kg*K)', 'FontSize',14);
 ylabel('Temperature (K)','FontSize',14);
 title ('T-s Graph for SLS Bypass Flow', 'FontSize',14);
 set(gcf, 'color', 'white');
-
-
->>>>>>> 4b188b81c63a757f6e63127124087a55337bceb9
-
 
 
