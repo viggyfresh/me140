@@ -94,11 +94,11 @@ P5 = pt5 ./ Po5_ratio;
 P8 = pt8 ./ Po8_ratio;
 
 %Calculate net thrust
-Ft_calc = (m_dot .* (U8 - U2)) + (P8 * A8) - (P2 * A2);
+Ft_calc = (m_dot .* (U8 - U2));% + (P8 * A8) - (P2 * A2);
 
 %Plot stagnation temperature vs. rmp (by station)
 figure;
-plot(rpm, To2, rpm, To3, rpm, To4, rpm, To5, rpm, To8, 'marker', '.', 'MarkerSize', 20);
+plot(rpm, To2, rpm, To3, rpm, To4, rpm, To5, rpm, To8, 'marker', '.', 'MarkerSize', 23);
 xlabel('Spool Speed (RPM)');
 ylabel('Stagnation Temperature (K)');
 title('Stagnation Temperature vs. Spool Speed ');
@@ -108,7 +108,7 @@ set(gcf,'color','w');
 %Plot stagnation pressure vs. rpm (by station)
 figure;
 plot(rpm, ones(1,length(rpm))*Po2/10^3, rpm, pt3/10^3, rpm, p4/10^3, rpm, ...
-     pt5/10^3, rpm, pt8/10^3, 'marker', '.', 'MarkerSize', 20);
+     pt5/10^3, rpm, pt8/10^3, 'marker', '.', 'MarkerSize', 23);
 xlabel('Spool Speed (RPM)');
 ylabel('Stagnation Pressure (KPa, Absolute)');
 title('Stagnation Pressure vs. Spool Speed ');
@@ -117,7 +117,7 @@ set(gcf,'color','w');
 
 %Plot mach number vs. rpm (by station)
 figure;
-plot(rpm, Ma2, rpm, Ma3, rpm, Ma4, rpm, Ma5, rpm, Ma8,'marker', '.', 'MarkerSize', 20);
+plot(rpm, Ma2, rpm, Ma3, rpm, Ma4, rpm, Ma5, rpm, Ma8,'marker', '.', 'MarkerSize', 23);
 xlabel('Spool Speed (RPM)');
 ylabel('Mach Number');
 title('Mach Number vs. Spool Speed ');
@@ -126,28 +126,30 @@ set(gcf,'color','w');
 
 %Plot station velocity vs. rpm (by station)
 figure;
-plot(rpm, U2, rpm, U3, rpm, U4, rpm, U5, rpm, U8, 'marker', '.', 'MarkerSize', 20);
+plot(rpm, U2, rpm, U3, rpm, U4, rpm, U5, rpm, U8, 'marker', '.', 'MarkerSize', 23);
 xlabel('Spool Speed (RPM)');
 ylabel('Velocity (m/s)');
 title('Velocity vs. Spool Speed');
 legend('Station 2','Station 3','Station 4','Station 5','Station 8');
 set(gcf,'color','w');
 
-% %Plot air and fuel mass flow rates vs. rpm (by station)
-% figure;
-% [ax, ~, ~] = plotyy(rpm, m_dot, rpm, m_dot_fuel, rpm, af, 'loglog');
-% axes(ax(1)); ylabel('Mass flow of air (kg/s)');
-% axes(ax(2)); ylabel('Mass flow of fuel (kg/s)');
-% axes(ax(3)); ylabel('Air-Fuel Ratio');
-% title('Mass Flow Rates vs. Spool Speed')
-% xlabel('Spool Speed (RPM)');
-% set(gcf,'color','w');
+%Plot mass flow rates - need AF ratio?
+figure;
+[ax, h1, h2] = plotyy(rpm, m_dot, rpm, m_dot_fuel);
+set(h1,'Marker','.','MarkerSize', 23);
+set(h2,'Marker','.','MarkerSize', 23)
+ylabel(ax(1),'Mass flow of air (kg/s)');
+ylabel(ax(2), 'Mass flow of fuel (kg/s)');
+title('Mass Flow Rates vs. Spool Speed')
+xlabel('Spool Speed (RPM)');
+set(gcf,'color','w');
 
 %Plot calculated and measured net thrust vs. rpm (by station)
-figure;
 plot(rpm, Ft_calc, rpm, thrust);
 xlabel('Spool Speed (RPM)');
 ylabel('Thrust (N)');
 title('Thrust vs. Spool Speed');
 legend('Calculated Thrust', 'Measured Thrust');
 set(gcf,'color','w');
+
+plotfixer;
