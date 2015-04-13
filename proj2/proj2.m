@@ -96,6 +96,8 @@ P8 = pt8 ./ Po8_ratio;
 %Calculate net thrust TODO: need to fix pressure terms--UPDATE: SHOULD BE
 %FIXED, COMPARE AT OFFICE HOURS
 Ft_calc = (m_dot .* (U8-U2)) + (P8-P2)*A8;
+thrust_sp = Ft_calc ./ m_dot;
+TSFC = m_dot_fuel ./ Ft_calc;
 
 %Plot stagnation temperature vs. rmp (by station)
 figure;
@@ -153,5 +155,25 @@ ylabel('Thrust (N)');
 title('Thrust vs. Spool Speed');
 legend('Calculated Thrust', 'Measured Thrust');
 set(gcf,'color','w');
+
+
+%%%%%%%%%%%%%%%%%%%%%%Part 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Plot specific thrust vs. rpm (by station)
+figure;
+plot(rpm, thrust_sp);
+xlabel('Spool Speed (RPM)');
+ylabel('Specific Thrust');
+title('Specific vs. Spool Speed');
+set(gcf,'color','w');
+
+%Plot thrust-specific fuel consumptionvs. rpm (by station)
+figure;
+plot(rpm, TSFC);
+xlabel('Spool Speed (RPM)');
+ylabel('Thrust-specific Fuel Consumption');
+title('Thrust-Specific Fuel Consumption vs. Spool Speed');
+set(gcf,'color','w');
+
 
 plotfixer;
