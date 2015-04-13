@@ -97,16 +97,17 @@ P8 = pt8 ./ Po8_ratio;
 
 %Plot stagnation temperature vs. rmp (by station)
 figure;
-plot(rpm, To2, rpm, To3, rpm, To4, rpm, To5, rpm, To8);
+plot(rpm, To2, rpm, To3, rpm, To4, rpm, To5, rpm, To8, 'marker', '.', 'MarkerSize', 20);
 xlabel('Spool Speed (RPM)');
 ylabel('Stagnation Temperature (K)');
 title('Stagnation Temperature vs. Spool Speed ');
-legend('Station 2','Station 3','Station 4','Station 5','Station 8');
+legend('Station 2','Station 3','Station 4','Station 5','Station 8', 'location', 'best');
 set(gcf,'color','w');
 
 %Plot stagnation pressure vs. rpm (by station)
 figure;
-plot(rpm, Po2/10^3, rpm, pt3/10^3, rpm, p4/10^3, rpm, pt5/10^3, rpm, pt8/10^3);
+plot(rpm, ones(1,length(rpm))*Po2/10^3, rpm, pt3/10^3, rpm, p4/10^3, rpm, ...
+    pt5/10^3, rpm, pt8/10^3, 'marker', '.', 'MarkerSize', 20);
 xlabel('Spool Speed (RPM)');
 ylabel('Stagnation Pressure (KPa, Absolute)');
 title('Stagnation Pressure vs. Spool Speed ');
@@ -115,7 +116,7 @@ set(gcf,'color','w');
 
 %Plot mach number vs. rpm (by station)
 figure;
-plot(rpm, Ma2, rpm, Ma3, rpm, Ma4, rpm, Ma5, rpm, Ma8);
+plot(rpm, Ma2, rpm, Ma3, rpm, Ma4, rpm, Ma5, rpm, Ma8,'marker', '.', 'MarkerSize', 20);
 xlabel('Spool Speed (RPM)');
 ylabel('Mach Number');
 title('Mach Number vs. Spool Speed ');
@@ -124,7 +125,7 @@ set(gcf,'color','w');
 
 %Plot station velocity vs. rpm (by station)
 figure;
-plot(rpm, U2, rpm, U3, rpm, U4, rpm, U5, rpm, U8);
+plot(rpm, U2, rpm, U3, rpm, U4, rpm, U5, rpm, U8, 'marker', '.', 'MarkerSize', 20);
 xlabel('Spool Speed (RPM)');
 ylabel('Velocity (m/s)');
 title('Velocity vs. Spool Speed');
@@ -133,7 +134,7 @@ set(gcf,'color','w');
 
 %Plot air and fuel mass flow rates vs. rpm (by station)
 figure;
-[ax, ~, ~] = plotyy(rpm, m_dot, rpm, m_dot_fuel, rpm, af);
+[ax, ~, ~] = plotyy(rpm, m_dot, rpm, m_dot_fuel, rpm, af, 'loglog');
 axes(ax(1)); ylabel('Mass flow of air (kg/s)');
 axes(ax(2)); ylabel('Mass flow of fuel (kg/s)');
 axes(ax(3)); ylabel('Air-Fuel Ratio');
