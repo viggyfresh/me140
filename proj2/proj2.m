@@ -15,7 +15,7 @@ pt3 = [50.4636 57.6214 73.4094 89.7863 109.6062 132.8239] * 10^3; %Stagnation
 p4 = [46.6808 53.9519 69.468 85.8223 105.2571 128.2483] * 10^3; %Static
 pt5 = [5.4178 6.1699 7.9933 10.2856 12.6753 15.7876] * 10^3; %Stagnation
 pt8 = [3.5038 4.2604 5.9569 7.7169 9.3909 11.2959] * 10^3; %Stagnation
-fuelFlow = [0.0021 0.0023 0.0025 0.0027 0.0029 0.0032]; %kg/s
+m_dot_fuel = [0.0021 0.0023 0.0025 0.0027 0.0029 0.0032]; %kg/s
 thrust = [3.7 3.9 5.1 6 6.5 7.9] * 4.4482216; %N
 
 Po2 = 101.3 * 10^3; % Pa
@@ -48,7 +48,7 @@ M_H = 1.008;
 AF_ratio = 18.5 * ((M_O2 + (79/21) * M_N2)) / (12 * M_C + 26 * M_H);
 
 %Find air mass flow - not sure why
-airFlow = fuelFlow * AF_ratio;
+airFlow = m_dot_fuel * AF_ratio;
 
 %Time to actually find air m_dot, Ma, U, and rho at state 2
 %Assumption - since Ma will be small, T2 = T2_measured ~= T2_actual
@@ -60,6 +60,9 @@ U_2 = sqrt(k .* R .* Tm2) .* Ma_2;
 rho_2 = (Po2 - dp2) ./ (R .* Tm2);
 m_dot = rho_2 .* U_2 .* A2;
 
+%Calculate air-fuel ratio
+af = m_dot / m_dot_fuel;
+
 %Find mach number in order to find static and stagnation temperature values
 for i=1:6
     [Ma2(i), To2(i), T2(i)] = zachStuart(Tm2(i), Po2, m_dot(i), A2, RF_c);
@@ -69,3 +72,64 @@ for i=1:6
     [Ma5(i), To5(i), T5(i)] = zachStuart(Tm5(i), pt5(i), m_dot(i), A5, RF_a);
     [Ma8(i), To8(i), T8(i)] = zachStuart(Tm8(i), pt8(i), m_dot(i), A8, RF_c);
 end
+
+%Calculate speed of sound at each station
+[~, ~, gamma2, ~] = sp_heats(T2);
+[~, ~, gamma3, ~] = sp_heats(T3);
+[~, ~, gamma4, ~] = sp_heats(T4);
+[~, ~, gamma5, ~] = sp_heats(T5);
+[~, ~, gamma8, ~] = sp_heats(T8);
+
+U2 = Ma2 .* sqrt(gamma2 .* R .* T2);
+U3 = Ma3 .* sqrt(gamma3 .* R .* T3);
+U4 = Ma4 .* sqrt(gamma4 .* R .* T4);
+U5 = Ma5 .* sqrt(gamma5 .* R .* T5);
+U8 = Ma8 .* sqrt(gamma8 .* R .* T8);
+
+%Plot stagnation temperature vs. rmp (by station)
+figure;
+plot(rpm, To2, rpm, To3, rpm, To4, rpm, To5, rpm, To8);
+xlabel('Spool Speed (RPM)');
+ylabel('Stagnation Temperature (K)');
+title('Stagnation Temperature vs. Spool Speed ');
+legend('Station 2','Station 3','Station 4','Station 5','Station 8');
+set(gcf,'color','w');
+
+%Plot stagnation pressure vs. rpm (by station)
+figure;
+plot(rpm, Po2/10^3, rpm, pt3/10^3, rpm, p4/10^3, rpm, pt5/10^3, rpm, pt8/10^3);
+xlabel('Spool Speed (RPM)');
+ylabel('Stagnation Pressure (KPa, Absolute)');
+title('Stagnation Pressure vs. Spool Speed ');
+legend('Station 2','Station 3','Station 4','Station 5','Station 8');
+set(gcf,'color','w');
+
+%Plot mach number vs. rpm (by station)
+figure;
+plot(rpm, Ma2, rpm, Ma3, rpm, Ma4, rpm, Ma5, rpm, Ma8);
+xlabel('Spool Speed (RPM)');
+ylabel('Mach Number');
+title('Mach Number vs. Spool Speed ');
+legend('Station 2','Station 3','Station 4','Station 5','Station 8');
+set(gcf,'color','w');
+
+%Plot station velocity vs. rpm (by station)
+figure;
+plot(rpm, U2, rpm, U3, rpm, U4, rpm, U5, rpm, U8);
+xlabel('Spool Speed (RPM)');
+ylabel('Velocity (m/s)');
+title('Velocity vs. Spool Speed');
+legend('Station 2','Station 3','Station 4','Station 5','Station 8');
+set(gcf,'color','w');
+
+%Plot air and fuel mass flow rates vs. rpm (by station)
+figure;
+[ax, ~, ~] = plotyy(rpm, m_dot, rpm, m_dot_fuel, rpm, af);
+axes(ax(1)); ylabel('Mass flow of air (kg/s)');
+axes(ax(2)); ylabel('Mass flow of fuel (kg/s)');
+axes(ax(3)); ylabel('Air-Fuel Ratio');
+title('Mass Flow Rates vs. Spool Speed')
+xlabel('Spool Speed (RPM)');
+set(gcf,'color','w');
+
+
