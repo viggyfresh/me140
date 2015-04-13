@@ -93,8 +93,9 @@ P4 = p4./ Po4_ratio;
 P5 = pt5 ./ Po5_ratio;
 P8 = pt8 ./ Po8_ratio;
 
-%Calculate net thrust TODO: need to fix pressure terms
-Ft_calc = (m_dot .* (U8 - U2));% + (P8 * A8) - (P2 * A2);
+%Calculate net thrust TODO: need to fix pressure terms--UPDATE: SHOULD BE
+%FIXED, COMPARE AT OFFICE HOURS
+Ft_calc = (m_dot .* (U8-U2)) + (P8-P2)*A8;
 
 %Plot stagnation temperature vs. rmp (by station)
 figure;
