@@ -48,7 +48,7 @@ M_H = 1.008;
 AF_ratio = 18.5 * ((M_O2 + (79/21) * M_N2)) / (12 * M_C + 26 * M_H);
 
 %Find air mass flow - not sure why
-airFlow = fuelFlow*AF_ratio;
+airFlow = fuelFlow * AF_ratio;
 
 %Time to actually find air m_dot, Ma, U, and rho at state 2
 %Assumption - since Ma will be small, T2 = T2_measured ~= T2_actual
@@ -66,22 +66,6 @@ for i=1:6
     [Ma3(i), To3(i), T3(i)] = zachStuart(Tm3(i), pt3(i), m_dot(i), A3, RF_c);
     %assume static = stagnation pressure at station 4 due to low Ma
     [Ma4(i), To4(i), T4(i)] = zachStuart(Tm4(i), p4(i), m_dot(i), A4, RF_c);
-    [Ma5(i), To5(i), T5(i)] = zachStuart(Tm5(i), pt5(i), m_dot(i), A5, RF_a)
-    [Ma8(i), To8(i), T8(i)] = zachStuart(Tm8(i), pt8(i), m_dot(i), A8, RF_c)
+    [Ma5(i), To5(i), T5(i)] = zachStuart(Tm5(i), pt5(i), m_dot(i), A5, RF_a);
+    [Ma8(i), To8(i), T8(i)] = zachStuart(Tm8(i), pt8(i), m_dot(i), A8, RF_c);
 end
-
-Ma2
-To2
-T2
-Ma3
-To3
-T3
-Ma4
-To4
-T4
-Ma5
-To5
-T5
-Ma8
-To8
-T8
