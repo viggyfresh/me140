@@ -65,12 +65,12 @@ af = m_dot / m_dot_fuel;
 
 %Find mach number in order to find static and stagnation temperature values
 for i=1:6
-    [Ma2(i), To2(i), T2(i)] = zachStuart(Tm2(i), Po2, m_dot(i), A2, RF_c);
-    [Ma3(i), To3(i), T3(i)] = zachStuart(Tm3(i), pt3(i), m_dot(i), A3, RF_c);
+    [Ma2(i), To2(i), T2(i), Po2_ratio(i)] = zachStuart(Tm2(i), Po2, m_dot(i), A2, RF_c);
+    [Ma3(i), To3(i), T3(i), Po3_ratio(i)] = zachStuart(Tm3(i), pt3(i), m_dot(i), A3, RF_c);
     %assume static = stagnation pressure at station 4 due to low Ma
-    [Ma4(i), To4(i), T4(i)] = zachStuart(Tm4(i), p4(i), m_dot(i), A4, RF_c);
-    [Ma5(i), To5(i), T5(i)] = zachStuart(Tm5(i), pt5(i), m_dot(i), A5, RF_a);
-    [Ma8(i), To8(i), T8(i)] = zachStuart(Tm8(i), pt8(i), m_dot(i), A8, RF_c);
+    [Ma4(i), To4(i), T4(i), Po4_ratio(i)] = zachStuart(Tm4(i), p4(i), m_dot(i), A4, RF_c);
+    [Ma5(i), To5(i), T5(i), Po5_ratio(i)] = zachStuart(Tm5(i), pt5(i), m_dot(i), A5, RF_a);
+    [Ma8(i), To8(i), T8(i), Po8_ratio(i)] = zachStuart(Tm8(i), pt8(i), m_dot(i), A8, RF_c);
 end
 
 %Calculate speed of sound at each station
@@ -85,6 +85,15 @@ U3 = Ma3 .* sqrt(gamma3 .* R .* T3);
 U4 = Ma4 .* sqrt(gamma4 .* R .* T4);
 U5 = Ma5 .* sqrt(gamma5 .* R .* T5);
 U8 = Ma8 .* sqrt(gamma8 .* R .* T8);
+
+%Compute all static pressures from stagnation ratios
+stag_two = ones(1, length(rpm)) * Po2;
+
+P2 = stag_two ./ Po2_ratio;
+P3 = pt3 ./ Po3_ratio;
+P4 = p4./ Po4_ratio;
+P5 = pt5 ./ Po5_ratio;
+P8 = pt8 ./ Po8_ratio;
 
 %Plot stagnation temperature vs. rmp (by station)
 figure;
