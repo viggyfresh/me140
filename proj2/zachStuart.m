@@ -1,4 +1,4 @@
-function [Ma, To, T] = zachStuart(Tm, Po, m_dot, A, RF)
+function [Ma, To, T, Po_over_P] = zachStuart(Tm, Po, m_dot, A, RF)
 
 To = Tm;
 To_guess = Inf;
