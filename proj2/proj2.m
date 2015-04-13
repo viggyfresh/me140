@@ -93,7 +93,7 @@ P4 = p4./ Po4_ratio;
 P5 = pt5 ./ Po5_ratio;
 P8 = pt8 ./ Po8_ratio;
 
-%Calculate net thrust
+%Calculate net thrust TODO: need to fix pressure terms
 Ft_calc = (m_dot .* (U8 - U2));% + (P8 * A8) - (P2 * A2);
 
 %Plot stagnation temperature vs. rmp (by station)
@@ -133,7 +133,7 @@ title('Velocity vs. Spool Speed');
 legend('Station 2','Station 3','Station 4','Station 5','Station 8');
 set(gcf,'color','w');
 
-%Plot mass flow rates - need AF ratio?
+%Plot mass flow rates - TODO: need to plot AF ratio
 figure;
 [ax, h1, h2] = plotyy(rpm, m_dot, rpm, m_dot_fuel);
 set(h1,'Marker','.','MarkerSize', 23);
@@ -145,6 +145,7 @@ xlabel('Spool Speed (RPM)');
 set(gcf,'color','w');
 
 %Plot calculated and measured net thrust vs. rpm (by station)
+figure;
 plot(rpm, Ft_calc, rpm, thrust);
 xlabel('Spool Speed (RPM)');
 ylabel('Thrust (N)');
