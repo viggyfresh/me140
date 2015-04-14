@@ -53,7 +53,7 @@ m_dot = rho_2 .* U_2 .* A2;
 af = m_dot ./ m_dot_fuel;
 
 %Find mach number in order to find static and stagnation temperature values
-for i=1:6
+for i=1:length(rpm)
     [Ma2(i), To2(i), T2(i), Po2_ratio(i)] = zachStuart(Tm2(i), Po2, m_dot(i), A2, RF_c);
     [Ma3(i), To3(i), T3(i), Po3_ratio(i)] = zachStuart(Tm3(i), pt3(i), m_dot(i), A3, RF_c);
     %assume static = stagnation pressure at station 4 due to low Ma
@@ -62,13 +62,30 @@ for i=1:6
     [Ma8(i), To8(i), T8(i), Po8_ratio(i)] = zachStuart(Tm8(i), pt8(i), m_dot(i), A8, RF_c);
 end
 
+%Find station 1 values (stagnation temp, stagnation pressure, velocity, mach number)
+Po1 = Po2; 
+To1 = To2;
+for i = 1:length(rpm)
+    [Ma1(i), T1(i), Po1_ratio(i)] = richieTran(To1(i), Po1, m_dot(i), A1);
+end
+
+% U1_test = (A2 / A1) * U2
+% T1_test = ((R * T2) + (U2 .^ 2 - U1 .^2)/2) / R
+% [~, ~, gamma1, ~] = sp_heats(T1);
+% c1 = sqrt(gamma1 .* T1 * R);
+% Ma1_test = U1 ./c1
+
+%[mfp1_trial, Ma1_trial, T1_trial] = richieTran(To1, Po1, m_dot, A1, length(rpm))
+
 %Calculate speed of sound at each station
+[~, ~, gamma1, ~] = sp_heats(T1);
 [~, ~, gamma2, ~] = sp_heats(T2);
 [~, ~, gamma3, ~] = sp_heats(T3);
 [~, ~, gamma4, ~] = sp_heats(T4);
 [~, ~, gamma5, ~] = sp_heats(T5);
 [~, ~, gamma8, ~] = sp_heats(T8);
 
+U1 = Ma1 .* sqrt(gamma1 .* R .* T1);
 U2 = Ma2 .* sqrt(gamma2 .* R .* T2);
 U3 = Ma3 .* sqrt(gamma3 .* R .* T3);
 U4 = Ma4 .* sqrt(gamma4 .* R .* T4);
@@ -77,19 +94,12 @@ U8 = Ma8 .* sqrt(gamma8 .* R .* T8);
 
 %Compute all static pressures from stagnation ratios
 stag_two = ones(1, length(rpm)) * Po2;
+P1 = stag_two ./ Po1_ratio;
 P2 = stag_two ./ Po2_ratio;
 P3 = pt3 ./ Po3_ratio;
 P4 = p4./ Po4_ratio;
 P5 = pt5 ./ Po5_ratio;
 P8 = pt8 ./ Po8_ratio;
-
-%Find station 1 values (stagnation temp, stagnation pressure, velocity, mach number)
-Po1 = Po2; 
-To1 = To2;
-U1 = (A2 / A1) * U2;
-T1 = ((R * T2) + (U2 .^ 2 - U1 .^2)/2) / R;
-c1 = sqrt(sp_heats(T1) .* T1 * R);
-Ma1 = U1 ./c1;
 
 %Calculate thrust terms - CV from state 0 to state 8
 Ft_calc = (m_dot .* U8);
@@ -104,39 +114,39 @@ krpm = rpm ./ 1000;
 
 %Plot stagnation temperature vs. rmp (by station)
 figure;
-plot(krpm, To2, krpm, To3, krpm, To4, krpm, To5, krpm, To8, 'marker', '.', 'MarkerSize', markerSize);
+plot(krpm, To1, krpm, To2, krpm, To3, krpm, To4, krpm, To5, krpm, To8, 'marker', '.', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Stagnation Temperature (K)');
 title('Stagnation Temperature vs. Spool Speed ');
-legend('Station 2','Station 3','Station 4','Station 5','Station 8', 'location', 'best');
+legend('Station 1','Station 2','Station 3','Station 4','Station 5','Station 8', 'location', 'best');
 set(gcf,'color','w');
 
 %Plot stagnation pressure vs. krpm (by station)
 figure;
-plot(krpm, ones(1,length(krpm))*Po2/10^3, krpm, pt3/10^3, krpm, p4/10^3, krpm, ...
+plot(krpm, ones(1,length(krpm))*Po1/10^3, krpm, ones(1,length(krpm))*Po2/10^3, krpm, pt3/10^3, krpm, p4/10^3, krpm, ...
      pt5/10^3, krpm, pt8/10^3, 'marker', '.', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Stagnation Pressure (KPa, Absolute)');
 title('Stagnation Pressure vs. Spool Speed ');
-legend('Station 2','Station 3','Station 4','Station 5','Station 8', 'location', 'best');
+legend('Station 1','Station 2','Station 3','Station 4','Station 5','Station 8', 'location', 'best');
 set(gcf,'color','w');
 
 %Plot mach number vs. krpm (by station)
 figure;
-plot(krpm, Ma2, krpm, Ma3, krpm, Ma4, krpm, Ma5, krpm, Ma8,'marker', '.', 'MarkerSize', markerSize);
+plot(krpm, Ma1, krpm, Ma2, krpm, Ma3, krpm, Ma4, krpm, Ma5, krpm, Ma8,'marker', '.', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Mach Number');
 title('Mach Number vs. Spool Speed ');
-legend('Station 2','Station 3','Station 4','Station 5','Station 8', 'location', 'best');
+legend('Station 1','Station 2','Station 3','Station 4','Station 5','Station 8', 'location', 'best');
 set(gcf,'color','w');
 
 %Plot station velocity vs. krpm (by station)
 figure;
-plot(krpm, U2, krpm, U3, krpm, U4, krpm, U5, krpm, U8, 'marker', '.', 'MarkerSize', markerSize);
+plot(krpm, U1, krpm, U2, krpm, U3, krpm, U4, krpm, U5, krpm, U8, 'marker', '.', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Velocity (m/s)');
 title('Velocity vs. Spool Speed');
-legend('Station 2','Station 3','Station 4','Station 5','Station 8', 'location', 'best');
+legend('Station 1','Station 2','Station 3','Station 4','Station 5','Station 8', 'location', 'best');
 set(gcf,'color','w');
 
 %Plot mass flow rates
@@ -234,9 +244,11 @@ title('Combustor Stagnation Pressure Ratio vs. Spool Speed');
 set(gcf, 'color', 'w');
 
 %Nozzle
+% ho5 = h8s + V8s^2 / 2
+% V8s = sqrt(2 * (ho5 - h8s))
 %TODO: need to check this big time
-T8s = turb_Ts(T5, P8 ./ P5, length(rpm));
-U8s = sqrt(U5.^2 + 2 .* deltaH_var_cp(T8s, T5, length(rpm)));
+T8s = jeannyWang(To5, pt5 ./ (ones(1, length(rpm)) .* Po2), length(rpm));
+U8s = sqrt(2 .* deltaH_var_cp(T8s, To5, length(rpm)));
 eta_nozz = (U8.^2) ./ (U8s.^2)
 
 %Plot efficiencies
