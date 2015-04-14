@@ -211,12 +211,21 @@ plotfixer;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%Part 4%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 W_dot_comp_actual = m_dot .* deltaH_var_cp(To2, To3, length(rpm));
-W_dot_turb_actual = m_dot .* deltaH_var_cp(To5, To4, length(rpm))
+W_dot_turb_actual = m_dot .* deltaH_var_cp(To5, To4, length(rpm));
 
 To3s = comp_Ts(To2,(pt3 ./ Po2), length(rpm));
 eta_comp = deltaH_var_cp(To2, To3s, length(rpm)) ...
-           ./ deltaH_var_cp(To2, To3, length(rpm));
+           ./ deltaH_var_cp(To2, To3, length(rpm))
 
 To5s = turb_Ts(To4,(pt5 ./ p4), length(rpm))
 eta_turb = deltaH_var_cp(To5, To4, length(rpm)) ./ deltaH_var_cp(To5s, To4, length(rpm))
 %^^THESE VALUES SEEM LOW....
+
+%Plot thermal efficiency vs. spool speed
+figure;
+plot(krpm, W_dot_comp_actual, krpm,W_dot_turb_actual, 'marker', '.', 'MarkerSize', markerSize);
+xlabel('Spool Speed (kRPM)');
+ylabel('Power (W)');
+legend('Compressor Power Consumed', 'Turbine Power Generated', 'location', 'best')
+title('Power vs. Spool Speed');
+set(gcf,'color','w');
