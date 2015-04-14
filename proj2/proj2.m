@@ -191,8 +191,9 @@ set(gcf,'color','w');
 set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%f'));
 
 %Find Q_dot into system and work out of turbine
+%SOMETHING IS WRONG WITH W_NET HERE.....
 Q_dot = m_dot .* deltaH_var_cp(T3, T4, length(krpm));
-W_net = -m_dot .* (deltaH_var_cp(T4, T5, length(krpm)) - deltaH_var_cp(T2,...
+W_net = m_dot .* (deltaH_var_cp(T5, T4, length(krpm)) - deltaH_var_cp(T2,...
     T3, length(krpm)));
 eta = W_net ./ Q_dot;
 
@@ -206,3 +207,15 @@ set(gcf,'color','w');
 
 plotfixer;
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%Part 4%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+W_dot_comp_actual = m_dot .* deltaH_var_cp(To2, To3, length(rpm));
+W_dot_turb_actual = m_dot .* deltaH_var_cp(To5, To4, length(rpm))
+
+To3s = comp_Ts(To2,(pt3 ./ Po2), length(rpm));
+eta_comp = deltaH_var_cp(To2, To3s, length(rpm)) ...
+           ./ deltaH_var_cp(To2, To3, length(rpm));
+
+To5s = turb_Ts(To4,(pt5 ./ p4), length(rpm))
+eta_turb = deltaH_var_cp(To5, To4, length(rpm)) ./ deltaH_var_cp(To5s, To4, length(rpm))
+%^^THESE VALUES SEEM LOW....
