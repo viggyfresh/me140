@@ -1,7 +1,6 @@
 function [Ma, To, T, Po_over_P] = zachStuart(Tm, Po, m_dot, A, RF)
 
 To = Tm;
-To_guess = Inf;
 
 R = 286.9;
 a = 28.11;
@@ -11,7 +10,6 @@ d = -1.966*10^-9;
 
 while (1)
     T = Tm - 0.01;
-    %T_guess = Inf;
     mfp = (m_dot ./ A) .* sqrt(R .* To) ./ Po;
     while (1)
         I1 = R * (a .* (To - T) + (b / 2) .* (To.^2 - T.^2) + ...
