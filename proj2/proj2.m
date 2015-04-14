@@ -191,7 +191,7 @@ set(gcf,'color','w');
 set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%f'));
 
 %Find Q_dot into system and work out of turbine
-%SOMETHING IS WRONG WITH W_NET HERE.....
+%TODO: do we need the heating value of kerosene (vs. Jet A, which we have)
 lhv = 42800 * 10^3; %J/kg
 Q_dot = m_dot_fuel .* lhv;
 W_net = m_dot .* (U8 .^ 2)  ./ 2; 
@@ -206,9 +206,8 @@ ylabel('Thermal Efficiency (%)');
 title('Thermal Efficiency vs. Spool Speed');
 set(gcf,'color','w');
 
-plotfixer;
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%Part 4%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Power consumed by compressor and produced by turbine
 W_dot_comp_actual = m_dot .* deltaH_var_cp(To2, To3, length(rpm));
 W_dot_turb_actual = m_dot .* deltaH_var_cp(To5, To4, length(rpm));
 
@@ -218,9 +217,8 @@ eta_comp = deltaH_var_cp(To2, To3s, length(rpm)) ...
 
 To5s = turb_Ts(To4,(pt5 ./ p4), length(rpm));
 eta_turb = deltaH_var_cp(To5, To4, length(rpm)) ./ deltaH_var_cp(To5s, To4, length(rpm))
-%^^THESE VALUES SEEM LOW....
 
-%Plot thermal efficiency vs. spool speed
+%Plot compressor and turbine power vs. spool speed
 figure;
 plot(krpm, W_dot_comp_actual, krpm, W_dot_turb_actual, 'marker', '.', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
@@ -228,3 +226,21 @@ ylabel('Power (W)');
 legend('Compressor Power Consumed', 'Turbine Power Generated', 'location', 'best')
 title('Power vs. Spool Speed');
 set(gcf,'color','w');
+set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%.0f'));
+
+%Stagnation pressure ratio across combustor
+combustor_stag_ratio = p4 ./ pt3
+
+%Nozzle: TODO!
+
+%Apparent combustion efficiency = change in enthalpy of air per unit
+%heating value of fuel
+app_comb_eff = deltaH_var_cp(T3, T4, length(rpm)) ./ lhv
+figure;
+plot(krpm, app_comb_eff .* 100, 'marker', '.', 'MarkerSize', markerSize);
+xlabel('Spool Speed (kRPM)');
+ylabel('Apparent Combustion Efficiency (%)');
+title('Apparent Combustion Efficiency vs. Spool Speed');
+set(gcf,'color','w');
+
+plotfixer;
