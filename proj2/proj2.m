@@ -192,14 +192,15 @@ set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%f'));
 
 %Find Q_dot into system and work out of turbine
 %SOMETHING IS WRONG WITH W_NET HERE.....
-Q_dot = m_dot .* deltaH_var_cp(T3, T4, length(krpm));
-W_net = m_dot .* (deltaH_var_cp(T5, T4, length(krpm)) - deltaH_var_cp(T2,...
-    T3, length(krpm)));
-eta = W_net ./ Q_dot;
+lhv = 42800 * 10^3 %J/kg
+Q_dot = m_dot_fuel .* lhv;
+W_net = m_dot .* (U8 .^ 2 - U2 .^ 2) ./ 2 
+eta_therm = W_net ./ Q_dot
+
 
 %Plot thermal efficiency vs. spool speed
 figure;
-plot(krpm, eta*100, 'marker', '.', 'MarkerSize', markerSize);
+plot(krpm, eta_therm*100, 'marker', '.', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Thermal Efficiency (%)');
 title('Thermal Efficiency vs. Spool Speed');
