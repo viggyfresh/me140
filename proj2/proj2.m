@@ -194,7 +194,7 @@ set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%f'));
 %SOMETHING IS WRONG WITH W_NET HERE.....
 lhv = 42800 * 10^3; %J/kg
 Q_dot = m_dot_fuel .* lhv;
-W_net = m_dot .* (U8 .^ 2 - U2 .^ 2) ./ 2; 
+W_net = m_dot .* (U8 .^ 2)  ./ 2; 
 eta_therm = W_net ./ Q_dot
 
 
