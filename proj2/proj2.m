@@ -83,6 +83,14 @@ P4 = p4./ Po4_ratio;
 P5 = pt5 ./ Po5_ratio;
 P8 = pt8 ./ Po8_ratio;
 
+%Find station 1 values (stagnation temp, stagnation pressure, velocity, mach number)
+Po1 = Po2; 
+To1 = To2;
+U1 = (A2 / A1) * U2;
+T1 = ((R * T2) + (U2 .^ 2 - U1 .^2)/2) / R;
+c1 = sqrt(sp_heats(T1) .* T1 * R);
+Ma1 = U1 ./c1;
+
 %Calculate thrust terms - CV from state 0 to state 8
 Ft_calc = (m_dot .* U8);
 thrust_sp = Ft_calc ./ m_dot;
@@ -138,6 +146,7 @@ set(h1,'Marker','.','MarkerSize', markerSize);
 set(h2,'Marker','.','MarkerSize', markerSize)
 ylabel(ax(1),'Mass flow of air (g/s)');
 ylabel(ax(2), 'Mass flow of fuel (g/s)');
+xlabel('Spool Speed (kRPM)')
 title('Mass Flow vs. Spool Speed');
 set(gcf, 'color', 'white');
 
