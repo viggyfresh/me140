@@ -34,6 +34,7 @@ while (1)
         % To_over_T = (Tm ./ T - 1)./RF+1; %don't know if this works
         % T_guess = To / To_over_T;
         if (abs(T - T_guess) / T < 0.01)
+            T = T_guess;
             break;
         end
         T = T_guess;
@@ -42,6 +43,7 @@ while (1)
     To_guess = T * (1 + (k * R * Ma^2 / (2 * c_p_ave)));
     % To_guess = T .* To_over_T;
     if (abs(To - To_guess) / To < 0.01)
+        To = To_guess;
         break;
     end
     To = To_guess;

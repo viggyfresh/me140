@@ -1,3 +1,5 @@
+%TODO: calculate everything at station 1!!!!!!!!
+
 clc
 close all
 clear all
@@ -37,18 +39,6 @@ RF_c = 0.68;
 RF_a = 0.86;
 
 R = 286.9;
-
-% %Does the chemistries
-% M_O2 = 32; %g/mol
-% M_N2 = 28.013;
-% M_C = 12.011;
-% M_H = 1.008;
-% 
-% %Calculate air/fuel ratio
-% AF_ratio = 18.5 * ((M_O2 + (79/21) * M_N2)) / (12 * M_C + 26 * M_H);
-% 
-% %Find air mass flow - not sure why
-% airFlow = m_dot_fuel * AF_ratio;
 
 %Time to actually find air m_dot, Ma, U, and rho at state 2
 %Assumption - since Ma will be small, T2 = T2_measured ~= T2_actual
@@ -93,9 +83,8 @@ P4 = p4./ Po4_ratio;
 P5 = pt5 ./ Po5_ratio;
 P8 = pt8 ./ Po8_ratio;
 
-%Calculate net thrust TODO: need to fix pressure terms--UPDATE: SHOULD BE
-%FIXED, COMPARE AT OFFICE HOURS
-Ft_calc = (m_dot .* (U8-U2)) + (P8-P2)*A8;
+%Calculate thrust terms - CV from state 0 to state 8
+Ft_calc = (m_dot .* U8);
 thrust_sp = Ft_calc ./ m_dot;
 TSFC = m_dot_fuel ./ Ft_calc;
 
@@ -142,15 +131,14 @@ title('Velocity vs. Spool Speed');
 legend('Station 2','Station 3','Station 4','Station 5','Station 8', 'location', 'best');
 set(gcf,'color','w');
 
-%Plot mass flow rates - TODO: need to plot AF ratio
+%Plot mass flow rates
 figure;
-
 [ax, h1, h2] = plotyy(krpm, m_dot .* 1000, krpm, m_dot_fuel .* 1000);
 set(h1,'Marker','.','MarkerSize', markerSize);
 set(h2,'Marker','.','MarkerSize', markerSize)
 ylabel(ax(1),'Mass flow of air (g/s)');
 ylabel(ax(2), 'Mass flow of fuel (g/s)');
-title('Mass flow vs. Spool Speed');
+title('Mass Flow vs. Spool Speed');
 set(gcf, 'color', 'white');
 
 %Plot AF  vs krpm
@@ -181,7 +169,7 @@ ylabel('Specific Thrust (N*s/kg)');
 title('Specific Thrust vs. Spool Speed');
 set(gcf,'color','w');
 
-%Plot thrust-specific fuel consumptionvs. krpm (by station)
+%Plot thrust-specific fuel consumption vs. krpm (by station)
 figure;
 plot(krpm, TSFC, 'marker', '.', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
@@ -191,11 +179,10 @@ set(gcf,'color','w');
 set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%f'));
 
 %Find Q_dot into system and work out of turbine
-%TODO: do we need the heating value of kerosene (vs. Jet A, which we have)
 lhv = 42800 * 10^3; %J/kg
 Q_dot = m_dot_fuel .* lhv;
 W_net = m_dot .* (U8 .^ 2)  ./ 2; 
-eta_therm = W_net ./ Q_dot
+eta_therm = W_net ./ Q_dot;
 
 
 %Plot thermal efficiency vs. spool speed
@@ -213,10 +200,10 @@ W_dot_turb_actual = m_dot .* deltaH_var_cp(To5, To4, length(rpm));
 
 To3s = comp_Ts(To2,(pt3 ./ Po2), length(rpm));
 eta_comp = deltaH_var_cp(To2, To3s, length(rpm)) ...
-           ./ deltaH_var_cp(To2, To3, length(rpm))
+           ./ deltaH_var_cp(To2, To3, length(rpm));
 
 To5s = turb_Ts(To4,(pt5 ./ p4), length(rpm));
-eta_turb = deltaH_var_cp(To5, To4, length(rpm)) ./ deltaH_var_cp(To5s, To4, length(rpm))
+eta_turb = deltaH_var_cp(To5, To4, length(rpm)) ./ deltaH_var_cp(To5s, To4, length(rpm));
 
 %Plot compressor and turbine power vs. spool speed
 figure;
@@ -228,14 +215,33 @@ title('Power vs. Spool Speed');
 set(gcf,'color','w');
 set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%.0f'));
 
-%Stagnation pressure ratio across combustor
-combustor_stag_ratio = p4 ./ pt3
+%Plot stagnation pressure ratio across combustor
+combustor_stag_ratio = p4 ./ pt3;
+figure;
+plot(krpm, combustor_stag_ratio);
+xlabel('Spool Speed (kRPM)');
+ylabel('Stagnation Pressure Ratio');
+title('Combustor Stagnation Pressure Ratio vs. Spool Speed');
+set(gcf, 'color', 'w');
 
-%Nozzle: TODO!
+%Nozzle
+%TODO: need to check this big time
+T8s = turb_Ts(T5, P8 ./ P5, length(rpm));
+U8s = sqrt(U5.^2 + 2 .* deltaH_var_cp(T8s, T5, length(rpm)));
+eta_nozz = (U8.^2) ./ (U8s.^2)
+
+%Plot efficiencies
+figure;
+plot(krpm, eta_comp, krpm, eta_turb, krpm, eta_nozz);
+xlabel('Spool Speed (kRPM)');
+ylabel('Component Efficiency (%)');
+legend('Compressor', 'Turbine', 'Nozzle', 'location', 'best')
+title('Component Efficiencies vs. Spool Speed');
+set(gcf, 'color', 'w');
 
 %Apparent combustion efficiency = change in enthalpy of air per unit
 %heating value of fuel
-app_comb_eff = deltaH_var_cp(T3, T4, length(rpm)) ./ lhv
+app_comb_eff = (af .* deltaH_var_cp(T3, T4, length(rpm))) ./ lhv;
 figure;
 plot(krpm, app_comb_eff .* 100, 'marker', '.', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
@@ -244,3 +250,4 @@ title('Apparent Combustion Efficiency vs. Spool Speed');
 set(gcf,'color','w');
 
 plotfixer;
+%TODO: check values, make sure we have all plots, verify
