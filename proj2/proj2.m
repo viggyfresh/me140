@@ -192,9 +192,9 @@ set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%f'));
 
 %Find Q_dot into system and work out of turbine
 %SOMETHING IS WRONG WITH W_NET HERE.....
-lhv = 42800 * 10^3 %J/kg
+lhv = 42800 * 10^3; %J/kg
 Q_dot = m_dot_fuel .* lhv;
-W_net = m_dot .* (U8 .^ 2 - U2 .^ 2) ./ 2 
+W_net = m_dot .* (U8 .^ 2 - U2 .^ 2) ./ 2; 
 eta_therm = W_net ./ Q_dot
 
 
@@ -208,7 +208,6 @@ set(gcf,'color','w');
 
 plotfixer;
 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%Part 4%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 W_dot_comp_actual = m_dot .* deltaH_var_cp(To2, To3, length(rpm));
 W_dot_turb_actual = m_dot .* deltaH_var_cp(To5, To4, length(rpm));
@@ -217,13 +216,13 @@ To3s = comp_Ts(To2,(pt3 ./ Po2), length(rpm));
 eta_comp = deltaH_var_cp(To2, To3s, length(rpm)) ...
            ./ deltaH_var_cp(To2, To3, length(rpm))
 
-To5s = turb_Ts(To4,(pt5 ./ p4), length(rpm))
+To5s = turb_Ts(To4,(pt5 ./ p4), length(rpm));
 eta_turb = deltaH_var_cp(To5, To4, length(rpm)) ./ deltaH_var_cp(To5s, To4, length(rpm))
 %^^THESE VALUES SEEM LOW....
 
 %Plot thermal efficiency vs. spool speed
 figure;
-plot(krpm, W_dot_comp_actual, krpm,W_dot_turb_actual, 'marker', '.', 'MarkerSize', markerSize);
+plot(krpm, W_dot_comp_actual, krpm, W_dot_turb_actual, 'marker', '.', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Power (W)');
 legend('Compressor Power Consumed', 'Turbine Power Generated', 'location', 'best')
