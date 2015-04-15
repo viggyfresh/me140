@@ -107,7 +107,7 @@ thrust_sp = Ft_calc ./ m_dot;
 TSFC = m_dot_fuel ./ Ft_calc;
 
 %Marker size var
-markerSize = 25;
+markerSize = 10;
 
 %Convert rpm tp krmp
 krpm = rpm ./ 1000;
@@ -115,7 +115,7 @@ krpm = rpm ./ 1000;
 %Plot stagnation temperature vs. rmp (by station)
 figure;
 plot(krpm, To1, krpm, To2, krpm, To3, krpm, To4, krpm, To5, krpm, To8,...
-     'marker', '.', 'MarkerSize', markerSize);
+     'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Stagnation Temperature (K)');
 title('Stagnation Temperature vs. Spool Speed ');
@@ -127,7 +127,7 @@ set(gcf,'color','w');
 figure;
 plot(krpm, ones(1,length(krpm))*Po1/10^3, krpm, ...
      ones(1,length(krpm))*Po2/10^3, krpm, pt3/10^3, krpm, p4/10^3, krpm, ...
-     pt5/10^3, krpm, pt8/10^3, 'marker', '.', 'MarkerSize', markerSize);
+     pt5/10^3, krpm, pt8/10^3, 'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Stagnation Pressure (KPa, Absolute)');
 title('Stagnation Pressure vs. Spool Speed ');
@@ -138,7 +138,7 @@ set(gcf,'color','w');
 %Plot mach number vs. krpm (by station)
 figure;
 plot(krpm, Ma1, krpm, Ma2, krpm, Ma3, krpm, Ma4, krpm, Ma5, krpm, Ma8,...
-     'marker', '.', 'MarkerSize', markerSize);
+     'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Mach Number');
 title('Mach Number vs. Spool Speed ');
@@ -149,7 +149,7 @@ set(gcf,'color','w');
 %Plot station velocity vs. krpm (by station)
 figure;
 plot(krpm, U1, krpm, U2, krpm, U3, krpm, U4, krpm, U5, krpm, U8,...
-     'marker', '.', 'MarkerSize', markerSize);
+     'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Velocity (m/s)');
 title('Velocity vs. Spool Speed');
@@ -160,8 +160,8 @@ set(gcf,'color','w');
 %Plot mass flow rates
 figure;
 [ax, h1, h2] = plotyy(krpm, m_dot .* 1000, krpm, m_dot_fuel .* 1000);
-set(h1,'Marker','.','MarkerSize', markerSize);
-set(h2,'Marker','.','MarkerSize', markerSize)
+set(h1,'Marker','o','MarkerSize', markerSize);
+set(h2,'Marker','o','MarkerSize', markerSize)
 ylabel(ax(1),'Mass flow of air (g/s)');
 ylabel(ax(2), 'Mass flow of fuel (g/s)');
 xlabel('Spool Speed (kRPM)')
@@ -170,7 +170,7 @@ set(gcf, 'color', 'white');
 
 %Plot AF  vs krpm
 figure;
-plot(krpm, af, 'marker', '.', 'MarkerSize', markerSize);
+plot(krpm, af, 'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Air-Fuel Ratio');
 title('Air-Fuel Ratio vs. Spool Speed')
@@ -178,7 +178,7 @@ set(gcf,'color','w');
 
 %Plot calculated and measured net thrust vs. krpm (by station)
 figure;
-plot(krpm, Ft_calc, krpm, thrust, 'marker', '.', 'MarkerSize', markerSize);
+plot(krpm, Ft_calc, krpm, thrust, 'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Thrust (N)');
 title('Thrust vs. Spool Speed');
@@ -190,7 +190,7 @@ set(gcf,'color','w');
 
 %Plot specific thrust vs. krpm (by station)
 figure;
-plot(krpm, thrust_sp, 'marker', '.', 'MarkerSize', markerSize);
+plot(krpm, thrust_sp, 'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Specific Thrust (N*s/kg)');
 title('Specific Thrust vs. Spool Speed');
@@ -198,7 +198,7 @@ set(gcf,'color','w');
 
 %Plot thrust-specific fuel consumption vs. krpm (by station)
 figure;
-plot(krpm, TSFC, 'marker', '.', 'MarkerSize', markerSize);
+plot(krpm, TSFC, 'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Thrust-specific Fuel Consumption (kg/N*s)');
 title('Thrust-Specific Fuel Consumption vs. Spool Speed');
@@ -214,7 +214,7 @@ eta_therm = W_net ./ Q_dot;
 
 %Plot thermal efficiency vs. spool speed
 figure;
-plot(krpm, eta_therm*100, 'marker', '.', 'MarkerSize', markerSize);
+plot(krpm, eta_therm*100, 'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Thermal Efficiency (%)');
 title('Thermal Efficiency vs. Spool Speed');
@@ -235,7 +235,7 @@ eta_turb = deltaH_var_cp(To5, To4, length(rpm)) ...
 
 %Plot compressor and turbine power vs. spool speed
 figure;
-plot(krpm, W_dot_comp_actual, krpm, W_dot_turb_actual, 'marker', '.', ...
+plot(krpm, W_dot_comp_actual, krpm, W_dot_turb_actual, 'marker', 'o', ...
      'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Power (W)');
@@ -248,7 +248,7 @@ set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%.0f'));
 %Plot stagnation pressure ratio across combustor
 combustor_stag_ratio = p4 ./ pt3;
 figure;
-plot(krpm, combustor_stag_ratio, 'marker', '.', 'MarkerSize', markerSize);
+plot(krpm, combustor_stag_ratio, 'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Stagnation Pressure Ratio');
 title('Combustor Stagnation Pressure Ratio vs. Spool Speed');
@@ -262,7 +262,7 @@ eta_nozz = (U8.^2) ./ (U8s.^2);
 %Plot efficiencies
 figure;
 plot(krpm, eta_comp*100, krpm, eta_turb*100, krpm, eta_nozz*100,...
-     'marker', '.', 'MarkerSize', markerSize);
+     'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Component Efficiency (%)');
 legend('Compressor', 'Turbine', 'Nozzle', 'location', 'best')
@@ -272,7 +272,7 @@ set(gcf, 'color', 'w');
 %Apparent combustion efficiency
 app_comb_eff = (af .* deltaH_var_cp(T3, T4, length(rpm))) ./ lhv;
 figure;
-plot(krpm, app_comb_eff .* 100, 'marker', '.', 'MarkerSize', markerSize);
+plot(krpm, app_comb_eff .* 100, 'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Apparent Combustion Efficiency (%)');
 title('Apparent Combustion Efficiency vs. Spool Speed');
