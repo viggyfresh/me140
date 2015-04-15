@@ -120,7 +120,7 @@ xlabel('Spool Speed (kRPM)');
 ylabel('Stagnation Temperature (K)');
 title('Stagnation Temperature vs. Spool Speed ');
 legend('Station 1','Station 2','Station 3','Station 4','Station 5',...
-       'Station 8', 'location', 'best');
+       'Station 8', 'location', 'bestoutside');
 set(gcf,'color','w');
 
 %Plot stagnation pressure vs. krpm (by station)
@@ -132,7 +132,7 @@ xlabel('Spool Speed (kRPM)');
 ylabel('Stagnation Pressure (KPa, Absolute)');
 title('Stagnation Pressure vs. Spool Speed ');
 legend('Station 1','Station 2','Station 3','Station 4','Station 5',...
-       'Station 8', 'location', 'best');
+       'Station 8', 'location', 'bestoutside');
 set(gcf,'color','w');
 
 %Plot mach number vs. krpm (by station)
@@ -143,7 +143,7 @@ xlabel('Spool Speed (kRPM)');
 ylabel('Mach Number');
 title('Mach Number vs. Spool Speed ');
 legend('Station 1','Station 2','Station 3','Station 4','Station 5',...
-       'Station 8', 'location', 'best');
+       'Station 8', 'location', 'bestoutside');
 set(gcf,'color','w');
 
 %Plot station velocity vs. krpm (by station)
@@ -154,7 +154,7 @@ xlabel('Spool Speed (kRPM)');
 ylabel('Velocity (m/s)');
 title('Velocity vs. Spool Speed');
 legend('Station 1','Station 2','Station 3','Station 4','Station 5',...
-       'Station 8', 'location', 'best');
+       'Station 8', 'location', 'bestoutside');
 set(gcf,'color','w');
 
 %Plot mass flow rates
