@@ -237,7 +237,7 @@ set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%.0f'));
 %Plot stagnation pressure ratio across combustor
 combustor_stag_ratio = p4 ./ pt3;
 figure;
-plot(krpm, combustor_stag_ratio);
+plot(krpm, combustor_stag_ratio, 'marker', '.', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Stagnation Pressure Ratio');
 title('Combustor Stagnation Pressure Ratio vs. Spool Speed');
@@ -249,11 +249,11 @@ set(gcf, 'color', 'w');
 %TODO: need to check this big time
 T8s = jeannyWang(To5, pt5 ./ (ones(1, length(rpm)) .* Po2), length(rpm));
 U8s = sqrt(2 .* deltaH_var_cp(T8s, To5, length(rpm)));
-eta_nozz = (U8.^2) ./ (U8s.^2)
+eta_nozz = (U8.^2) ./ (U8s.^2);
 
 %Plot efficiencies
 figure;
-plot(krpm, eta_comp, krpm, eta_turb, krpm, eta_nozz);
+plot(krpm, eta_comp*100, krpm, eta_turb*100, krpm, eta_nozz*100, 'marker', '.', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Component Efficiency (%)');
 legend('Compressor', 'Turbine', 'Nozzle', 'location', 'best')
