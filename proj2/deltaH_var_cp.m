@@ -1,4 +1,4 @@
-function [ deltaH ] = deltaH_var_cp( T1, T2,n )
+function [ deltaH ] = deltaH_var_cp( T1, T2, n )
 
 dT=.01;
 T=T1;

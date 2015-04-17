@@ -44,7 +44,7 @@ R = 286.9;
 
 %Time to actually find air m_dot, Ma, U, and rho at state 2
 %Assumption - since Ma will be small, T2 = T2_measured ~= T2_actual
-[~, ~, k, R] = sp_heats(Tm2);
+[~, ~, k, R] = sp_heats_air(Tm2);
 Po2_over_P = Po2 ./ (Po2 - dp2);
 Ma_2 = sqrt((Po2_over_P.^((k - 1) ./ k) - 1) .* (2 ./ (k - 1)));
 U_2 = sqrt(k .* R .* Tm2) .* Ma_2;
@@ -54,14 +54,26 @@ m_dot = rho_2 .* U_2 .* A2;
 %Calculate air-fuel ratio
 af = m_dot ./ m_dot_fuel;
 
+%Define LHV
+LHV = 42800;
+
 %Chemistry, NOT FOR PART 1
 
 molMass_O2 = 32;
 molMass_N2 = 28;
 molMass_C = 12.01;
 molMass_H = 1.008;
+molMass_H2O = 18.016;
+molMass_CO2 = 44.01;
+
 
 %stochiometric air fuel and equivalence ratio
 AF_s = (17.85 * molMass_O2 + 17.85*(79/21) * molMass_N2) / (12.3 * molMass_C + 22.2 * molMass_H);
-phi - AF_s ./ af;
+phi = AF_s ./ af;
 
+%%%%% Find Temperature across combustor: To4 %%%%%%%%
+hf.H2O = -241820 * (1 / molMass_H2O); %for vapor, in kJ/kg
+hf.CO2 = -393520 * (1 / molMass_CO2);
+hf.JetA = 12.3 * hf.H2O + 11.1 * hf.CO2 + LHV;    
+
+To4 = tempCalc_combustor(hf)
