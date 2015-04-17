@@ -6,7 +6,7 @@ To = 25 + 273.15; % Reference temperature
 T_guess = To; % Initial guess
 dT = 0.001; % Temperature step
 target=hf.JetA;
-right = 12.3 * hf.CO2 + 11.1 * hf.H2O;
+right = 12.3 * hf.CO2 + 11.1 * hf.H2O; %NEED TO CONVERT TO KJ/KMOL
 
 while abs(target-right)/target > 0.01
     T_guess = T_guess + dT;
