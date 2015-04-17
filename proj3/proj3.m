@@ -72,8 +72,9 @@ AF_s = (17.85 * molMass_O2 + 17.85*(79/21) * molMass_N2) / (12.3 * molMass_C + 2
 phi = AF_s ./ af;
 
 %%%%% Find Temperature across combustor: To4 %%%%%%%%
-hf.H2O = -241820 * (1 / molMass_H2O); %for vapor, in kJ/kg
-hf.CO2 = -393520 * (1 / molMass_CO2);
-hf.JetA = 12.3 * hf.H2O + 11.1 * hf.CO2 + LHV;    
+hf.H2O = -241820; %for vapor, in kJ/kmol 
+hf.CO2 = -393520;
+hf.JetA = 12.3 * hf.H2O + 11.1 * hf.CO2 + LHV;  %NEED TO CONVERT LHV TO MOLAR QUANTITY
+
 
 To4 = tempCalc_combustor(hf)
