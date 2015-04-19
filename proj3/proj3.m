@@ -55,12 +55,12 @@ m_dot = rho_2 .* U_2 .* A2;
 af = m_dot ./ m_dot_fuel;
 
 %Define LHV
-LHV = 42800;
+LHV = 42800 * 170.145/1000; %converted to kJ/mol
 
 %Chemistry, NOT FOR PART 1
 
 molMass_O2 = 32;
-molMass_N2 = 28;
+molMass_N2 = 28.02;
 molMass_C = 12.01;
 molMass_H = 1.008;
 molMass_H2O = 18.016;
@@ -72,9 +72,9 @@ AF_s = (17.85 * molMass_O2 + 17.85*(79/21) * molMass_N2) / (12.3 * molMass_C + 2
 phi = AF_s ./ af;
 
 %%%%% Find Temperature across combustor: To4 %%%%%%%%
-hf.H2O = -241820; %for vapor, in kJ/kmol 
-hf.CO2 = -393520;
-hf.JetA = 12.3 * hf.H2O + 11.1 * hf.CO2 + LHV;  %NEED TO CONVERT LHV TO MOLAR QUANTITY
+hf.H2O = -241.820; %for vapor, in kJ/mol 
+hf.CO2 = -393.520; %in kJ/mol
+hf.JetA = 12.3 * hf.H2O + 11.1 * hf.CO2 + LHV; 
 
 
 To4 = tempCalc_combustor(hf)
