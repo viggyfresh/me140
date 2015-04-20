@@ -74,7 +74,7 @@ phi = AF_s ./ af;
 %%%%% Find Temperature across combustor: To4 %%%%%%%%
 hf.H2O = -241820; %for vapor, in J/mol 
 hf.CO2 = -393520; %in J/mol
-hf.JetA = 12.3 * hf.H2O + 11.1 * hf.CO2 + LHV; 
+hf.JetA = 11.1 * hf.H2O + 12.3 * hf.CO2 + LHV;
 
 
 To4 = tempCalc_combustor(hf)
