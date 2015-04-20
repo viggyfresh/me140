@@ -77,4 +77,11 @@ hf.CO2 = -393520; %in J/mol
 hf.JetA = 11.1 * hf.H2O + 12.3 * hf.CO2 + LHV;
 
 
-To4 = tempCalc_combustor(hf)
+%To4 = tempCalc_combustor(hf);
+
+
+
+% PART 2 %
+[hf_mol, hf_kg] = heatOfFormation();
+T_a = flameTemp(0.319, 'JetA', hf_mol)
+
