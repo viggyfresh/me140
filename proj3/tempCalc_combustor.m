@@ -15,8 +15,7 @@ while abs((target-right)/target) > 0.1
     deltaH_CO2 = 12.3 * sp_heats_CO2(T_guess) * (44.01/1000) * dT; 
     deltaH_H2O = 11.1 * sp_heats_H2O(T_guess) * (18.02/1000) * dT;
     deltaH_N2 = 17.85 * (79/21) * sp_heats_N2(T_guess) * (28.02/1000) * dT;
-    right = right + 12.3 * deltaH_CO2 + 11.1 * deltaH_H2O + 17.85 * (79/21) *...
-        deltaH_N2;
+    right = right + deltaH_CO2 + deltaH_H2O + deltaH_N2;
 end
 T = T_guess;
 end
