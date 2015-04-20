@@ -94,4 +94,11 @@ To4
 
 % PART 2 %
 [hf_mol, hf_kg] = heatOfFormation();
-T_a = flameTemp(0.319, 'JetA', hf_mol, MM)
+
+phi_input = 0.05:0.05:0.65;
+
+for i=1:length(phi_input)
+    T_a(i) = flameTemp(phi_input(i), 'JetA', hf_mol, MM);
+end
+
+T_a
