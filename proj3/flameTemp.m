@@ -1,6 +1,6 @@
 function [ T_a ] = flameTemp(phi, type, hf_mol, MM)
 
-T_a = 25 + 273.15;
+T_a = 300;
 dT = 0.1;
 
 if (strcmp(type, 'JetA'))

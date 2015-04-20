@@ -46,7 +46,7 @@ R = 286.9;
 
 %Time to actually find air m_dot, Ma, U, and rho at state 2
 %Assumption - since Ma will be small, T2 = T2_measured ~= T2_actual
-[~, ~, k, R] = sp_heats_air(Tm2);
+[~, ~, k, R] = sp_heats(Tm2, 'air');
 Po2_over_P = Po2 ./ (Po2 - dp2);
 Ma_2 = sqrt((Po2_over_P.^((k - 1) ./ k) - 1) .* (2 ./ (k - 1)));
 U_2 = sqrt(k .* R .* Tm2) .* Ma_2;
