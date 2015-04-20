@@ -59,16 +59,16 @@ LHV = (42800 * 10^3) * 170.145/1000; %converted to J/mol
 
 %Chemistry, NOT FOR PART 1
 
-molMass_O2 = 32;
-molMass_N2 = 28.02;
-molMass_C = 12.01;
-molMass_H = 1.008;
-molMass_H2O = 18.016;
-molMass_CO2 = 44.01;
+MM.O2 = 32;
+MM.N2 = 28.02;
+MM.C = 12.01;
+MM.H = 1.008;
+MM.H2O = 18.016;
+MM.CO2 = 44.01;
 
 
 %stochiometric air fuel and equivalence ratio
-AF_s = (17.85 * molMass_O2 + 17.85*(79/21) * molMass_N2) / (12.3 * molMass_C + 22.2 * molMass_H);
+AF_s = (17.85 * MM.O2 + 17.85*(79/21) * MM.N2) / (12.3 * MM.C + 22.2 * MM.H);
 phi = AF_s ./ af;
 
 %%%%% Find Temperature across combustor: To4 %%%%%%%%
@@ -83,5 +83,5 @@ hf.JetA = 11.1 * hf.H2O + 12.3 * hf.CO2 + LHV;
 
 % PART 2 %
 [hf_mol, hf_kg] = heatOfFormation();
-T_a = flameTemp(0.319, 'JetA', hf_mol)
+T_a = flameTemp(0.319, 'JetA', hf_mol, MM)
 
