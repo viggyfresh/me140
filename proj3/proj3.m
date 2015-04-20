@@ -1,5 +1,7 @@
 %Part 1, find a new Cp
 
+clc;
+clear all;
 
 %Raw data
 %Ignoring last two data points due to experiment malfunction
@@ -54,6 +56,13 @@ m_dot = rho_2 .* U_2 .* A2;
 %Calculate air-fuel ratio
 af = m_dot ./ m_dot_fuel;
 
+for i=1:length(rpm)
+    [Ma2(i), To2(i), T2(i), Po2_ratio(i)] = ...
+        zachStuart(Tm2(i), Po2, m_dot(i), A2, RF_c);
+    [Ma3(i), To3(i), T3(i), Po3_ratio(i)] = ...
+        zachStuart(Tm3(i), pt3(i), m_dot(i), A3, RF_c);
+end
+
 %Define LHV
 LHV = (42800 * 10^3) * 170.145/1000; %converted to J/mol
 
@@ -65,7 +74,7 @@ MM.C = 12.01;
 MM.H = 1.008;
 MM.H2O = 18.016;
 MM.CO2 = 44.01;
-
+MM.LHV = 170;
 
 %stochiometric air fuel and equivalence ratio
 AF_s = (17.85 * MM.O2 + 17.85*(79/21) * MM.N2) / (12.3 * MM.C + 22.2 * MM.H);
@@ -78,10 +87,12 @@ hf.JetA = 11.1 * hf.H2O + 12.3 * hf.CO2 + LHV;
 
 
 %To4 = tempCalc_combustor(hf);
-
+for i=1:length(rpm)
+To4(i) = combustor(MM, phi(i), To3(i))
+end
 
 
 % PART 2 %
 [hf_mol, hf_kg] = heatOfFormation();
-T_a = flameTemp(0.319, 'JetA', hf_mol, MM)
+T_a = flameTemp(0.319, 'JetA', hf_mol, MM);
 
