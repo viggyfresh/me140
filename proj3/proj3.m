@@ -74,7 +74,7 @@ MM.C = 12.01;
 MM.H = 1.008;
 MM.H2O = 18.016;
 MM.CO2 = 44.01;
-MM.LHV = 170;
+MM.JetA = 170.145;
 
 %stochiometric air fuel and equivalence ratio
 AF_s = (17.85 * MM.O2 + 17.85*(79/21) * MM.N2) / (12.3 * MM.C + 22.2 * MM.H);
