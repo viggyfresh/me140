@@ -327,14 +327,17 @@ set(gcf, 'color', 'w');
 % Calculate adiabatic flame temperature wrt. phi
 phi_input = 0.05:0.05:0.65;
 for i=1:length(phi_input)
-    T_a(i) = flameTemp(phi_input(i), 'JetA', hf_mol, MM);
+    T_a_JetA(i) = flameTemp(phi_input(i), 'JetA', hf_mol, MM);
+    T_a_Dodecane(i) = flameTemp(phi_input(i), 'Dodecane', hf_mol, MM);
 end
 
 % Plot adiabatic flame temp versus phi
 figure;
-plot(phi_input, T_a, 'marker', 'o', 'MarkerSize', markerSize);
+plot(phi_input, T_a_JetA, phi_input, T_a_Dodecane,...
+     'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Equivalence Ratio (phi)');
 ylabel('Adiabatic Flame Temperature (K)');
+legend('JetA', 'Dodecane', 'location', 'best');
 title('Adiabatic Flame Temperature versus Equivalence Ratio');
 set(gcf, 'color', 'w');
 
