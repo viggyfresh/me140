@@ -1,6 +1,6 @@
 %Part 1, find a new Cp
 
-clc;
+%clc;
 clear all;
 
 %Raw data
@@ -8,13 +8,13 @@ clear all;
 rpm = [46500 49300 55000 60000 65100 70500];
 Tm2 = [21.559 20.9850 21.1541 21.2047 20.8731 20.9066] + 273.15; %Cross flow
 Tm3 = [68.5792 74.8547 86.1913 117.9889 129.9338 148.9507 171.9082]...
-       + 273.15; %Cross flow
+    + 273.15; %Cross flow
 Tm4 = [503.7978 501.4857 509.7827 535.9689 547.0686 597.3990]...
-       + 273.15; %Cross flow
+    + 273.15; %Cross flow
 Tm5 = [484.6335 474.2929 482.9551 507.9552 513.6135 556.9158]...
-       + 273.15; %Axial flow
+    + 273.15; %Axial flow
 Tm8 = [488.5296 484.472 486.4055 494.6287 500.1043	514.3652]...
-       + 273.15; %Cross flow
+    + 273.15; %Cross flow
 Tm_oil = [45.6508 49.6376 57.1879 64.9292 70.94 75.7677] + 273.15;
 dp2 = [0.5141 0.6161 0.8152 1.0346 1.3044 1.6022] * 10^3; %Differential
 pt3 = [50.4636 57.6214 73.4094 89.7863 109.6062 132.8239] * 10^3; %Stagnation
@@ -73,6 +73,7 @@ AF_s = (17.85 * MM.O2 + 17.85*(79/21) * MM.N2) / (12.3 * MM.C + 22.2 * MM.H);
 phi = AF_s ./ af;
 
 hf.H2O = -241820; %for vapor, in J/mol 
+hf.H2O = -241820; %for vapor, in J/mol
 hf.CO2 = -393520; %in J/mol
 hf.JetA = 11.1 * hf.H2O + 12.3 * hf.CO2 + LHV;
 
@@ -88,11 +89,9 @@ end
 Ma4
 To4
 
-
-
 %To4 = tempCalc_combustor(hf);
 for i=1:length(rpm)
-To4_JetA(i) = combustor(MM, phi(i), To3(i));
+    To4_JetA(i) = combustor(MM, phi(i), To3(i));
 end
 To4_JetA
 

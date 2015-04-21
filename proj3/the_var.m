@@ -13,6 +13,8 @@ dT = 0.01;
 
 % Increment until To is found
 while (cp_int < target)
+%     cp_int
+%     target
     To = To + dT;
     dcp_int = sp_heats(To, 'air') * dT;
     cp_int = cp_int + dcp_int;

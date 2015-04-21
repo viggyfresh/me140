@@ -47,7 +47,7 @@ elseif strcmp(type,'air')
     b = 0.1967*10^-2;
     c = 0.4802*10^-5;
     d = -1.966*10^-9;
-
+    
 end
 
 p = [d c b a];
