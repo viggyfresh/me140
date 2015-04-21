@@ -93,6 +93,7 @@ end
 for i=1:length(rpm)
     To4_JetA(i) = combustor(MM, phi(i), To3(i));
 end
+
 %Calcualate To5s_JetA using To4_JetA
 To5s_JetA = turb_Ts(To4_JetA, (pt5 ./ p4), length(rpm), 'JetA', phi, MM);
 
@@ -257,6 +258,9 @@ To5s = turb_Ts(To4,(pt5 ./ p4), length(rpm), 'JetA', phi, MM);
 
 eta_turb = deltaH_var_cp(To5, To4, length(rpm), 'JetA', phi, MM) ...
            ./ deltaH_var_cp(To5s, To4, length(rpm), 'JetA', phi, MM);
+       
+%Constant Air and Variable Air
+       
 
 for i=1:length(rpm)
     [Ma4_c(i), To4_c(i), T4_c(i), Po4_ratio_c(i)] = ...
@@ -272,6 +276,7 @@ end
 W_dot_turb_var = m_dot .* deltaH_var_cp(To5_v, To4_v, length(rpm), 'air', phi, MM);
 W_dot_turb_const = m_dot .* deltaH_var_cp(To5_c, To4_c, length(rpm), 'const', phi, MM);
 W_dot_turb_isen = m_dot .* deltaH_var_cp(To5s_JetA, To4_JetA, length(rpm), 'JetA', phi, MM);
+
 %New plot of turbine power
 figure;
 plot(krpm, W_dot_turb_actual, krpm, W_dot_turb_var, krpm, W_dot_turb_const,...
