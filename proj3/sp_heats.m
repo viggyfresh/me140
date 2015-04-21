@@ -48,6 +48,14 @@ elseif strcmp(type,'air')
     c = 0.4802*10^-5;
     d = -1.966*10^-9;
     
+elseif strcmp(type,'const')
+    
+    R = 286.9;
+    molarMass = 1;
+    a = 1.0038;
+    b = 0;
+    c = 0;
+    d = 0;
 end
 
 p = [d c b a];
