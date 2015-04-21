@@ -142,9 +142,9 @@ plot(krpm, To2, krpm, To3, krpm, To4, krpm, To4_JetA,...
 xlabel('Spool Speed (kRPM)');
 ylabel('Stagnation Temperature (K)');
 title('Stagnation Temperature vs. Spool Speed');
-legend('Station 1','Station 2','Station 3','Station 4',...
-       'Station 4 - Adiabatic (JetA)', 'Station 5',...
-       'Station 5 - Isentropic (JetA)', 'Station 8',...
+legend('To1','To2','To3','To4',...
+       'To4s (JetA)', 'To5',...
+       'To5s (JetA)', 'To8',...
        'location', 'bestoutside');
 set(gcf,'color','w');
 
@@ -156,8 +156,8 @@ plot(krpm, ones(1,length(krpm))*Po1/10^3, krpm, ...
 xlabel('Spool Speed (kRPM)');
 ylabel('Stagnation Pressure (KPa, Absolute)');
 title('Stagnation Pressure vs. Spool Speed ');
-legend('Station 1','Station 2','Station 3','Station 4','Station 5',...
-       'Station 8', 'location', 'bestoutside');
+legend('Po1','Po2','Po3','Po4','Po5',...
+       'Po8', 'location', 'bestoutside');
 set(gcf,'color','w');
 
 %Plot mach number vs. krpm (by station)
@@ -167,8 +167,8 @@ plot(krpm, Ma1, krpm, Ma2, krpm, Ma3, krpm, Ma4, krpm, Ma5, krpm, Ma8,...
 xlabel('Spool Speed (kRPM)');
 ylabel('Mach Number');
 title('Mach Number vs. Spool Speed ');
-legend('Station 1','Station 2','Station 3','Station 4','Station 5',...
-       'Station 8', 'location', 'bestoutside');
+legend('Ma1','Ma2','Ma3','Ma4','Ma5',...
+       'Ma8', 'location', 'bestoutside');
 set(gcf,'color','w');
 
 %Plot station velocity vs. krpm (by station)
@@ -178,8 +178,8 @@ plot(krpm, U1, krpm, U2, krpm, U3, krpm, U4, krpm, U5, krpm, U8,...
 xlabel('Spool Speed (kRPM)');
 ylabel('Velocity (m/s)');
 title('Velocity vs. Spool Speed');
-legend('Station 1','Station 2','Station 3','Station 4','Station 5',...
-       'Station 8', 'location', 'bestoutside');
+legend('U1','U2','U3','U4','U5',...
+       'U8', 'location', 'bestoutside');
 set(gcf,'color','w');
 
 %Plot mass flow rates
@@ -338,8 +338,9 @@ end
 
 % Plot adiabatic flame temp versus phi
 figure;
-plot(phi_input, T_a_JetA, phi_input, T_a_Dodecane,...
-     'marker', 'o', 'MarkerSize', markerSize);
+plot(phi_input, T_a_JetA,'marker', 'o', 'MarkerSize', markerSize);
+hold on;
+plot(phi_input, T_a_Dodecane, 'color', [0 1 0], 'marker', 'x', 'MarkerSize', markerSize); 
 xlabel('Equivalence Ratio (phi)');
 ylabel('Adiabatic Flame Temperature (K)');
 legend('JetA', 'Dodecane', 'location', 'best');
