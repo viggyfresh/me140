@@ -22,8 +22,9 @@ function [cp, cv, gamma, R] = sp_heats_JetA(T, phi, MM)
     y_N2 = coeff * (79 / 21) / N;
     y_O2 = coeff * (1 - phi) / N;
     
-    cp = y_CO2 * cp_CO2 + y_H2O * cp_H2O + y_N2 * cp_N2 + y_O2 * cp_O2;
-    cv = cp - R_u;
+    cp = (y_CO2 * cp_CO2 + y_H2O * cp_H2O + y_N2 * cp_N2 + y_O2 * cp_O2); % J / mol * K
+    cp = cp ./ mass * 10^3; % J / kg * K
+    cv = cp - R_u; % J / kg * K
     gamma = cp / cv;
         
     R = R_u ./ mass * 10^3;

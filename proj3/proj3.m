@@ -56,17 +56,9 @@ m_dot = rho_2 .* U_2 .* A2;
 %Calculate air-fuel ratio
 af = m_dot ./ m_dot_fuel;
 
-for i=1:length(rpm)
-    [Ma2(i), To2(i), T2(i), Po2_ratio(i)] = ...
-        zachStuart(Tm2(i), Po2, m_dot(i), A2, RF_c);
-    [Ma3(i), To3(i), T3(i), Po3_ratio(i)] = ...
-        zachStuart(Tm3(i), pt3(i), m_dot(i), A3, RF_c);
-end
 
 %Define LHV
 LHV = (42800 * 10^3) * 170.145/1000; %converted to J/mol
-
-%Chemistry, NOT FOR PART 1
 
 MM.O2 = 32;
 MM.N2 = 28.02;
@@ -80,17 +72,29 @@ MM.JetA = 170.145;
 AF_s = (17.85 * MM.O2 + 17.85*(79/21) * MM.N2) / (12.3 * MM.C + 22.2 * MM.H);
 phi = AF_s ./ af;
 
-%%%%% Find Temperature across combustor: To4 %%%%%%%%
 hf.H2O = -241820; %for vapor, in J/mol 
 hf.CO2 = -393520; %in J/mol
 hf.JetA = 11.1 * hf.H2O + 12.3 * hf.CO2 + LHV;
 
+for i=1:length(rpm)
+    [Ma2(i), To2(i), T2(i), Po2_ratio(i)] = ...
+        zachStuart(Tm2(i), Po2, m_dot(i), A2, RF_c);
+    [Ma3(i), To3(i), T3(i), Po3_ratio(i)] = ...
+        zachStuart(Tm3(i), pt3(i), m_dot(i), A3, RF_c);
+    [Ma4(i), To4(i), T4(i), Po4_ratio(i)] = ...
+        viggyFresh(Tm4(i), p4(i), m_dot(i), A4, RF_c, phi(i), MM)
+end
+
+Ma4
+To4
+
+
 
 %To4 = tempCalc_combustor(hf);
 for i=1:length(rpm)
-To4(i) = combustor(MM, phi(i), To3(i));
+To4_JetA(i) = combustor(MM, phi(i), To3(i));
 end
-To4
+To4_JetA
 
 % PART 2 %
 [hf_mol, hf_kg] = heatOfFormation();
