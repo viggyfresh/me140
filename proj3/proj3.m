@@ -68,11 +68,6 @@ MM.JetA = 170.145;
 AF_s = (17.85 * MM.O2 + 17.85*(79/21) * MM.N2) / (12.3 * MM.C + 22.2 * MM.H);
 phi = AF_s ./ af;
 
-hf.H2O = -241820; %for vapor, in J/mol 
-hf.H2O = -241820; %for vapor, in J/mol
-hf.CO2 = -393520; %in J/mol
-hf.JetA = 11.1 * hf.H2O + 12.3 * hf.CO2 + LHV;
-
 for i=1:length(rpm)
     [Ma2(i), To2(i), T2(i), Po2_ratio(i)] = ...
         zachStuart(Tm2(i), Po2, m_dot(i), A2, RF_c, 'air');
@@ -93,6 +88,13 @@ To1 = To2;
 for i = 1:length(rpm)
     [Ma1(i), T1(i), Po1_ratio(i)] = richieTran(To1(i), Po1, m_dot(i), A1);
 end
+
+%Recalculate To4 with JetA chemistry things (Part 3)
+for i=1:length(rpm)
+    To4_JetA(i) = combustor(MM, phi(i), To3(i));
+end
+%Calcualate To5s_JetA using To4_JetA
+To5s_JetA = turb_Ts(To4_JetA, (pt5 ./ p4), length(rpm), 'JetA', phi, MM);
 
 %Calculate speed of sound at each station
 [~, ~, gamma1, ~] = sp_heats(T1, 'air');
@@ -131,13 +133,18 @@ krpm = rpm ./ 1000;
 
 %Plot stagnation temperature vs. rmp (by station)
 figure;
-plot(krpm, To1, krpm, To2, krpm, To3, krpm, To4, krpm, To5, krpm, To8,...
+plot(krpm, To1, 'x-', 'Color', [0.9,0.4,0.6], 'MarkerSize', markerSize);
+hold on
+plot(krpm, To2, krpm, To3, krpm, To4, krpm, To4_JetA,...
+     krpm, To5, krpm, To5s_JetA, krpm, To8,...
      'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Stagnation Temperature (K)');
-title('Stagnation Temperature vs. Spool Speed ');
-legend('Station 1','Station 2','Station 3','Station 4','Station 5',...
-       'Station 8', 'location', 'bestoutside');
+title('Stagnation Temperature vs. Spool Speed');
+legend('Station 1','Station 2','Station 3','Station 4',...
+       'Station 4 - Adiabatic Burned Gas (Jet A)', 'Station 5',...
+       'Station 5 - Isentropic (JetA)', 'Station 8',...
+       'location', 'bestoutside');
 set(gcf,'color','w');
 
 %Plot stagnation pressure vs. krpm (by station)
@@ -247,6 +254,7 @@ eta_comp = deltaH_var_cp(To2, To3s, length(rpm), 'air', phi, MM) ...
            ./ deltaH_var_cp(To2, To3, length(rpm), 'air', phi, MM);
 
 To5s = turb_Ts(To4,(pt5 ./ p4), length(rpm), 'JetA', phi, MM);
+
 eta_turb = deltaH_var_cp(To5, To4, length(rpm), 'JetA', phi, MM) ...
            ./ deltaH_var_cp(To5s, To4, length(rpm), 'JetA', phi, MM);
 
@@ -263,13 +271,14 @@ end
 
 W_dot_turb_var = m_dot .* deltaH_var_cp(To5_v, To4_v, length(rpm), 'air', phi, MM);
 W_dot_turb_const = m_dot .* deltaH_var_cp(To5_c, To4_c, length(rpm), 'const', phi, MM);
+W_dot_turb_isen = m_dot .* deltaH_var_cp(To5s_JetA, To4_JetA, length(rpm), 'JetA', phi, MM);
 %New plot of turbine power
 figure;
 plot(krpm, W_dot_turb_actual, krpm, W_dot_turb_var, krpm, W_dot_turb_const,...
     'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Turbine Power (W)');
-legend('Products of Combustion', 'Variable c_p of air', 'Constant c_p of air',...
+legend('Products of Combustion', 'Variable c_p of air', 'Constant c_p of air at 300K',...
        'location', 'best');
 title('Turbine Power vs. Spool Speed');
 set(gcf,'color','w');
@@ -277,12 +286,12 @@ set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%.0f'));
 
 %Plot compressor and turbine power vs. spool speed
 figure;
-plot(krpm, W_dot_comp_actual, krpm, W_dot_turb_actual, 'marker', 'o', ...
-     'MarkerSize', markerSize);
+plot(krpm, W_dot_comp_actual, krpm, W_dot_turb_actual,...
+     krpm, W_dot_turb_isen, 'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Power (W)');
 legend('Compressor Power Consumed', 'Turbine Power Generated',...
-       'location', 'best')
+       'Turbine Power Generated (Isentropic, JetA)', 'location', 'best')
 title('Power vs. Spool Speed');
 set(gcf,'color','w');
 set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%.0f'));
@@ -311,24 +320,25 @@ legend('Compressor', 'Turbine', 'Nozzle', 'location', 'best')
 title('Component Efficiencies vs. Spool Speed');
 set(gcf, 'color', 'w');
 
+% PART 2 %
+% Calculate heat of formation of JetA
+[hf_mol, hf_kg] = heatOfFormation();
+
+% Calculate adiabatic flame temperature wrt. phi
+phi_input = 0.05:0.05:0.65;
+for i=1:length(phi_input)
+    T_a(i) = flameTemp(phi_input(i), 'JetA', hf_mol, MM);
+end
+
+% Plot adiabatic flame temp versus phi
+figure;
+plot(phi_input, T_a, 'marker', 'o', 'MarkerSize', markerSize);
+xlabel('Equivalence Ratio (phi)');
+ylabel('Adiabatic Flame Temperature (K)');
+title('Adiabatic Flame Temperature versus Equivalence Ratio');
+set(gcf, 'color', 'w');
+
+%PART 3 - moved to other locations hehe
+
+
 plotfixer;
-
-
-% % PART 2 %
-% [hf_mol, hf_kg] = heatOfFormation();
-% 
-% phi_input = 0.05:0.05:0.65;
-% 
-% for i=1:length(phi_input)
-%     T_a(i) = flameTemp(phi_input(i), 'JetA', hf_mol, MM);
-% end
-% 
-% T_a
-% 
-% %PART 3
-% 
-% %Get To4
-% for i=1:length(rpm)
-%     To4_JetA(i) = combustor(MM, phi(i), To3(i));
-% end
-% To4_JetA
