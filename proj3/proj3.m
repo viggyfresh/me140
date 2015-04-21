@@ -75,9 +75,9 @@ hf.JetA = 11.1 * hf.H2O + 12.3 * hf.CO2 + LHV;
 
 for i=1:length(rpm)
     [Ma2(i), To2(i), T2(i), Po2_ratio(i)] = ...
-        zachStuart(Tm2(i), Po2, m_dot(i), A2, RF_c);
+        zachStuart(Tm2(i), Po2, m_dot(i), A2, RF_c, 'air');
     [Ma3(i), To3(i), T3(i), Po3_ratio(i)] = ...
-        zachStuart(Tm3(i), pt3(i), m_dot(i), A3, RF_c);
+        zachStuart(Tm3(i), pt3(i), m_dot(i), A3, RF_c, 'air');
     %assume static = stagnation pressure at station 4 due to low Ma
     [Ma4(i), To4(i), T4(i), Po4_ratio(i)] = ...
         viggyFresh(Tm4(i), p4(i), m_dot(i), A4, RF_c, phi(i), MM);
@@ -249,6 +249,31 @@ eta_comp = deltaH_var_cp(To2, To3s, length(rpm), 'air', phi, MM) ...
 To5s = turb_Ts(To4,(pt5 ./ p4), length(rpm), 'JetA', phi, MM);
 eta_turb = deltaH_var_cp(To5, To4, length(rpm), 'JetA', phi, MM) ...
            ./ deltaH_var_cp(To5s, To4, length(rpm), 'JetA', phi, MM);
+
+for i=1:length(rpm)
+    [Ma4_c(i), To4_c(i), T4_c(i), Po4_ratio_c(i)] = ...
+        zachStuart(Tm4(i), p4(i), m_dot(i), A4, RF_c, 'const');
+    [Ma5_c(i), To5_c(i), T5_c(i), Po5_ratio_c(i)] = ...
+        zachStuart(Tm5(i), pt5(i), m_dot(i), A5, RF_a, 'const');
+    [Ma4_v(i), To4_v(i), T4_v(i), Po4_ratio_v(i)] = ...
+        zachStuart(Tm4(i), p4(i), m_dot(i), A4, RF_c, 'air');
+    [Ma5_v(i), To5_v(i), T5_v(i), Po5_ratio_v(i)] = ...
+        zachStuart(Tm5(i), pt5(i), m_dot(i), A5, RF_a, 'air');
+end
+
+W_dot_turb_var = m_dot .* deltaH_var_cp(To5_v, To4_v, length(rpm), 'air', phi, MM);
+W_dot_turb_const = m_dot .* deltaH_var_cp(To5_c, To4_c, length(rpm), 'const', phi, MM);
+%New plot of turbine power
+figure;
+plot(krpm, W_dot_turb_actual, krpm, W_dot_turb_var, krpm, W_dot_turb_const,...
+    'marker', 'o', 'MarkerSize', markerSize);
+xlabel('Spool Speed (kRPM)');
+ylabel('Turbine Power (W)');
+legend('Products of Combustion', 'Variable c_p of air', 'Constant c_p of air',...
+       'location', 'best');
+title('Turbine Power vs. Spool Speed');
+set(gcf,'color','w');
+set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%.0f'));
 
 %Plot compressor and turbine power vs. spool speed
 figure;

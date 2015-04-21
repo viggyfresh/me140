@@ -29,7 +29,6 @@ while (1)
             %[~, ~, rhs] = the_var_JetA(Ma, T, phi, MM);
             rhs = Ma .* sqrt(k) .* (1 + (k * R * Ma^2 ...
                   / (2 * c_p_ave)))^(0.5) ./ Po_over_P;
-            abs(lhs-rhs) / lhs
         end
         T_guess = Tm ./ (1 + (RF * k * R * Ma^2 / (2 * c_p_ave)));
         if (abs(T - T_guess) / T < 0.01)

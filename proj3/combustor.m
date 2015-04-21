@@ -5,8 +5,8 @@ T_guess = To; % Initial guess
 
 dT = 0.1; % Temperature step
 lhv = 42800 * MM.JetA;
-target = phi * lhv + 17.85 * (deltaH_var_cp(To, To3, 'O2') * MM.O2 / 1000 ...
-         + (79/21) * deltaH_var_cp(To, To3, 'N2') * MM.N2 / 1000); %J/mol
+target = phi * lhv + 17.85 * (deltaH_var_cp(To, To3, 'O2', 1, phi, MM) * MM.O2 / 1000 ...
+         + (79/21) * deltaH_var_cp(To, To3, 'N2', 1, phi, MM) * MM.N2 / 1000); %J/mol
 right = 0;
 coeff = (2 * 12.3 + 11.1) / 2;
 
