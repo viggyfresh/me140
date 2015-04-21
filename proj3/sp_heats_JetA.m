@@ -29,8 +29,8 @@ function [cp, cv, gamma, R] = sp_heats_JetA(T, phi, MM)
 
     M_total = phi * (12.3 * MM.CO2 + 11.1 * MM.H2O) + ...
         coeff * ((79 / 21) * MM.N2 + (1 - phi) * MM.O2); %g
-    m_CO2 = 12.3 * MM.CO2 / M_total;
-    m_H2O = 11.1 * MM.H2O / M_total;
+    m_CO2 = phi * 12.3 * MM.CO2 / M_total;
+    m_H2O = phi * 11.1 * MM.H2O / M_total;
     m_N2 = coeff * (79 / 21) * MM.N2 / M_total;
     m_O2 = coeff * (1 - phi) * MM.O2 / M_total;
     
