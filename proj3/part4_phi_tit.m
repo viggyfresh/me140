@@ -73,7 +73,8 @@ MM.JetA = 170.145;
 AF_s = (17.85 * MM.O2 + 17.85*(79/21) * MM.N2) / (12.3 * MM.C + 22.2 * MM.H);
 phi = AF_s ./ af;
 
-To4 = [700 800 900 1000 1100 1200];
+% Adiabatic flame temp is about 900K
+To4 = [700 750 800 850 900];
 eta_turb = 0.2879;
 eta_nozz = 0.5848;
 
@@ -144,7 +145,7 @@ W_net = (m_dot + m_dot_fuel) .* (U8 .^ 2)  ./ 2;
 eta_therm = W_net ./ Q_dot
 
 figure;
-plot(To4, eta_therm, 'marker', 'o', 'MarkerSize', markerSize);
+plot(To4, eta_therm * 100, 'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Thermal Efficiency vs. Inlet Temperature To4 (K)');
 ylabel('Thermal Efficiency (%)');
 title('Thermal Efficiency vs. Turbine Inlet Temperature');
