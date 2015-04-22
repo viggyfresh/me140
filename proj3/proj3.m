@@ -239,7 +239,7 @@ eta_therm = W_net ./ Q_dot;
 
 %Plot thermal efficiency vs. spool speed
 figure;
-plot(krpm, eta_therm*100, 'marker', 'o', 'MarkerSize', markerSize);
+plot(krpm, eta_therm * 100, 'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Thermal Efficiency (%)');
 title('Thermal Efficiency vs. Spool Speed');
