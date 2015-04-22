@@ -1,6 +1,8 @@
 %Part 4, Varying paramters
 clc;
 clear all;
+close all;
+
 % varying phi
 phi = [0.0911	0.1821	0.2732	0.3642	0.7285	0.9106];
 Thrust_phi = [50.4632	51.1187	51.78	52.4464	55.1681	56.561];
@@ -11,15 +13,13 @@ ylabel('Thrust (N)');
 title('Thrust vs. Equivalence Ratio');
 set(gcf,'color','w');
 
-%Raw data
-%Ignoring last two data points due to experiment malfunction
+%Raw data at max spool speed
 rpm = 70500;
 Tm2 = 20.9066 + 273.15; %Cross flow
 Tm3 = 171.9082 + 273.15; %Cross flow
 Tm4 = 597.3990 + 273.15; %Cross flow
 Tm5 = 556.9158 + 273.15; %Axial flow
 Tm8 = 514.3652 + 273.15; %Cross flow
-%Tm_oil = [45.6508 49.6376 57.1879 64.9292 70.94 75.7677] + 273.15;
 dp2 = 1.6022 * 10^3; %Differential
 pt3 = 132.8239 * 10^3; %Stagnation
 p4 =  128.2483 * 10^3; %Static
@@ -74,6 +74,8 @@ AF_s = (17.85 * MM.O2 + 17.85*(79/21) * MM.N2) / (12.3 * MM.C + 22.2 * MM.H);
 phi = AF_s ./ af;
 
 To4 = [700 800 900 1000 1100 1200];
+eta_turb = 0.2879;
+eta_nozz = 0.5848;
 
 for i=1:length(To4)
     To4(i)
@@ -85,21 +87,15 @@ for i=1:length(To4)
     [Ma4(i), T4(i), Po5_ratio(i)] = richieTran(To4(i), p4, m_dot + m_dot_fuel, A4);
    
     To5s(i) = turb_Ts(To4(i), pt5 / p4, 1, 'JetA', phi, MM);
-    To5(i) = var_cp_turb(To4(i), To5s(i), 0.2879);
+    To5(i) = var_cp_turb(To4(i), To5s(i), eta_turb);
     [Ma5(i), T5(i), Po5_ratio(i)] = richieTran(To5(i), pt5, m_dot + m_dot_fuel, A5);
     
     To8s(i) = var_cp_neg(To5(i), pt8 / pt5);
-    To8(i) = var_cp_nozz(To5(i), To8s(i), 0.5848);
+    To8(i) = var_cp_nozz(To5(i), To8s(i), eta_nozz);
     [Ma8(i), T8(i), Po8_ratio(i)] = richieTran(To8(i), pt8, m_dot + m_dot_fuel, A8);
 
     
 end
-
-%Find station 1 values
-Po1 = Po2; 
-To1 = To2;
-
-
 
 %Calculate speed of sound at each station
 [~, ~, gamma2, ~] = sp_heats(T2, 'air');
@@ -141,50 +137,17 @@ ylabel('Thrust (N)');
 title('Thrust vs. Turbine Inlet Temperature');
 set(gcf,'color','w');
 
-%%%%%%%%%%%%%%%%%%%%%%Part 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 %Find Q_dot into system and work out of turbine
 lhv = 42800 * 10^3; %J/kg
 Q_dot = m_dot_fuel .* lhv;
 W_net = (m_dot + m_dot_fuel) .* (U8 .^ 2)  ./ 2;
 eta_therm = W_net ./ Q_dot
 
-
-%Plot thermal efficiency vs. spool speed
-% figure;
-% plot(krpm, eta_therm*100, 'marker', 'o', 'MarkerSize', markerSize);
-% xlabel('Spool Speed (kRPM)');
-% ylabel('Thermal Efficiency (%)');
-% title('Thermal Efficiency vs. Spool Speed');
-% set(gcf,'color','w');
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%Part 4%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Power consumed by compressor and produced by turbine
-%W_dot_comp_actual = m_dot .* deltaH_var_cp(To2, To3, length(rpm), ...
- %                   'air', phi, MM);
-%W_dot_turb_actual = (m_dot + m_dot_fuel) .* ...
-  %                  deltaH_var_cp(To5, To4, length(rpm), 'JetA', phi, MM);
-
-%To3s = comp_Ts(To2,(pt3 ./ Po2), length(rpm), 'air', phi, MM);
-%eta_comp = deltaH_var_cp(To2, To3s, length(rpm), 'air', phi, MM) ...
-%           ./ deltaH_var_cp(To2, To3, length(rpm), 'air', phi, MM);
-
-%To5s = turb_Ts(To4,(pt5 ./ p4), length(rpm), 'JetA', phi, MM);
-
-%eta_turb = deltaH_var_cp(To5, To4, length(rpm), 'JetA', phi, MM) ...
- %          ./ deltaH_var_cp(To5s, To4, length(rpm), 'JetA', phi, MM);
-       
-% %Constant Air and Variable Air
-%        
-% 
-% %Plot stagnation pressure ratio across combustor
-% combustor_stag_ratio = p4 ./ pt3;
-% 
-% %Nozzle
-% T8s = jeannyWang(To5, pt5 ./ (ones(1, length(rpm)) .* Po2),...
-%                  length(rpm), 'JetA', phi, MM);
-% U8s = sqrt(2 .* deltaH_var_cp(T8s, To5, length(rpm), 'JetA', phi, MM));
-% eta_nozz = (U8.^2) ./ (U8s.^2);
-
+figure;
+plot(To4, eta_therm, 'marker', 'o', 'MarkerSize', markerSize);
+xlabel('Thermal Efficiency vs. Inlet Temperature To4 (K)');
+ylabel('Thermal Efficiency (%)');
+title('Thermal Efficiency vs. Turbine Inlet Temperature');
+set(gcf,'color','w');
 
 plotfixer;
