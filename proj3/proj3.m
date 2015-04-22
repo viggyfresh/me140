@@ -75,11 +75,11 @@ for i=1:length(rpm)
         zachStuart(Tm3(i), pt3(i), m_dot(i), A3, RF_c, 'air');
     %assume static = stagnation pressure at station 4 due to low Ma
     [Ma4(i), To4(i), T4(i), Po4_ratio(i)] = ...
-        viggyFresh(Tm4(i), p4(i), m_dot(i), A4, RF_c, phi(i), MM);
+        viggyFresh(Tm4(i), p4(i), m_dot(i) + m_dot_fuel(i), A4, RF_c, phi(i), MM);
     [Ma5(i), To5(i), T5(i), Po5_ratio(i)] = ...
-        viggyFresh(Tm5(i), pt5(i), m_dot(i), A5, RF_a, phi(i), MM);
+        viggyFresh(Tm5(i), pt5(i), m_dot(i) + m_dot_fuel(i), A5, RF_a, phi(i), MM);
     [Ma8(i), To8(i), T8(i), Po8_ratio(i)] = ...
-        viggyFresh(Tm8(i), pt8(i), m_dot(i), A8, RF_c, phi(i), MM);
+        viggyFresh(Tm8(i), pt8(i), m_dot(i) + m_dot_fuel(i), A8, RF_c, phi(i), MM);
 end
 
 %Find station 1 values
@@ -122,7 +122,7 @@ P5 = pt5 ./ Po5_ratio;
 P8 = pt8 ./ Po8_ratio;
 
 %Calculate thrust terms - CV from state 0 to state 8
-Ft_calc = (m_dot .* U8);
+Ft_calc = ((m_dot + m_dot_fuel) .* U8);
 thrust_sp = Ft_calc ./ m_dot;
 TSFC = m_dot_fuel ./ Ft_calc;
 
@@ -233,7 +233,7 @@ set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%f'));
 %Find Q_dot into system and work out of turbine
 lhv = 42800 * 10^3; %J/kg
 Q_dot = m_dot_fuel .* lhv;
-W_net = m_dot .* (U8 .^ 2)  ./ 2; 
+W_net = (m_dot + m_dot_fuel) .* (U8 .^ 2)  ./ 2;
 eta_therm = W_net ./ Q_dot;
 
 
@@ -249,8 +249,8 @@ set(gcf,'color','w');
 %Power consumed by compressor and produced by turbine
 W_dot_comp_actual = m_dot .* deltaH_var_cp(To2, To3, length(rpm), ...
                     'air', phi, MM);
-W_dot_turb_actual = m_dot .* deltaH_var_cp(To5, To4, length(rpm), ...
-    'JetA', phi, MM);
+W_dot_turb_actual = (m_dot + m_dot_fuel) .* ...
+                    deltaH_var_cp(To5, To4, length(rpm), 'JetA', phi, MM);
 
 To3s = comp_Ts(To2,(pt3 ./ Po2), length(rpm), 'air', phi, MM);
 eta_comp = deltaH_var_cp(To2, To3s, length(rpm), 'air', phi, MM) ...
@@ -275,11 +275,11 @@ for i=1:length(rpm)
         zachStuart(Tm5(i), pt5(i), m_dot(i), A5, RF_a, 'air');
 end
 
-W_dot_turb_var = m_dot .* deltaH_var_cp(To5_v, To4_v, length(rpm), ...
+W_dot_turb_var = (m_dot + m_dot_fuel) .* deltaH_var_cp(To5_v, To4_v, length(rpm), ...
     'air', phi, MM);
-W_dot_turb_const = m_dot .* deltaH_var_cp(To5_c, To4_c, length(rpm), ...
+W_dot_turb_const = (m_dot + m_dot_fuel) .* deltaH_var_cp(To5_c, To4_c, length(rpm), ...
     'const', phi, MM);
-W_dot_turb_isen = m_dot .* deltaH_var_cp(To5s_JetA, To4_JetA, ...
+W_dot_turb_isen = (m_dot + m_dot_fuel) .* deltaH_var_cp(To5s_JetA, To4_JetA, ...
     length(rpm), 'JetA', phi, MM);
 
 %New plot of turbine power
