@@ -247,8 +247,10 @@ set(gcf,'color','w');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%Part 4%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Power consumed by compressor and produced by turbine
-W_dot_comp_actual = m_dot .* deltaH_var_cp(To2, To3, length(rpm), 'air', phi, MM);
-W_dot_turb_actual = m_dot .* deltaH_var_cp(To5, To4, length(rpm), 'JetA', phi, MM);
+W_dot_comp_actual = m_dot .* deltaH_var_cp(To2, To3, length(rpm), ...
+                    'air', phi, MM);
+W_dot_turb_actual = m_dot .* deltaH_var_cp(To5, To4, length(rpm), ...
+    'JetA', phi, MM);
 
 To3s = comp_Ts(To2,(pt3 ./ Po2), length(rpm), 'air', phi, MM);
 eta_comp = deltaH_var_cp(To2, To3s, length(rpm), 'air', phi, MM) ...
@@ -273,9 +275,12 @@ for i=1:length(rpm)
         zachStuart(Tm5(i), pt5(i), m_dot(i), A5, RF_a, 'air');
 end
 
-W_dot_turb_var = m_dot .* deltaH_var_cp(To5_v, To4_v, length(rpm), 'air', phi, MM);
-W_dot_turb_const = m_dot .* deltaH_var_cp(To5_c, To4_c, length(rpm), 'const', phi, MM);
-W_dot_turb_isen = m_dot .* deltaH_var_cp(To5s_JetA, To4_JetA, length(rpm), 'JetA', phi, MM);
+W_dot_turb_var = m_dot .* deltaH_var_cp(To5_v, To4_v, length(rpm), ...
+    'air', phi, MM);
+W_dot_turb_const = m_dot .* deltaH_var_cp(To5_c, To4_c, length(rpm), ...
+    'const', phi, MM);
+W_dot_turb_isen = m_dot .* deltaH_var_cp(To5s_JetA, To4_JetA, ...
+    length(rpm), 'JetA', phi, MM);
 
 %New plot of turbine power
 figure;
@@ -283,8 +288,8 @@ plot(krpm, W_dot_turb_actual, krpm, W_dot_turb_var, krpm, W_dot_turb_const,...
     'marker', 'o', 'MarkerSize', markerSize);
 xlabel('Spool Speed (kRPM)');
 ylabel('Turbine Power (W)');
-legend('Products of Combustion', 'Variable c_p of air', 'Constant c_p of air at 300K',...
-       'location', 'best');
+legend('Products of Combustion', 'Variable c_p of air', ...
+       'Constant c_p of air at 300K', 'location', 'best');
 title('Turbine Power vs. Spool Speed');
 set(gcf,'color','w');
 set(gca, 'YTickLabel', num2str(get(gca,'YTick')', '%.0f'));
@@ -311,7 +316,8 @@ title('Combustor Stagnation Pressure Ratio vs. Spool Speed');
 set(gcf, 'color', 'w');
 
 %Nozzle
-T8s = jeannyWang(To5, pt5 ./ (ones(1, length(rpm)) .* Po2), length(rpm), 'JetA', phi, MM);
+T8s = jeannyWang(To5, pt5 ./ (ones(1, length(rpm)) .* Po2),...
+                 length(rpm), 'JetA', phi, MM);
 U8s = sqrt(2 .* deltaH_var_cp(T8s, To5, length(rpm), 'JetA', phi, MM));
 eta_nozz = (U8.^2) ./ (U8s.^2);
 
@@ -340,7 +346,8 @@ end
 figure;
 plot(phi_input, T_a_JetA,'marker', 'o', 'MarkerSize', markerSize);
 hold on;
-plot(phi_input, T_a_Dodecane, 'color', [0 1 0], 'marker', 'x', 'MarkerSize', markerSize); 
+plot(phi_input, T_a_Dodecane, 'color', [0 1 0], 'marker', 'x',...
+     'MarkerSize', markerSize); 
 xlabel('Equivalence Ratio (phi)');
 ylabel('Adiabatic Flame Temperature (K)');
 legend('JetA', 'Dodecane', 'location', 'best');
@@ -348,6 +355,5 @@ title('Adiabatic Flame Temperature versus Equivalence Ratio');
 set(gcf, 'color', 'w');
 
 %PART 3 - moved to other locations hehe
-
 
 plotfixer;

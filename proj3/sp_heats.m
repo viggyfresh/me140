@@ -1,6 +1,4 @@
 function [ cp, cv, gamma, R ] = sp_heats( temp , type )
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
 
 if strcmp(type,'CO2')
     
