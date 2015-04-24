@@ -16,7 +16,7 @@ hf.N2 = 0;                  sf.N2 = 191.61;
 hf.H2 = 0;                  sf.H2 = 130.68;
 
 %calculates the integrals
-fun_O2_h = @(T)sp_heats(T,'O2');
+fun_O2_h = @(T)sp_heats(T,'O2');  %CHANGE sp_heats TO PER MOLS??? (I THINK IT IS PER KG RIGHT NOW)
 fun_O2_s = @(T)sp_heats(T,'O2')./T;
 fun_N2_h = @(T)sp_heats(T,'N2');
 fun_N2_s = @(T)sp_heats(T,'N2')./T;
@@ -43,3 +43,7 @@ g_prod.H2O_vap =  hf.H2O_vap + integral(fun_H2O_vap_h, T_standard, T)...
             - T * ((sf.H2O_vap + integral(fun_H2O_vap_s, T_standard, T)) - R * log(P/P_standard))    
 
 %remember to add in coefficients!
+
+
+
+%test
