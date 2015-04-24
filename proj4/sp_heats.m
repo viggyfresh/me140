@@ -37,6 +37,15 @@ elseif strcmp(type,'O2')
     c = -0.7155*10^-5;
     d = 1.312*10^-9;
     
+elseif strcmp(type,'H2')
+    
+    molarMass = 2.02; %g/mol
+    R = 8.314462 ./ molarMass * 10^3;
+    a = 29.11;
+    b = -0.1916e-2;
+    c = 0.4003e-5;
+    d = -.8704e-9;
+
 elseif strcmp(type,'air')
     
     R = 286.9;
