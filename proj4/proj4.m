@@ -39,9 +39,9 @@ N_prod.H2O = 2 * MM.H2O;
 N_prod.N2 = lamda * 3.76 * MM.N2;
 N_prod.sum = 2 * MM.H2O + lamda * 3.76 * MM.N2 + lamda * MM.O2;
 
-y_prod.N2 = N_prod.N2 ./ N.sum;
-y_prod.O2 = N_prod.O2 ./ N.sum;
-y_prod.H2O = N_prod.H2O ./ N.sum;
+y_prod.N2 = N_prod.N2 ./ N_prod.sum;
+y_prod.O2 = N_prod.O2 ./ N_prod.sum;
+y_prod.H2O = N_prod.H2O ./ N_prod.sum;
 
 
 %calculate gibbs free energy of each species given balanced chemical
