@@ -31,18 +31,34 @@ T_standard = 298;       P_standard = 1;
 T = 300;                P = P_standard;
 R = 8.314; %J/(mol*K) --->>????? is this the right "R"?????
 
+% Calculate molar fractions for products [g/mol * g/mol] = [-]
+lamda = 2;
+phi = 1 ./ lamda;
+N_prod.O2 = lamda * MM.O2;
+N_prod.H2O = 2 * MM.H2O;
+N_prod.N2 = lamda * 3.76 * MM.N2;
+N_prod.sum = 2 * MM.H2O + lamda * 3.76 * MM.N2 + lamda * MM.O2;
+
+y_prod.N2 = N_prod.N2 ./ N.sum;
+y_prod.O2 = N_prod.O2 ./ N.sum;
+y_prod.H2O = N_prodH2O ./ N.sum;
+
+
 %calculate gibbs free energy of each species given balanced chemical
 %reaction
 g_prod.O2 = hf.O2 + integral(fun_O2_h, T_standard, T)...
-            - T * ((sf.O2 + integral(fun_O2_s, T_standard, T)) - R * log(P/P_standard))
+            - T * ((sf.O2 + integral(fun_O2_s, T_standard, T)) - R * log(P/P_standard));
 g_prod.N2 =  hf.N2 + integral(fun_N2_h, T_standard, T)...
-            - T * ((sf.N2 + integral(fun_N2_s, T_standard, T)) - R * log(P/P_standard))
+            - T * ((sf.N2 + integral(fun_N2_s, T_standard, T)) - R * log(P/P_standard));
 % g_prod.H2 =  hf.H2 + integral(fun_H2_h, T_standard, T)...
 %             - T * ((sf.H2 + integral(fun_H2_s, T_standard, T)) - R * log(P/P_standard))
 g_prod.H2O_vap =  hf.H2O_vap + integral(fun_H2O_vap_h, T_standard, T)...
-            - T * ((sf.H2O_vap + integral(fun_H2O_vap_s, T_standard, T)) - R * log(P/P_standard))    
+            - T * ((sf.H2O_vap + integral(fun_H2O_vap_s, T_standard, T)) - R * log(P/P_standard));
 
-%remember to add in coefficients!
+% Products:
+
+g_prod.total = y_prod.N2 .* g_prod.N2 + y_prod.H2O .* g_prod.H2O + y_prod.O2 .* g_prod.O2;
+
 
 
 
