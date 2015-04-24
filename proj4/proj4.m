@@ -41,7 +41,7 @@ N_prod.sum = 2 * MM.H2O + lamda * 3.76 * MM.N2 + lamda * MM.O2;
 
 y_prod.N2 = N_prod.N2 ./ N.sum;
 y_prod.O2 = N_prod.O2 ./ N.sum;
-y_prod.H2O = N_prodH2O ./ N.sum;
+y_prod.H2O = N_prod.H2O ./ N.sum;
 
 
 %calculate gibbs free energy of each species given balanced chemical
@@ -57,7 +57,7 @@ g_prod.H2O_vap =  hf.H2O_vap + integral(fun_H2O_vap_h, T_standard, T)...
 
 % Products:
 
-g_prod.total = y_prod.N2 .* g_prod.N2 + y_prod.H2O .* g_prod.H2O + y_prod.O2 .* g_prod.O2;
+g_prod.total = y_prod.N2 .* g_prod.N2 + y_prod.H2O .* g_prod.H2O_vap + y_prod.O2 .* g_prod.O2;
 
 
 
