@@ -100,3 +100,18 @@ efficiency.LHV = - N_react.sum * (g_prod_LHV.total - g_react.total) ./ (N_react.
 efficiency.HHV =  - N_react.sum * (g_prod_HHV.total - g_react.total) ./ (N_react.H2 * HHV)
 
 %^^something is wrong with these values
+
+%% first law efficiency (actual values) 
+
+% strategy:
+% calculate Psat using polnomial P(T) equation
+% calculate vapor fraction via Psat/P (where P = 1 atm)
+% calculate liquid fraction from vapor fraction
+% vapor fraction = beta, liquid fraction = gama
+% recalculate deltaG and sovle for first law efficiency
+% iterate through T, (to get new Psat, etc) and graph efficiency vs. T
+
+% idea:
+% write function, takes T, outputs, alpha and beta
+
+% Psat(T ) = exp(?1.2914x108 / T 3 +8.2048x105 / T 2 ?6522.8 / T + 25.5887)
