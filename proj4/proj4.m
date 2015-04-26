@@ -17,6 +17,10 @@ hf.O2 = 0;                  sf.O2 = 205.04;
 hf.N2 = 0;                  sf.N2 = 191.61;
 hf.H2 = 0;                  sf.H2 = 130.68;
 
+%Fuel heating values for H2 (J/mol)
+LHV = 286000;
+HHV = 119.96 * 10^3 * MM.H2;
+
 %calculates the integrals
 fun_O2_h = @(T)sp_heats(T,'O2');
 fun_O2_s = @(T)sp_heats(T,'O2')./T;
@@ -61,7 +65,7 @@ y_react.H2O_vap = N_react.H2O_vap ./ N_react.sum;
 
 %calculate gibbs free energy of each species given balanced chemical
 %reaction
-% Gibbs free energy of reactants - all in J / kg
+% Gibbs free energy of reactants - all in J / mol
 g_react.O2 = hf.O2 + integral(fun_O2_h, T_standard, T)...
             - T * ((sf.O2 + integral(fun_O2_s, T_standard, T)) - R * log(P/P_standard));
         
@@ -81,11 +85,18 @@ g_prod.N2 =  hf.N2 + integral(fun_N2_h, T_standard, T)...
 g_prod.H2O_vap =  hf.H2O_vap + integral(fun_H2O_vap_h, T_standard, T)...
             - T * ((sf.H2O_vap + integral(fun_H2O_vap_s, T_standard, T)) - R * log(P/P_standard));
 
+        %does this work below?        
+g_prod.H2O_liq =  hf.H2O_liq + integral(fun_H2O_liq_h, T_standard, T)...
+            - T * ((sf.H2O_liq + integral(fun_H2O_liq_s, T_standard, T)) - R * log(P/P_standard));
+
 % Reactants & Products:
 g_react.total = y_react.N2 .* g_react.N2 + y_react.O2 .* g_react.O2 + y_react.H2 .* g_react.H2
+g_prod_LHV.total = y_prod.N2 .* g_prod.N2 + y_prod.H2O_vap .* g_prod.H2O_vap + y_prod.O2 .* g_prod.O2
 
-g_prod.total = y_prod.N2 .* g_prod.N2 + y_prod.H2O .* g_prod.H2O_vap + y_prod.O2 .* g_prod.O2
+g_prod_HHV.total = y_prod.N2 .* g_prod.N2 + y_prod.H2O_vap .* g_prod.H2O_liq + y_prod.O2 .* g_prod.O2 % we use y_prod.H2O_vap instead of _liq because all liquid
 
+%calculate efficiencies
+efficiency.LHV = - N_react.sum * (g_prod_LHV.total - g_react.total) ./ (N_react.H2 * LHV)
+efficiency.HHV =  - N_react.sum * (g_prod_HHV.total - g_react.total) ./ (N_react.H2 * HHV)
 
-
-%test
+%^^something is wrong with these values
