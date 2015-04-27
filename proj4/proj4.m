@@ -10,7 +10,7 @@ MM.H = 1.008;
 MM.H2 = 2*MM.H;
 MM.H2O = 18.016;
 MM.CO2 = MM.C + MM.O2;
-MM.air = 28.97;
+MM.air = 28.97; 
 
 % Enthalpy (J/kg) and entropy (J/(kg*K)) of formation values
 hf.H2O_vap = -241820 / MM.H2O * 1000;
@@ -133,15 +133,11 @@ plotfixer;
 
 %% first law efficiency (actual values)
 
-% strategy:
-% calculate Psat using polnomial P(T) equation
-% calculate vapor fraction via Psat/P (where P = 1 atm)
-% calculate liquid fraction from vapor fraction
-% vapor fraction = beta, liquid fraction = gama
-% recalculate deltaG and sovle for first law efficiency
-% iterate through T, (to get new Psat, etc) and graph efficiency vs. T
+%% carnot efficiency 
 
-% idea:
-% write function, takes T, outputs, alpha and beta
-
-% Psat(T ) = exp(?1.2914x108 / T 3 +8.2048x105 / T 2 ?6522.8 / T + 25.5887)
+for i=1:length(T_series)
+    T = T_series(i);
+    n_carnot(i) = (1 - (T_standard / T))*100; %percent
+end
+hold on
+plot(T_series,n_carnot,'g');
