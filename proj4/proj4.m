@@ -1,6 +1,6 @@
-clc
-clear all
-close all
+clc;
+clear all;
+close all;
 
 % Molecular masses - grams
 MM.O2 = 32;
@@ -10,7 +10,7 @@ MM.H = 1.008;
 MM.H2 = 2*MM.H;
 MM.H2O = 18.016;
 MM.CO2 = MM.C + MM.O2;
-MM.air = 28.97;
+MM.air = 28.97; 
 
 % Enthalpy (J/kg) and entropy (J/(kg*K)) of formation values
 hf.H2O_vap = -241820 / MM.H2O * 1000;
@@ -153,26 +153,20 @@ for i=1:length(T_series)
 end
 
 % Something (might be) wrong with these values
+
+% Compute Carnot efficiency for all temperatures
+for i=1:length(T_series)
+    T = T_series(i);
+    n_carnot(i) = (1 - (T_standard / T)) * 100; %percent
+end
+
+% Plotting for Part 1
 figure;
 plot(T_series, efficiency.LHV * 100, T_series, efficiency.HHV * 100,...
-     T_series, efficiency.actual * 100);
+     T_series, efficiency.actual * 100, T_series, n_carnot);
 xlabel('Temperature (K)');
 ylabel('Efficiency (%)');
-legend('LHV', 'HHV', '\DeltaH');
+legend('LHV', 'HHV', '\DeltaH', '\eta_c');
 title('First Law Efficiency vs. Temperature');
 set(gcf, 'color', 'w');
 plotfixer;
-
-%% first law efficiency (actual values)
-
-% strategy:
-% calculate Psat using polnomial P(T) equation
-% calculate vapor fraction via Psat/P (where P = 1 atm)
-% calculate liquid fraction from vapor fraction
-% vapor fraction = beta, liquid fraction = gama
-% recalculate deltaG and sovle for first law efficiency
-% iterate through T, (to get new Psat, etc) and graph efficiency vs. T
-
-% idea:
-% write function, takes T, outputs, alpha and beta
-
