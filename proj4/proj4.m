@@ -141,3 +141,15 @@ for i=1:length(T_series)
 end
 hold on
 plot(T_series,n_carnot,'g');
+
+
+%% question 2 
+
+T_values = [80,220,650,80]; % celsius
+lambda_range = 1:.1:10;
+P_range = 1:.1:40; %Pa
+
+% change pressures, hold lamda
+lamda = 2;
+
+
