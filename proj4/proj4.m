@@ -1,27 +1,34 @@
 clc
+clear all
 close all
 
-%molecular masses
+% Molecular masses - grams
 MM.O2 = 32;
 MM.N2 = 28.02;
 MM.C = 12.01;
 MM.H = 1.008;
 MM.H2 = 2*MM.H;
-
 MM.H2O = 18.016;
+MM.CO2 = MM.C + MM.O2;
+MM.air = 28.97;
 
-%enthalpy (J/mol) and entropy( J/(mol*K) ) of formation values
-hf.H2O_vap = -241820;       sf.H2O_vap = 188.83;
-hf.H2O_liq = -285830;       sf.H2O_liq = 69.92;
-hf.O2 = 0;                  sf.O2 = 205.04;
-hf.N2 = 0;                  sf.N2 = 191.61;
-hf.H2 = 0;                  sf.H2 = 130.68;
+% Enthalpy (J/kg) and entropy (J/(kg*K)) of formation values
+hf.H2O_vap = -241820 / MM.H2O * 1000;
+sf.H2O_vap = 188.83 / MM.H2O * 1000;
+hf.H2O_liq = -285830 / MM.H2O * 1000;
+sf.H2O_liq = 69.92 / MM.H2O * 1000;
+hf.O2 = 0;
+sf.O2 = 205.04 / MM.O2 * 1000;
+hf.N2 = 0;
+sf.N2 = 191.61 / MM.N2 * 1000;
+hf.H2 = 0;
+sf.H2 = 130.68 / MM.H2 * 1000;
 
-%Fuel heating values for H2 (J/mol)
-LHV = 286000;
-HHV = 119.96 * 10^3 * MM.H2;
+% Fuel heating values for H2 (J/kg)
+LHV = 120.21 * 10^6;
+HHV = 142.18 * 10^6;
 
-%calculates the integrals
+% Calculates the integrals
 fun_O2_h = @(T)sp_heats(T,'O2');
 fun_O2_s = @(T)sp_heats(T,'O2')./T;
 fun_N2_h = @(T)sp_heats(T,'N2');
@@ -33,75 +40,98 @@ fun_H2O_vap_s = @(T)sp_heats(T,'H2O_vap')./T;
 fun_H2O_liq_h = @(T)sp_heats(T,'H2O_liq');
 fun_H2O_liq_s = @(T)sp_heats(T,'H2O_liq')./T;
 
+% Reference conditions
 T_standard = 298;       P_standard = 1;
-T = 300;                P = P_standard;
-R = 8.314; %J/(mol*K) --->>????? is this the right "R"?????
+T_series = 25:5:1000;
+T_series = T_series + 273;
+P = P_standard;
+R = 8.314;
 
 % Calculate molar fractions for products [g/mol * g/mol] = [-]
 lambda = 2;
 
-% Lower heating value - all gas
-N_prod.H2O_vap = 1;
-N_prod.H2O_liq = 0;
-N_prod.O2 = 0.5 * (lambda - 1);
-N_prod.N2 = 0.5 * lambda * 3.76;
-N_prod.sum = N_prod.H2O_vap + N_prod.H2O_liq + N_prod.O2 + N_prod.N2;
+for i=1:length(T_series)
+    T = T_series(i);
+    
+    % Lower heating value - all gas; higher heating value - all liquid
+    m_prod.H2O_vap = 1 * MM.H2O;
+    m_prod.H2O_liq = 0 * MM.H2O;
+    m_prod.O2 = 0.5 * (lambda - 1) * MM.O2;
+    m_prod.N2 = 0.5 * lambda * 3.76 * MM.N2;
+    m_prod.sum = m_prod.H2O_vap + m_prod.H2O_liq + m_prod.O2 + m_prod.N2;
+    
+    mf_prod.H2O_vap = m_prod.H2O_vap ./ m_prod.sum;
+    mf_prod.H2O_liq = m_prod.H2O_liq ./ m_prod.sum;
+    mf_prod.N2 = m_prod.N2 ./ m_prod.sum;
+    mf_prod.O2 = m_prod.O2 ./ m_prod.sum;
+    
+    m_react.H2 = 1 * MM.H2;
+    m_react.O2 = 0.5 * lambda * MM.O2;
+    m_react.N2 = 0.5 * lambda * 3.76 * MM.N2;
+    m_react.H2O_vap = 0;
+    m_react.sum = m_react.H2 + m_react.O2 + m_react.N2 + m_react.H2O_vap;
+    
+    mf_react.H2 = m_react.H2 ./ m_react.sum;
+    mf_react.O2 = m_react.O2 ./ m_react.sum;
+    mf_react.N2 = m_react.N2 ./ m_react.sum;
+    mf_react.H2O_vap = m_react.H2O_vap ./ m_react.sum;
+    
+    % Gibbs free energy - all in J / kg
+    g.O2 = hf.O2 + integral(fun_O2_h, T_standard, T)...
+        - T * ((sf.O2 + integral(fun_O2_s, T_standard, T))...
+        - R * log(P/P_standard));
+    
+    g.N2 =  hf.N2 + integral(fun_N2_h, T_standard, T)...
+        - T * ((sf.N2 + integral(fun_N2_s, T_standard, T))...
+        - R * log(P/P_standard));
+    
+    g.H2 =  hf.H2 + integral(fun_H2_h, T_standard, T)...
+        - T * ((sf.H2 + integral(fun_H2_s, T_standard, T))...
+        - R * log(P/P_standard));
+    
+    g.O2 = hf.O2 + integral(fun_O2_h, T_standard, T)...
+        - T * ((sf.O2 + integral(fun_O2_s, T_standard, T))...
+        - R * log(P/P_standard));
+    
+    g.N2 =  hf.N2 + integral(fun_N2_h, T_standard, T)...
+        - T * ((sf.N2 + integral(fun_N2_s, T_standard, T))...
+        - R * log(P/P_standard));
+    
+    g.H2O_vap =  hf.H2O_vap + integral(fun_H2O_vap_h, T_standard, T)...
+        - T * ((sf.H2O_vap + integral(fun_H2O_vap_s, T_standard, T))...
+        - R * log(P/P_standard));
+    
+    g.H2O_liq =  hf.H2O_liq + integral(fun_H2O_liq_h, T_standard, T)...
+        - T * ((sf.H2O_liq + integral(fun_H2O_liq_s, T_standard, T))...
+        - R * log(P/P_standard));
+    
+    % Reactants & Products:
+    g.total = mf_react.N2 .* g.N2 + mf_react.O2 .* g.O2...
+        + mf_react.H2 .* g.H2;
+    g.LHV = mf_prod.N2 .* g.N2 + mf_prod.H2O_vap .* g.H2O_vap...
+        + mf_prod.O2 .* g.O2;
+    % we use mf_prod.H2O_vap again because coefficient is the same
+    g.HHV = mf_prod.N2 .* g.N2 + mf_prod.H2O_vap .* g.H2O_liq...
+        + mf_prod.O2 .* g.O2;
+    
+    %calculate efficiencies
+    efficiency.LHV(i) = -m_react.sum * (g.LHV - g.total)...
+        ./ (m_react.H2 * LHV);
+    efficiency.HHV(i) =  -m_react.sum * (g.HHV - g.total)...
+        ./ (m_react.H2 * HHV);
+end
 
-y_prod.H2O_vap = N_prod.H2O_vap ./ N_prod.sum;
-y_prod.H2O_liq = N_prod.H2O_liq ./ N_prod.sum;
-y_prod.N2 = N_prod.N2 ./ N_prod.sum;
-y_prod.O2 = N_prod.O2 ./ N_prod.sum;
+% Something (might be) wrong with these values
+figure;
+plot(T_series, efficiency.LHV * 100, T_series, efficiency.HHV * 100);
+xlabel('Temperature (K)');
+ylabel('Efficiency (%)');
+legend('LHV', 'HHV');
+title('First Law Efficiency vs. Temperature');
+set(gcf, 'color', 'w');
+plotfixer;
 
-N_react.H2 = 1;
-N_react.O2 = 0.5 * lambda;
-N_react.N2 = 0.5 * lambda * 3.76;
-N_react.H2O_vap = 0;
-N_react.sum = N_react.H2 + N_react.O2 + N_react.N2 + N_react.H2O_vap;
-
-y_react.H2 = N_react.H2 ./ N_react.sum;
-y_react.O2 = N_react.O2 ./ N_react.sum;
-y_react.N2 = N_react.N2 ./ N_react.sum;
-y_react.H2O_vap = N_react.H2O_vap ./ N_react.sum;
-
-%calculate gibbs free energy of each species given balanced chemical
-%reaction
-% Gibbs free energy of reactants - all in J / mol
-g_react.O2 = hf.O2 + integral(fun_O2_h, T_standard, T)...
-            - T * ((sf.O2 + integral(fun_O2_s, T_standard, T)) - R * log(P/P_standard));
-        
-g_react.N2 =  hf.N2 + integral(fun_N2_h, T_standard, T)...
-            - T * ((sf.N2 + integral(fun_N2_s, T_standard, T)) - R * log(P/P_standard));
-        
-g_react.H2 =  hf.H2 + integral(fun_H2_h, T_standard, T)...
-            - T * ((sf.H2 + integral(fun_H2_s, T_standard, T)) - R * log(P/P_standard));
-        
-% Gibbs free energy of products 
-g_prod.O2 = hf.O2 + integral(fun_O2_h, T_standard, T)...
-            - T * ((sf.O2 + integral(fun_O2_s, T_standard, T)) - R * log(P/P_standard));
-g_prod.N2 =  hf.N2 + integral(fun_N2_h, T_standard, T)...
-            - T * ((sf.N2 + integral(fun_N2_s, T_standard, T)) - R * log(P/P_standard));
-% g_prod.H2 =  hf.H2 + integral(fun_H2_h, T_standard, T)...
-%             - T * ((sf.H2 + integral(fun_H2_s, T_standard, T)) - R * log(P/P_standard))
-g_prod.H2O_vap =  hf.H2O_vap + integral(fun_H2O_vap_h, T_standard, T)...
-            - T * ((sf.H2O_vap + integral(fun_H2O_vap_s, T_standard, T)) - R * log(P/P_standard));
-
-        %does this work below?        
-g_prod.H2O_liq =  hf.H2O_liq + integral(fun_H2O_liq_h, T_standard, T)...
-            - T * ((sf.H2O_liq + integral(fun_H2O_liq_s, T_standard, T)) - R * log(P/P_standard));
-
-% Reactants & Products:
-g_react.total = y_react.N2 .* g_react.N2 + y_react.O2 .* g_react.O2 + y_react.H2 .* g_react.H2
-g_prod_LHV.total = y_prod.N2 .* g_prod.N2 + y_prod.H2O_vap .* g_prod.H2O_vap + y_prod.O2 .* g_prod.O2
-
-g_prod_HHV.total = y_prod.N2 .* g_prod.N2 + y_prod.H2O_vap .* g_prod.H2O_liq + y_prod.O2 .* g_prod.O2 % we use y_prod.H2O_vap instead of _liq because all liquid
-
-%calculate efficiencies
-efficiency.LHV = - N_react.sum * (g_prod_LHV.total - g_react.total) ./ (N_react.H2 * LHV)
-efficiency.HHV =  - N_react.sum * (g_prod_HHV.total - g_react.total) ./ (N_react.H2 * HHV)
-
-%^^something is wrong with these values
-
-%% first law efficiency (actual values) 
+%% first law efficiency (actual values)
 
 % strategy:
 % calculate Psat using polnomial P(T) equation
