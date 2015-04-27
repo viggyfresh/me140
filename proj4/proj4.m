@@ -5,7 +5,7 @@ close all;
 % Part 1
 alpha = 0;
 lambda = 2;
-P_standard = 101.3 * 10^3;
+P_standard = 101.325 * 10^3;
 P = P_standard;
 T_standard = 298;
 T_series = 25:5:1000;
@@ -33,7 +33,7 @@ plotfixer;
 
 T_values = [80,220,650,800] + 273; % K
 lambda_range = 1:0.5:10;
-P_range = 1:1:40; % Pa
+P_range = 1:1:40; % atm
 alpha = 0;
 
 % Change pressure, keep lambda constant
@@ -41,7 +41,7 @@ lambda = 2;
 for i=1:length(T_values)
     T = T_values(i);
     for j = 1:length(P_range)
-        P = P_range(j) * 101.3 * 10^3;
+        P = P_range(j) * P_standard;
         eta.p(i, j) = lucio(T, P, alpha, lambda);
     end
 end
