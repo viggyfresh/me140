@@ -288,8 +288,6 @@ for i=1:length(T_values)
         mf_react.N2 = m_react.N2 ./ m_react.sum;
         mf_react.H2O_vap = m_react.H2O_vap ./ m_react.sum;
         
-        mf_prod
-        
         H.O2 = hf.O2 + integral(fun_O2_h, T_standard, T);
         g.O2 = H.O2...
             - T * ((sf.O2 + integral(fun_O2_s, T_standard, T))...
@@ -342,7 +340,13 @@ for i=1:length(T_values)
             ./ (m_react.H2 * LHV);
     end
 end
-figure
+% figure
 plot(lambda_range, eta_lambda(1, :) * 100, lambda_range, ...
     eta_lambda(2, :) * 100, lambda_range, eta_lambda(3, :)...
     * 100, lambda_range, eta_lambda(4, :) * 100)
+xlabel('Lambda (-)');
+ylabel('Efficiency (%)');
+legend('80^{\circ}C', '220^{\circ}C', '650^{\circ}C', '800^{\circ}C');
+title('First Law Efficiency vs. Lambda');
+set(gcf, 'color', 'w');
+plotfixer;
