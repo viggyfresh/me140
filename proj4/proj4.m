@@ -80,7 +80,7 @@ set(gcf, 'color', 'w');
 plotfixer;
 
 %% Part 3
-lambda = 2; %make lambda constant again
+lambda = 2; %makes lambda constant again
 T_values = 298:1:373;
 for i = 1:length(T_values)
     T = T_values(i);
@@ -88,7 +88,7 @@ for i = 1:length(T_values)
 end
 figure
 plot(T_values,RH)
-xlabel('Temperature')
+xlabel('Temperature (K)')
 ylabel('Relative Humidity')
 title('Relative Humidity vs. Temperature')
 
