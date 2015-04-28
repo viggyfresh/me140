@@ -1,10 +1,10 @@
-function [ alpha, RH ] = relHumidity( T, lambda, P )
+function [ alpha, RH ] = relHumidity( T, lambda)
 
 P_standard = 101.325 .* 10^3;
 P_sat = exp(-1.2914e8 ./ T^3 + 8.2048e5 ./ T^2 - 6522.8 ./ T + 25.5887);
 
 N_a = (0.5 .* (lambda - 1) + (0.5 .* lambda .* 3.76));
-y_max = P_sat / P;
+y_max = P_sat / P_standard;
 alpha = 0;
 dalpha = .01;
 N_tot_H2O = 1 + alpha; %(fully saturated)

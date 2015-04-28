@@ -53,7 +53,7 @@ plot(P_range, eta.p(1, :) * 100, P_range, eta.p(2, :) * 100,...
 xlabel('Pressure (Pa)');
 ylabel('Efficiency (%)');
 legend('80^{\circ}C', '220^{\circ}C', '650^{\circ}C', '800^{\circ}C',...
-    'Location','Southwest');
+    'Location','Southeast');
 title('First Law Efficiency vs. Pressure');
 set(gcf, 'color', 'w');
 plotfixer;
@@ -64,7 +64,7 @@ for i=1:length(T_values)
     T = T_values(i);
     for j = 1:length(lambda_range)
         lambda = lambda_range(j);
-        eta.lambda(i, j) = lucio(T, P, alpha, lambda)
+        eta.lambda(i, j) = lucio(T, P, alpha, lambda);
     end
 end
 
@@ -76,7 +76,7 @@ plot(lambda_range, eta.lambda(1, :) * 100, lambda_range, ...
 xlabel('Lambda (-)');
 ylabel('Efficiency (%)');
 legend('80^{\circ}C', '220^{\circ}C', '650^{\circ}C', '800^{\circ}C',...
-    'Location','Southwest');
+    'Location','Southeast');
 title('First Law Efficiency vs. Lambda');
 set(gcf, 'color', 'w');
 plotfixer;
@@ -102,7 +102,7 @@ lambda = 2;
 P = P_standard;
 for i = 1:length(T_values)
     T = T_values(i);
-    [alpha_curr, RH_curr] = relHumidity(T, lambda,P);
+    [alpha_curr, RH_curr] = relHumidity(T, lambda);
     alpha_100 = john(T, lambda);
     eta.dry(i) = lucio(T, P, 0, lambda);
     eta.hundred(i) = lucio(T, P, alpha_100, lambda);

@@ -3,7 +3,7 @@ function [eta_LHV, eta_HHV, eta_actual] = lucio(T, P, alpha, lambda)
 % Universal gas constant R
 R = 8.3144621;
 
-% Molecular masses - grams
+% Molecular masses - kg/kmol
 MM.O2 = 32;
 MM.N2 = 28.02;
 MM.C = 12.01;
@@ -159,9 +159,10 @@ g_prod.H2O_vap = H.H2O_vap...
     - T * ((sf.H2O_vap + integral(fun_H2O_vap_s, T_standard, T))...
     - Rvar.H2O * log(P_prod.H2O_vap/P_standard));
 
-H.H2O_liq = hf.H2O_liq + integral(fun_H2O_liq_h, T_standard, T);
+% H.H2O_liq = hf.H2O_liq + integral(fun_H2O_liq_h, T_standard, T);
+H.H2O_liq = hf.H2O_liq + 4200*(T-T_standard);
 g_prod.H2O_liq = H.H2O_liq...
-    - T * ((sf.H2O_liq + integral(fun_H2O_liq_s, T_standard, T))...
+    - T * ((sf.H2O_liq + 4200*log(T/T_standard))...
     - Rvar.H2O_liq * log(P_prod.H2O_liq/P_standard));
 
 
