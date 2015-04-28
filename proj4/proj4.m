@@ -31,7 +31,7 @@ plotfixer;
 
 %% Part 2
 
-T_values = [80,220,650,800] + 273; % K
+T_values = [100,220,650,800] + 273; % K
 lambda_range = 1:0.5:10;
 P_range = 1:1:40; % atm
 alpha = 0;
