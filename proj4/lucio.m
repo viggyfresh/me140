@@ -55,19 +55,19 @@ P_sat = exp(-1.2914e8 / T^3 + 8.2048e5 / T^2 - 6522.8 / T + 25.5887);
 % Saturation computations
 y_max = P_sat / P_standard;
 N_a = (0.5 * (lambda - 1) + (0.5 * lambda * 3.76));
-y_test = 1 / (1 + N_a);
+y_test = (1 + alpha) / (1 + alpha + N_a);
 
 if y_test > y_max
     beta = (y_max * N_a) / (1 - y_max);
-    gamma = 1 - beta;
+    gamma = 1 + alpha - beta;
 else
-    beta = 1;
+    beta = 1 + alpha;
     gamma = 0;
 end
 
 N_prod.H2O_vap = beta;
 N_prod.H2O_liq = gamma;
-N_prod.H2O = 1;
+N_prod.H2O = 1 + alpha;
 N_prod.O2 = 0.5 * (lambda - 1);
 N_prod.N2 = 0.5 * lambda * 3.76;
 N_prod.sum = N_prod.H2O_vap + N_prod.O2 + N_prod.N2;
@@ -78,11 +78,11 @@ y_prod.H2O = N_prod.H2O ./ N_prod.sum;
 y_prod.N2 = N_prod.N2 ./ N_prod.sum;
 y_prod.O2 = N_prod.O2 ./ N_prod.sum;
 
-m_prod.H2O_vap = beta * MM.H2O;
-m_prod.H2O_liq = gamma * MM.H2O;
-m_prod.H2O = MM.H2O;
-m_prod.O2 = 0.5 * (lambda - 1) * MM.O2;
-m_prod.N2 = 0.5 * lambda * 3.76 * MM.N2;
+m_prod.H2O_vap = N_prod.H2O_vap * MM.H2O;
+m_prod.H2O_liq = N_prod.H2O_liq * MM.H2O;
+m_prod.H2O = N_prod.H2O * MM.H2O;
+m_prod.O2 = N_prod.O2 * MM.O2;
+m_prod.N2 = N_prod.N2 * MM.N2;
 m_prod.sum = m_prod.H2O + m_prod.O2 + m_prod.N2;
 
 mf_prod.H2O_vap = m_prod.H2O_vap ./ m_prod.sum;
@@ -102,10 +102,10 @@ y_react.O2 = N_react.O2 ./ N_react.sum;
 y_react.N2 = N_react.N2 ./ N_react.sum;
 y_react.H2O_vap = N_react.H2O_vap ./ N_react.sum;
 
-m_react.H2 = 1 * MM.H2;
-m_react.O2 = 0.5 * lambda * MM.O2;
-m_react.N2 = 0.5 * lambda * 3.76 * MM.N2;
-m_react.H2O_vap = alpha * MM.H2O;
+m_react.H2 = N_react.H2 * MM.H2;
+m_react.O2 = N_react.O2 * MM.O2;
+m_react.N2 = N_react.N2 * MM.N2;
+m_react.H2O_vap = N_react.H2O_vap * MM.H2O;
 m_react.sum = m_react.H2 + m_react.O2 + m_react.N2 + m_react.H2O_vap;
 
 mf_react.H2 = m_react.H2 ./ m_react.sum;

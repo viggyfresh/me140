@@ -86,12 +86,30 @@ for i = 1:length(T_values)
     T = T_values(i);
     [alpha(i), RH(i)] = relHumidity(T, lambda);
 end
-figure
-plot(T_values,RH)
-xlabel('Temperature (K)')
-ylabel('Relative Humidity')
-title('Relative Humidity vs. Temperature')
+figure;
+plot(T_values, RH);
+xlabel('Temperature (K)');
+ylabel('Relative Humidity');
+title('Relative Humidity vs. Temperature');
+set(gcf, 'color', 'w');
+plotfixer;
 
-    
-    
-    
+%% Part 4
+T_values = 298:1:373;
+lambda = 2;
+P = P_standard;
+for i = 1:length(T_values)
+    T = T_values(i);
+    [alpha_curr, RH_curr] = relHumidity(T, lambda);
+    eta.dry(i) = lucio(T, P, 0, lambda);
+    eta.sat(i) = lucio(T, P, alpha_curr, lambda);
+end
+
+figure
+plot(T_values, eta.dry * 100, T_values, eta.sat * 100);
+xlabel('Temperature (K)');
+ylabel('Efficiency (%)');
+title('First Law Efficiency vs. Temperature');
+legend('Dry Hydrogen and Air', 'Saturation at Exit');
+set(gcf, 'color', 'w');
+plotfixer;
