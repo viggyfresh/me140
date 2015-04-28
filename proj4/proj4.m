@@ -1,5 +1,5 @@
 clc;
-clear all;
+% clear all;
 close all;
 
 % Part 1
@@ -24,7 +24,7 @@ plot(T_series, eta.LHV * 100, T_series, eta.HHV * 100,...
      T_series, eta.actual * 100, T_series, eta.carnot * 100);
 xlabel('Temperature (K)');
 ylabel('Efficiency (%)');
-legend('LHV', 'HHV', '\DeltaH', '\eta_c');
+legend('LHV', 'HHV', '\DeltaH', '\eta_c','Location','Southeast');
 title('First Law Efficiency vs. Temperature');
 set(gcf, 'color', 'w');
 plotfixer;
@@ -102,7 +102,7 @@ lambda = 2;
 P = P_standard;
 for i = 1:length(T_values)
     T = T_values(i);
-    [alpha_curr, RH_curr] = relHumidity(T, lambda);
+    [alpha_curr, RH_curr] = relHumidity(T, lambda,P);
     alpha_100 = john(T, lambda);
     eta.dry(i) = lucio(T, P, 0, lambda);
     eta.hundred(i) = lucio(T, P, alpha_100, lambda);
