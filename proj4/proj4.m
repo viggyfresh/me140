@@ -79,9 +79,9 @@ title('First Law Efficiency vs. Lambda');
 set(gcf, 'color', 'w');
 plotfixer;
 
-%%%%%%  Part 3 %%%%%%%%%
+%% Part 3
 lamda = 2; %make lambda constant again
-T_values = 25:.1:100;
+T_values = 298:1:373;
 for i = 1:length(T_values)
     T = T_values(i);
     [alpha(i), RH(i)] = relHumidity(T, lambda);
