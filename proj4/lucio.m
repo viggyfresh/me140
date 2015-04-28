@@ -96,7 +96,7 @@ N_react.H2 = 1;
 N_react.O2 = 0.5 * lambda;
 N_react.N2 = 0.5 * lambda * 3.76;
 N_react.H2O_vap = alpha;
-N_react.sum = N_react.O2 + N_react.N2 + N_react.H2O_vap;
+N_react.sum = N_react.H2 + N_react.O2 + N_react.N2 + N_react.H2O_vap;
 
 y_react.H2 = N_react.H2 ./ N_react.sum;
 y_react.O2 = N_react.O2 ./ N_react.sum;
