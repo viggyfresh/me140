@@ -101,15 +101,18 @@ P = P_standard;
 for i = 1:length(T_values)
     T = T_values(i);
     [alpha_curr, RH_curr] = relHumidity(T, lambda);
+    alpha_100 = john(T, lambda);
     eta.dry(i) = lucio(T, P, 0, lambda);
+    eta.hundred(i) = lucio(T, P, alpha_100, lambda);
     eta.sat(i) = lucio(T, P, alpha_curr, lambda);
 end
 
 figure
-plot(T_values, eta.dry * 100, T_values, eta.sat * 100);
+plot(T_values, eta.dry * 100, T_values, eta.hundred * 100,...
+     T_values, eta.sat * 100);
 xlabel('Temperature (K)');
 ylabel('Efficiency (%)');
 title('First Law Efficiency vs. Temperature');
-legend('Dry Hydrogen and Air', 'Saturation at Exit');
+legend('Dry Hydrogen and Air', 'RH = 100% at Inlet', 'Saturation at Exit');
 set(gcf, 'color', 'w');
 plotfixer;
