@@ -31,7 +31,7 @@ plotfixer;
 
 %% Part 2
 
-T_values = [100,220,650,800] + 273; % K
+T_values = [80,220,650,800] + 273; % K
 lambda_range = 1:0.5:10;
 P_range = 1:1:40; % atm
 alpha = 0;
@@ -52,7 +52,8 @@ plot(P_range, eta.p(1, :) * 100, P_range, eta.p(2, :) * 100,...
      P_range, eta.p(3, :) * 100, P_range, eta.p(4, :) * 100);
 xlabel('Pressure (Pa)');
 ylabel('Efficiency (%)');
-legend('80^{\circ}C', '220^{\circ}C', '650^{\circ}C', '800^{\circ}C');
+legend('80^{\circ}C', '220^{\circ}C', '650^{\circ}C', '800^{\circ}C',...
+    'Location','Southwest');
 title('First Law Efficiency vs. Pressure');
 set(gcf, 'color', 'w');
 plotfixer;
@@ -63,7 +64,7 @@ for i=1:length(T_values)
     T = T_values(i);
     for j = 1:length(lambda_range)
         lambda = lambda_range(j);
-        eta.lambda(i, j) = lucio(T, P, alpha, lambda);
+        eta.lambda(i, j) = lucio(T, P, alpha, lambda)
     end
 end
 
@@ -74,7 +75,8 @@ plot(lambda_range, eta.lambda(1, :) * 100, lambda_range, ...
      lambda_range, eta.lambda(4, :) * 100)
 xlabel('Lambda (-)');
 ylabel('Efficiency (%)');
-legend('80^{\circ}C', '220^{\circ}C', '650^{\circ}C', '800^{\circ}C');
+legend('80^{\circ}C', '220^{\circ}C', '650^{\circ}C', '800^{\circ}C',...
+    'Location','Southwest');
 title('First Law Efficiency vs. Lambda');
 set(gcf, 'color', 'w');
 plotfixer;

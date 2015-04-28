@@ -17,6 +17,7 @@ Rvar.O2 = R / MM.O2 * 10^3;
 Rvar.H2 = R / MM.H2 * 10^3;
 Rvar.N2 = R / MM.N2 * 10^3;
 Rvar.H2O = R / MM.H2O * 10^3;
+Rvar.H2O_liq = 0; %to avoid matlab rounding errors of ln(1)
 
 % Enthalpy (J/kg) and entropy (J/(kg*K)) of formation values
 hf.H2O_vap = -241820 / MM.H2O * 1000;
@@ -67,10 +68,10 @@ end
 
 N_prod.H2O_vap = beta;
 N_prod.H2O_liq = gamma;
-N_prod.H2O = 1 + alpha;
+N_prod.H2O = beta + gamma; % 1 + alpha = beta + gamma 
 N_prod.O2 = 0.5 * (lambda - 1);
 N_prod.N2 = 0.5 * lambda * 3.76;
-N_prod.sum = N_prod.H2O_vap + N_prod.O2 + N_prod.N2;
+N_prod.sum = N_prod.H2O_liq + N_prod.H2O_vap + N_prod.O2 + N_prod.N2;
 
 y_prod.H2O_vap = N_prod.H2O_vap ./ N_prod.sum;
 y_prod.H2O_liq = N_prod.H2O_liq ./ N_prod.sum;
@@ -161,7 +162,7 @@ g_prod.H2O_vap = H.H2O_vap...
 H.H2O_liq = hf.H2O_liq + integral(fun_H2O_liq_h, T_standard, T);
 g_prod.H2O_liq = H.H2O_liq...
     - T * ((sf.H2O_liq + integral(fun_H2O_liq_s, T_standard, T))...
-    - Rvar.H2O * log(P_prod.H2O_liq/P_standard));
+    - Rvar.H2O_liq * log(P_prod.H2O_liq/P_standard));
 
 
 % Reactants & Products:
