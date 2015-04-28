@@ -80,7 +80,7 @@ set(gcf, 'color', 'w');
 plotfixer;
 
 %% Part 3
-lamda = 2; %make lambda constant again
+lambda = 2; %make lambda constant again
 T_values = 298:1:373;
 for i = 1:length(T_values)
     T = T_values(i);
