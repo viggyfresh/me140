@@ -78,3 +78,20 @@ legend('80^{\circ}C', '220^{\circ}C', '650^{\circ}C', '800^{\circ}C');
 title('First Law Efficiency vs. Lambda');
 set(gcf, 'color', 'w');
 plotfixer;
+
+%%%%%%  Part 3 %%%%%%%%%
+lamda = 2; %make lambda constant again
+T_values = 25:.1:100;
+for i = 1:length(T_values)
+    T = T_values(i);
+    [alpha(i), RH(i)] = relHumidity(T, lambda);
+end
+figure
+plot(T_values,RH)
+xlabel('Temperature')
+ylabel('Relative Humidity')
+title('Relative Humidity vs. Temperature')
+
+    
+    
+    
