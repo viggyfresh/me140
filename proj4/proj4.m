@@ -50,7 +50,7 @@ end
 figure;
 plot(P_range, eta.p(1, :) * 100, P_range, eta.p(2, :) * 100,...
      P_range, eta.p(3, :) * 100, P_range, eta.p(4, :) * 100);
-xlabel('Pressure (Pa)');
+xlabel('Pressure (atm)');
 ylabel('Efficiency (%)');
 legend('80^{\circ}C', '220^{\circ}C', '650^{\circ}C', '800^{\circ}C',...
     'Location','Southeast');
@@ -111,7 +111,7 @@ end
 
 figure
 plot(T_values, eta.dry * 100, T_values, eta.hundred * 100,...
-     T_values, eta.sat * 100);
+     T_values, eta.sat * 100, '--k');
 xlabel('Temperature (K)');
 ylabel('Efficiency (%)');
 title('First Law Efficiency vs. Temperature');
