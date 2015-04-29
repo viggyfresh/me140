@@ -111,7 +111,7 @@ end
 
 figure
 plot(T_values, eta.dry * 100, T_values, eta.hundred * 100,...
-     T_values, eta.sat * 100);
+     T_values, eta.sat * 100, '--k');
 xlabel('Temperature (K)');
 ylabel('Efficiency (%)');
 title('First Law Efficiency vs. Temperature');
