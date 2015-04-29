@@ -1,8 +1,8 @@
+%% Part 1
 clc;
 clear all;
 close all;
 
-% Part 1
 alpha = 0;
 lambda = 2;
 P_standard = 101.325 * 10^3;
