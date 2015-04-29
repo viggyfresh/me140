@@ -49,7 +49,7 @@ fun_H2O_liq_s = @(T)sp_heats(T,'H2O_liq')./T;
 
 % Reference conditions
 T_standard = 298;
-P_standard = 101.3 * 10^3;
+P_standard = 101.325 * 10^3;
 
 P_sat = exp(-1.2914e8 / T^3 + 8.2048e5 / T^2 - 6522.8 / T + 25.5887);
 
@@ -71,7 +71,7 @@ N_prod.H2O_liq = gamma;
 N_prod.H2O = beta + gamma; % 1 + alpha = beta + gamma 
 N_prod.O2 = 0.5 * (lambda - 1);
 N_prod.N2 = 0.5 * lambda * 3.76;
-N_prod.sum = N_prod.H2O_liq + N_prod.H2O_vap + N_prod.O2 + N_prod.N2;
+N_prod.sum = N_prod.H2O_vap + N_prod.O2 + N_prod.N2;
 
 y_prod.H2O_vap = N_prod.H2O_vap ./ N_prod.sum;
 y_prod.H2O_liq = N_prod.H2O_liq ./ N_prod.sum;
@@ -96,7 +96,7 @@ N_react.H2 = 1;
 N_react.O2 = 0.5 * lambda;
 N_react.N2 = 0.5 * lambda * 3.76;
 N_react.H2O_vap = alpha;
-N_react.sum = N_react.H2 + N_react.O2 + N_react.N2 + N_react.H2O_vap;
+N_react.sum = N_react.O2 + N_react.N2 + N_react.H2O_vap;
 
 y_react.H2 = N_react.H2 ./ N_react.sum;
 y_react.O2 = N_react.O2 ./ N_react.sum;
