@@ -1,4 +1,7 @@
-function [eta_LHV, eta_HHV, eta_actual] = lucio(T, P, alpha, lambda)
+function [eta_LHV, eta_HHV, eta_actual] = lucio(T, P,P2,alpha, lambda)
+
+% pressure in of hydrogen fuel line
+P_H2 = P2; 
 
 % Universal gas constant R
 R = 8.3144621;
@@ -115,7 +118,7 @@ mf_react.N2 = m_react.N2 ./ m_react.sum;
 mf_react.H2O_vap = m_react.H2O_vap ./ m_react.sum;
 
 % Partial pressures using linear mixing rules
-P_react.H2 = P;
+P_react.H2 = P_H2;
 P_react.O2 = y_react.O2 * P;
 P_react.N2 = y_react.N2 * P;
 P_react.H2O_vap = y_react.H2O_vap * P;

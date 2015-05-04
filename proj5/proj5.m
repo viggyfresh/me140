@@ -21,7 +21,7 @@ T_water_reservoir = [51 50.5 50.2 50.7 51.4];
 T_water_in_stack = [51.1 50.4 50.3 50.9 51.3];
 T_water_before_HeatExchange = [50.5 50.2 50.5 51.8 53.5];
 T_stack = [48.2 47 47.1 47.6 49.4];
-P_air_in = [75 1 1.2 1.6 2]; %these are GAUGE!!!
+P_air_in = [.75 1 1.2 1.6 2]; %these are GAUGE!!!
 P_H2_in = [1 1.1 1.1 1.1 1.1]; %GAUGE
 
 
@@ -72,7 +72,7 @@ lambda = air_flow ./ H2_flow; %% unitless
 
 % Lambda vs. I_load
 figure 
-plot(lambda, I_load)
+plot(I_load, lambda)
 xlabel('Excess-air coefficient');
 ylabel('Load Current [volts]')
 plotfixer 
