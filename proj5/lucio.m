@@ -1,6 +1,6 @@
-function [eta_LHV, eta_HHV, eta_actual] = lucio(T, P,P2,alpha, lambda)
+function [eta_LHV, eta_HHV, eta_actual] = lucio(T, P, P2, alpha, lambda)
 
-% pressure in of hydrogen fuel line
+% pressure of hydrogen fuel line
 P_H2 = P2; 
 
 % Universal gas constant R
