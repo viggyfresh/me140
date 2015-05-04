@@ -27,7 +27,7 @@ P_load = I_load .* V_load; %watts
 P_stack = I_stack .* V_stack; %watts
 P_accessory = P_stack - P_load; %watts
 
-figure
+figure;
 plot(P_load, I_load, P_load, I_stack);
 xlabel('Power to Resistor Bank (W)');
 ylabel('Current (A)');
@@ -36,7 +36,7 @@ legend('Load current', 'Stack current','Location','northwest');
 set(gcf, 'color', 'w');
 plotfixer; %% this must be added 
 
-figure 
+figure;
 plot(P_load, V_load, P_load, V_stack);
 xlabel('Power to Resistor Bank (W)');
 ylabel('Potential/Voltage (V)');
@@ -45,7 +45,7 @@ legend('Load potential', 'Stack potential','Location','southwest');
 set(gcf, 'color', 'w');
 plotfixer; 
 
-figure
+figure;
 plot(P_load, P_stack, P_load, P_accessory); % need to put where net power is zero
 xlabel('Power to Resistor Bank (W)');
 ylabel('Power (W)');
@@ -54,7 +54,7 @@ legend('Stack Power', 'Accessory Power');
 set(gcf, 'color', 'w');
 plotfixer;
 
-figure 
+figure;
 plot(P_load, H2_flow, P_load, air_flow);
 xlabel('Power to Resistor Bank (W)');
 ylabel('Mass flow rate (kg/s)');
@@ -76,18 +76,28 @@ H2_flow_m_s = H2_flow ./ MM.H2 .* 1000;  %mol/sec
 Air_flow_m_s = air_flow ./MM.air .* 1000; %mol/sec
 lambda = 2*Air_flow_m_s./H2_flow_m_s; %% check with TA 
 
-figure 
-plot(I_load, lambda)
+figure;
+plot(I_load, lambda);
 xlabel('Load Current [volts]');
-ylabel('\lambda')
-plotfixer 
+ylabel('\lambda');
+title('\lambda vs. Load Current');
+set(gcf, 'color', 'w');
+plotfixer;
 
 % n_1 vs. I_load
-for i = length(T_stack)
+for i=1:length(T_stack)
     alpha(i) = relHumidity(T_stack(i),lambda(i));
-    eta_LHV(i) = lucio(T_stack(i),P_air_in(i),P_H2_in(i),alpha(i),lambda(i));
+    eta_1_LHV(i) = lucio(T_stack(i),P_air_in(i),P_H2_in(i),alpha(i),lambda(i))
 end
 
+
+figure;
+plot(I_load, eta_1_LHV);
+xlabel('Load Current [volts]');
+ylabel('\eta (First Law)');
+title('First Law Efficiency vs. Load Current');
+set(gcf, 'color', 'w');
+plotfixer;
 
 
 % n_2 vs. I_load 
