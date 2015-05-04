@@ -28,6 +28,7 @@ P_H2_in = [1 1.1 1.1 1.1 1.1]; %GAUGE
 %Plots for Part 1
 P_load = I_load .* V_load; %watts
 P_stack = I_stack .* V_stack; %watts
+P_accessory = P_stack - P_load; %watts
 
 figure
 plot(P_load, I_load, P_load, I_stack);
@@ -47,15 +48,14 @@ legend('Load potential', 'Stack potential','Location','southwest');
 set(gcf, 'color', 'w');
 plotfixer; 
 
-%%%%% (WHAT IS ACCESSORY POWER?)
-% figure
-% plot(P_load, P_stack, P_load, P_accessory);
-% xlabel('Power to Resistor Bank (W)');
-% ylabel('Power (W)');
-% title('Stack and Accessory Power vs. Load Power');
-% legend('Stack Power', 'Accessory Power');
-% set(gcf, 'color', 'w');
-% plotfixer;
+figure
+plot(P_load, P_stack, P_load, P_accessory); % need to put where net power is zero
+xlabel('Power to Resistor Bank (W)');
+ylabel('Power (W)');
+title('Stack and Accessory Power vs. Load Power');
+legend('Stack Power', 'Accessory Power');
+set(gcf, 'color', 'w');
+plotfixer;
 
 figure 
 plot(P_load, H2_flow, P_load, air_flow);
