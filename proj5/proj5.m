@@ -68,10 +68,7 @@ plotfixer;
 
 %% Part A2
 
-
-
-% Lambda vs. I_load
-
+% lambda vs. I_load
 MM.O2 = 32;
 MM.N2 = 28.02;
 MM.H = 1.008;
@@ -80,7 +77,7 @@ MM.air = 28.97;
 
 H2_flow_m_s = H2_flow ./ MM.H2 .* 1000;  %mol/sec
 Air_flow_m_s = air_flow ./MM.air .* 1000; %mol/sec
-lambda = Air_flow_m_s./H2_flow_m_s; %% check with TA 
+lambda = 2*Air_flow_m_s./H2_flow_m_s; %% check with TA 
 
 figure 
 plot(I_load, lambda)
