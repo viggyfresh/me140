@@ -68,7 +68,7 @@ plotfixer;
 
 %% Part A2
 
-lambda = air_flow ./ H2_flow; %% unitless 
+
 
 % Lambda vs. I_load
 figure 
