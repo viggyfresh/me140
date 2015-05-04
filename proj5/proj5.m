@@ -74,7 +74,8 @@ MM.air = 28.97;
 
 H2_flow_m_s = H2_flow ./ MM.H2 .* 1000;  %mol/sec
 Air_flow_m_s = air_flow ./MM.air .* 1000; %mol/sec
-lambda = 2*Air_flow_m_s./H2_flow_m_s; %% check with TA 
+% divide by 4.76 to account for number of moles of air
+lambda = (2*Air_flow_m_s./H2_flow_m_s) ./ 4.76; % check with TA
 
 figure;
 plot(I_load, lambda);
