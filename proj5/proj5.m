@@ -2,7 +2,7 @@ clear all;
 clc;
 close all;
 
-%% part A1
+%% Part A1
 
 % measured values (that is, TA data measured values!)
 load = [1 2 3 4 5];
@@ -34,7 +34,7 @@ plot(P_load, I_load, P_load, I_stack);
 xlabel('Power to Resistor Bank (W)');
 ylabel('Current (A)');
 title('Load and Stack Currents vs. Load Power');
-legend('Load current', 'Stack current');
+legend('Load current', 'Stack current','Location','northwest');
 set(gcf, 'color', 'w');
 plotfixer; %% this must be added 
 
@@ -43,11 +43,11 @@ plot(P_load, V_load, P_load, V_stack);
 xlabel('Power to Resistor Bank (W)');
 ylabel('Potential/Voltage (V)');
 title('Load and Stack Potentials vs. Load Power');
-legend('Load potential', 'Stack potential');
+legend('Load potential', 'Stack potential','Location','southwest');
 set(gcf, 'color', 'w');
-plotfixer; %% this must be added 
+plotfixer; 
 
-%%%%%%%%%%%%%%% (WHAT IS ACCESSORY POWER?)
+%%%%% (WHAT IS ACCESSORY POWER?)
 % figure
 % plot(P_load, P_stack, P_load, P_accessory);
 % xlabel('Power to Resistor Bank (W)');
@@ -62,9 +62,23 @@ plot(P_load, H2_flow, P_load, air_flow);
 xlabel('Power to Resistor Bank (W)');
 ylabel('Mass flow rate (kg/s)');
 title('Mass flow rate of Hydrogen and Air vs. Load Power');
-legend('Hydrogen gas', 'Air');
+legend('Hydrogen gas', 'Air','Location','northwest');
 set(gcf, 'color', 'w');
-plotfixer; %% this must be added 
+plotfixer; 
 
 %% Part A2
+
+lambda = air_flow ./ H2_flow; %% unitless 
+
+% Lambda vs. I_load
+figure 
+plot(lambda, I_load)
+xlabel('Excess-air coefficient');
+ylabel('Load Current [volts]')
+plotfixer 
+
+% n_1 vs. I_load
+
+
+% n_2 vs. I_load 
 
