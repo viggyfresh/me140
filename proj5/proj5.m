@@ -88,7 +88,7 @@ plotfixer;
 % n_1 vs. I_load
 for i=1:length(T_stack)
     alpha(i) = relHumidity(T_stack(i),lambda(i));
-    eta_1_LHV(i) = lucio(T_stack(i),P_air_in(i),P_H2_in(i),alpha(i),lambda(i))
+    eta_1_LHV(i) = lucio(T_stack(i),P_air_in(i),P_H2_in(i),alpha(i),lambda(i));
 end
 
 
