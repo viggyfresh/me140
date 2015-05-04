@@ -71,13 +71,26 @@ plotfixer;
 
 
 % Lambda vs. I_load
+
+MM.O2 = 32;
+MM.N2 = 28.02;
+MM.H = 1.008;
+MM.H2 = 2 * MM.H;
+MM.air = 28.97;
+
+H2_flow_m_s = H2_flow ./ MM.H2 .* 1000;  %mol/sec
+Air_flow_m_s = air_flow ./MM.air .* 1000; %mol/sec
+lambda = Air_flow_m_s./H2_flow_m_s; %% check with TA 
+
 figure 
 plot(I_load, lambda)
-xlabel('Excess-air coefficient');
-ylabel('Load Current [volts]')
+xlabel('Load Current [volts]');
+ylabel('\lambda')
 plotfixer 
 
 % n_1 vs. I_load
+
+% [eta_LHV] = lucio[T_stack,P_air_in,P_H2_in,alpha,lambda];
 
 
 % n_2 vs. I_load 
