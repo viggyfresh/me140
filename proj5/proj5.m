@@ -21,7 +21,7 @@ T_water_reservoir = [51 50.5 50.2 50.7 51.4];
 T_water_in_stack = [51.1 50.4 50.3 50.9 51.3];
 T_water_before_HeatExchange = [50.5 50.2 50.5 51.8 53.5];
 T_stack = [48.2 47 47.1 47.6 49.4];
-P_air_in = [.75 1 1.2 1.6 2]; %these are GAUGE!!!
+P_air_in = [.75 1 1.2 1.6 2]; %GAUGE
 P_H2_in = [1 1.1 1.1 1.1 1.1]; %GAUGE
 
 
@@ -87,9 +87,9 @@ plotfixer
 
 % n_1 vs. I_load
 for i = length(T_stack)
-    alpha(i) = relHumidity(T_stack(i),lambda(i))
+    alpha(i) = relHumidity(T_stack(i),lambda(i));
+    eta_LHV(i) = lucio(T_stack(i),P_air_in(i),P_H2_in(i),alpha(i),lambda(i));
 end
-eta_LHV = lucio(T_stack,P_air_in,P_H2_in,alpha,lambda);
 
 
 
