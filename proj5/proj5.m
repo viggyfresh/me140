@@ -1,6 +1,8 @@
-clear all
-clc
-close all
+clear all;
+clc;
+close all;
+
+%% part A1
 
 % measured values (that is, TA data measured values!)
 load = [1 2 3 4 5];
@@ -34,16 +36,16 @@ ylabel('Current (A)');
 title('Load and Stack Currents vs. Load Power');
 legend('Load current', 'Stack current');
 set(gcf, 'color', 'w');
-plotfixer;
+plotfixer; %% this must be added 
 
-figure
+figure 
 plot(P_load, V_load, P_load, V_stack);
 xlabel('Power to Resistor Bank (W)');
 ylabel('Potential/Voltage (V)');
 title('Load and Stack Potentials vs. Load Power');
 legend('Load potential', 'Stack potential');
 set(gcf, 'color', 'w');
-plotfixer;
+plotfixer; %% this must be added 
 
 %%%%%%%%%%%%%%% (WHAT IS ACCESSORY POWER?)
 % figure
@@ -55,11 +57,14 @@ plotfixer;
 % set(gcf, 'color', 'w');
 % plotfixer;
 
-figure
+figure 
 plot(P_load, H2_flow, P_load, air_flow);
 xlabel('Power to Resistor Bank (W)');
 ylabel('Mass flow rate (kg/s)');
 title('Mass flow rate of Hydrogen and Air vs. Load Power');
 legend('Hydrogen gas', 'Air');
 set(gcf, 'color', 'w');
-plotfixer;
+plotfixer; %% this must be added 
+
+%% Part A2
+
