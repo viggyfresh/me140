@@ -65,7 +65,7 @@ plotfixer;
 
 %% Part A2
 
-% lambda vs. I_load
+% lambda vs. P_load
 MM.O2 = 32;
 MM.N2 = 28.02;
 MM.H = 1.008;
@@ -78,28 +78,29 @@ Air_flow_m_s = air_flow ./MM.air .* 1000; %mol/sec
 lambda = (2*Air_flow_m_s./H2_flow_m_s) ./ 4.76; % check with TA
 
 figure;
-plot(I_load, lambda);
-xlabel('Load Current [volts]');
+plot(P_load, lambda);
+xlabel('Power to Resistor Bank (W)');
 ylabel('\lambda');
-title('\lambda vs. Load Current');
+title('\lambda vs. Load Power');
 set(gcf, 'color', 'w');
 plotfixer;
 
-% n_1 vs. I_load
+% n_1 vs. P_load
 for i=1:length(T_stack)
-    alpha(i) = relHumidity(T_stack(i),lambda(i));
-    eta_1_LHV(i) = lucio(T_stack(i),P_air_in(i),P_H2_in(i),alpha(i),lambda(i));
+    alpha(i) = john(T_stack(i), lambda(i));
+    [eta_1(i), eta_2(i)] = lucio(T_stack(i),P_air_in(i),P_H2_in(i),alpha(i),lambda(i));
 end
 
 
 figure;
-plot(I_load, eta_1_LHV);
-xlabel('Load Current [volts]');
-ylabel('\eta (First Law)');
-title('First Law Efficiency vs. Load Current');
+plot(P_load, eta_1 * 100);%, P_load, eta_2 * 100);
+xlabel('Power to Resistor Bank (W)');
+ylabel('\eta');
+title('Efficiency vs. Load Current');
+legend('First Law');%, 'Second Law');
 set(gcf, 'color', 'w');
 plotfixer;
 
 
-% n_2 vs. I_load 
+% n_2 vs. P_load 
 

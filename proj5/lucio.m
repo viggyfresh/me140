@@ -1,4 +1,4 @@
-function [eta_LHV, eta_HHV, eta_actual] = lucio(T, P, P2, alpha, lambda)
+function [eta_1, eta_2] = lucio(T, P, P2, alpha, lambda)
 
 % pressure of hydrogen fuel line
 P_H2 = P2; 
@@ -69,6 +69,9 @@ else
     gamma = 0;
 end
 
+beta
+gamma
+
 N_prod.H2O_vap = beta;
 N_prod.H2O_liq = gamma;
 N_prod.H2O = beta + gamma; % 1 + alpha = beta + gamma 
@@ -134,48 +137,47 @@ P_prod.H2O_liq = P;
 
 % Enthalpy and Gibbs free energy of prod and react - all in J / kg
 H.O2 = hf.O2 + integral(fun_O2_h, T_standard, T);
-S_react.O2 = (sf.O2 + integral(fun_O2_s, T_standard, T))...
+s_react.O2 = (sf.O2 + integral(fun_O2_s, T_standard, T))...
     - Rvar.O2 * log(P_react.O2/P_standard);
-S_prod.O2 = (sf.O2 + integral(fun_O2_s, T_standard, T))...
+s_prod.O2 = (sf.O2 + integral(fun_O2_s, T_standard, T))...
     - Rvar.O2 * log(P_prod.O2/P_standard);
 g_react.O2 = H.O2...
-    - T * S_react.O2;
+    - T * s_react.O2;
 g_prod.O2 = H.O2...
-    - T * S_prod.O2;
+    - T * s_prod.O2;
 
 H.N2 = hf.N2 + integral(fun_N2_h, T_standard, T);
-S_react.N2 = (sf.N2 + integral(fun_N2_s, T_standard, T))...
+s_react.N2 = (sf.N2 + integral(fun_N2_s, T_standard, T))...
     - Rvar.N2 * log(P_react.N2/P_standard);
-S_prod.N2 = (sf.N2 + integral(fun_N2_s, T_standard, T))...
+s_prod.N2 = (sf.N2 + integral(fun_N2_s, T_standard, T))...
     - Rvar.N2 * log(P_prod.N2/P_standard);
 g_react.N2 = H.N2...
-    - T * S_react.N2;
+    - T * s_react.N2;
 g_prod.N2 = H.N2...
-    - T * S_prod.N2;
+    - T * s_prod.N2;
 
 H.H2 = hf.H2 + integral(fun_H2_h, T_standard, T);
-S_react.H2 = (sf.H2 + integral(fun_H2_s, T_standard, T))...
+s_react.H2 = (sf.H2 + integral(fun_H2_s, T_standard, T))...
     - Rvar.H2 * log(P_react.H2/P_standard);
 g_react.H2 = H.H2...
-    - T * S_react.H2;
+    - T * s_react.H2;
 
 H.H2O_vap = hf.H2O_vap + integral(fun_H2O_vap_h, T_standard, T);
-S_react.H2O_vap = (sf.H2O_vap + integral(fun_H2O_vap_s, T_standard, T))...
+s_react.H2O_vap = (sf.H2O_vap + integral(fun_H2O_vap_s, T_standard, T))...
     - Rvar.H2O * log(P_react.H2O_vap/P_standard);
-S_prod.H2O_vap = (sf.H2O_vap + integral(fun_H2O_vap_s, T_standard, T))...
+s_prod.H2O_vap = (sf.H2O_vap + integral(fun_H2O_vap_s, T_standard, T))...
     - Rvar.H2O * log(P_prod.H2O_vap/P_standard);
 g_react.H2O_vap = H.H2O_vap...
-    - T * S_react.H2O_vap;
+    - T * s_react.H2O_vap;
 g_prod.H2O_vap = H.H2O_vap...
-    - T * S_prod.H2O_vap;
+    - T * s_prod.H2O_vap;
 
 % H.H2O_liq = hf.H2O_liq + integral(fun_H2O_liq_h, T_standard, T);
 H.H2O_liq = hf.H2O_liq + 4200*(T-T_standard);
-S_prod.H2O_liq = (sf.H2O_liq + 4200*log(T/T_standard))...
+s_prod.H2O_liq = (sf.H2O_liq + 4200*log(T/T_standard))...
     - Rvar.H2O_liq * log(P_prod.H2O_liq/P_standard);
 g_prod.H2O_liq = H.H2O_liq...
-    - T * S_prod.H2O_liq;
-
+    - T * s_prod.H2O_liq;
 
 % Reactants & Products:
 g.react = mf_react.N2 .* g_react.N2 + mf_react.O2 .* g_react.O2...
@@ -184,19 +186,21 @@ g.react = mf_react.N2 .* g_react.N2 + mf_react.O2 .* g_react.O2...
 g.prod = mf_prod.N2 .* g_prod.N2 +  mf_prod.O2 .* g_prod.O2...
     + mf_prod.H2O_vap .* g_prod.H2O_vap + mf_prod.H2O_liq .* g_prod.H2O_liq;
 
-% Calculate actual enthalpy change for denominator
-H_prod = m_prod.N2 * H.N2 + m_prod.O2 * H.O2...
-    + m_prod.H2O_vap * H.H2O_vap + m_prod.H2O_liq * H.H2O_liq;
-H_prod = H_prod / 1000;
-H_react = m_react.N2 * H.N2 + m_react.O2 * H.O2...
-    + m_react.H2 * H.H2 + m_react.H2O_vap * H.H2O_vap;
-H_react = H_react / 1000;
-H_actual = H_react - H_prod;
+s.react = mf_react.N2 .* s_react.N2 + mf_react.O2 .* s_react.O2...
+    + mf_react.H2 .* s_react.H2 + mf_react.H2O_vap .* s_react.H2O_vap;
+
+s.prod = mf_prod.N2 .* s_prod.N2 +  mf_prod.O2 .* s_prod.O2...
+    + mf_prod.H2O_vap .* s_prod.H2O_vap + mf_prod.H2O_liq .* s_prod.H2O_liq;
+
+s_gen = s.prod - s.react;
+
+irrev = T * s_gen;
+
+deltaG_rxn = m_react.sum * (g.prod - g.react);
 
 % Calculate efficiencies
-eta_LHV = m_react.sum * (g.react - g.prod) ./ (m_react.H2 * LHV);
-eta_HHV = m_react.sum * (g.react - g.prod) ./ (m_react.H2 * HHV);
-eta_actual = (m_react.sum / 1000) * (g.react - g.prod) ./ (H_actual);
+eta_1 = (-deltaG_rxn - irrev) ./ (m_react.H2 * LHV);
+eta_2 = (-deltaG_rxn - irrev) / -deltaG_rxn;
 
 end
 
