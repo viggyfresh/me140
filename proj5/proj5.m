@@ -93,11 +93,11 @@ end
 
 
 figure;
-plot(P_load, eta_1 * 100);%, P_load, eta_2 * 100);
+plot(P_load, eta_1 * 100, P_load, eta_2 * 100);
 xlabel('Power to Resistor Bank (W)');
 ylabel('\eta');
 title('Efficiency vs. Load Current');
-legend('First Law');%, 'Second Law');
+legend('First Law', 'Second Law');
 set(gcf, 'color', 'w');
 plotfixer;
 

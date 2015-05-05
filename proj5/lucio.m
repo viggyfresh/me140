@@ -36,7 +36,6 @@ sf.H2 = 130.68 / MM.H2 * 1000;
 
 % Fuel heating values for H2 (J/kg)
 LHV = 120 * 10^6;
-HHV = 141.8 * 10^6;
 
 % Calculates the integrals
 fun_O2_h = @(T)sp_heats(T,'O2');
@@ -68,9 +67,6 @@ else
     beta = 1 + alpha;
     gamma = 0;
 end
-
-beta
-gamma
 
 N_prod.H2O_vap = beta;
 N_prod.H2O_liq = gamma;
@@ -172,12 +168,12 @@ g_react.H2O_vap = H.H2O_vap...
 g_prod.H2O_vap = H.H2O_vap...
     - T * s_prod.H2O_vap;
 
-% H.H2O_liq = hf.H2O_liq + integral(fun_H2O_liq_h, T_standard, T);
-H.H2O_liq = hf.H2O_liq + 4200*(T-T_standard);
-s_prod.H2O_liq = (sf.H2O_liq + 4200*log(T/T_standard))...
+H.H2O_liq = hf.H2O_liq + 4200*(T - T_standard);
+s_prod.H2O_liq = (sf.H2O_liq + 4200 * log(T/T_standard))...
     - Rvar.H2O_liq * log(P_prod.H2O_liq/P_standard);
 g_prod.H2O_liq = H.H2O_liq...
     - T * s_prod.H2O_liq;
+
 
 % Reactants & Products:
 g.react = mf_react.N2 .* g_react.N2 + mf_react.O2 .* g_react.O2...
@@ -186,15 +182,19 @@ g.react = mf_react.N2 .* g_react.N2 + mf_react.O2 .* g_react.O2...
 g.prod = mf_prod.N2 .* g_prod.N2 +  mf_prod.O2 .* g_prod.O2...
     + mf_prod.H2O_vap .* g_prod.H2O_vap + mf_prod.H2O_liq .* g_prod.H2O_liq;
 
-s.react = mf_react.N2 .* s_react.N2 + mf_react.O2 .* s_react.O2...
-    + mf_react.H2 .* s_react.H2 + mf_react.H2O_vap .* s_react.H2O_vap;
+S.react = m_react.N2 .* s_react.N2 + m_react.O2 .* s_react.O2...
+    + m_react.H2 .* s_react.H2 + m_react.H2O_vap .* s_react.H2O_vap;
 
-s.prod = mf_prod.N2 .* s_prod.N2 +  mf_prod.O2 .* s_prod.O2...
-    + mf_prod.H2O_vap .* s_prod.H2O_vap + mf_prod.H2O_liq .* s_prod.H2O_liq;
+S.react = S.react / 1000;
 
-s_gen = s.prod - s.react;
+S.prod = m_prod.N2 .* s_prod.N2 +  m_prod.O2 .* s_prod.O2...
+    + m_prod.H2O_vap .* s_prod.H2O_vap + m_prod.H2O_liq .* s_prod.H2O_liq;
 
-irrev = T * s_gen;
+S.prod = S.prod / 1000;
+
+S_gen = S.prod - S.react;
+
+irrev = T * S_gen;
 
 deltaG_rxn = m_react.sum * (g.prod - g.react);
 
