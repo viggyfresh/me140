@@ -88,7 +88,7 @@ plotfixer;
 % n_1 vs. P_load
 for i=1:length(T_stack)
     alpha(i) = john(T_stack(i), lambda(i));
-    [eta_1(i), eta_2(i)] = lucio(T_stack(i),P_air_in(i),P_H2_in(i),alpha(i),lambda(i));
+    [eta_1(i), eta_2(i), eta_p_load(i), eta_p_stack(i)] = lucio(T_stack(i),P_air_in(i),P_H2_in(i),alpha(i),lambda(i), P_load(i), P_stack(i));
 end
 
 

@@ -1,4 +1,4 @@
-function [eta_1, eta_2] = lucio(T, P, P2, alpha, lambda)
+function [eta_1, eta_2, eta_p_load, eta_p_stack] = lucio(T, P, P2, alpha, lambda, p_load, p_stack)
 
 % pressure of hydrogen fuel line
 P_H2 = P2; 
@@ -201,6 +201,8 @@ deltaG_rxn = m_react.sum * (g.prod - g.react);
 % Calculate efficiencies
 eta_1 = (-deltaG_rxn - irrev) ./ (m_react.H2 * LHV);
 eta_2 = (-deltaG_rxn - irrev) / -deltaG_rxn;
+eta_p_load = p_load / -deltaG_rxn;
+eta_p_stack = p_stack / -deltaG_rxn;
 
 end
 
