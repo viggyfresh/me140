@@ -19,8 +19,8 @@ T_water_reservoir = TA_data(:,14)' + 273.15; % K
 T_water_in_stack = TA_data(:,15)' + 273.15; % K
 T_water_before_HeatExchange = TA_data(:,16)' + 273.15; % K
 T_stack = TA_data(:,17)' + 273.15; % K 
-P_air_in = TA_data(:,9)' + P_atm;  % Converted to absolute
-P_H2_in = TA_data(:,11)' + P_atm;  % Converted to absolute
+P_air_in = TA_data(:,9)' + P_atm;  % Converted to absolute (Pa)
+P_H2_in = TA_data(:,11)' + P_atm;  % Converted to absolute (Pa)
 
 %Plots for Part 1
 P_load = I_load .* V_load; %watts
@@ -84,23 +84,39 @@ ylabel('\lambda');
 title('\lambda vs. Load Power');
 set(gcf, 'color', 'w');
 plotfixer;
-
 % n_1 vs. P_load
 for i=1:length(T_stack)
-    alpha(i) = john(T_stack(i), lambda(i));
-    [eta_1(i), eta_2(i), eta_p_load(i), eta_p_stack(i)] = lucio(T_stack(i),P_air_in(i),P_H2_in(i),alpha(i),lambda(i), P_load(i), P_stack(i));
+    alpha(i) = john(T_stack(i), lambda(i), P_air_in(i));
+    [deltaG_rxn(i)] = lucio(T_stack(i),P_air_in(i),P_H2_in(i),alpha(i),lambda(i));
 end
 
 
+deltaG = deltaG_rxn .* H2_flow_m_s; % J/s * kg/s
+LHV = 120 * 10^6; 
+
+eta_1_load = P_load ./ (LHV.*H2_flow);
+eta_2_load = P_load ./ (-deltaG_rxn.*H2_flow_m_s);
+
+eta_1_stack = P_stack ./ (LHV.*H2_flow);
+eta_2_stack = P_stack ./ (-deltaG_rxn.*H2_flow_m_s);
+
 figure;
-plot(P_load, eta_1 * 100, P_load, eta_2 * 100);
+plot(P_load, eta_1_load * 100, P_load, eta_2_load * 100);
 xlabel('Power to Resistor Bank (W)');
 ylabel('\eta');
-title('Efficiency vs. Load Current');
-legend('First Law', 'Second Law');
+title('Efficiency vs. Load (Load)');
+legend('First Law', 'Second Law','Location','Southeast');
 set(gcf, 'color', 'w');
 plotfixer;
 
+figure;
+plot (P_stack, eta_1_stack * 100, P_stack, eta_2_stack * 100);
+xlabel('Power to Resistor Bank (W)');
+ylabel('\eta');
+title('Efficiency vs. Load (Stack)');
+legend('First Law','Second Law');
+set(gcf, 'color', 'w');
+plotfixer;
 
 % n_2 vs. P_load 
 

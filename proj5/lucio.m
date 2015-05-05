@@ -1,4 +1,4 @@
-function [eta_1, eta_2, eta_p_load, eta_p_stack] = lucio(T, P, P2, alpha, lambda, p_load, p_stack)
+function [deltaG_rxn] = lucio(T, P, P2, alpha, lambda)
 
 % pressure of hydrogen fuel line
 P_H2 = P2; 
@@ -51,7 +51,7 @@ fun_H2O_liq_s = @(T)sp_heats(T,'H2O_liq')./T;
 
 % Reference conditions
 T_standard = 298;
-P_standard = 101.325 * 10^3;
+P_standard = P;
 
 P_sat = exp(-1.2914e8 / T^3 + 8.2048e5 / T^2 - 6522.8 / T + 25.5887);
 
@@ -181,22 +181,22 @@ g.react = mf_react.N2 .* g_react.N2 + mf_react.O2 .* g_react.O2...
 g.prod = mf_prod.N2 .* g_prod.N2 +  mf_prod.O2 .* g_prod.O2...
     + mf_prod.H2O_vap .* g_prod.H2O_vap + mf_prod.H2O_liq .* g_prod.H2O_liq;
 
-S.react = m_react.N2 .* s_react.N2 + m_react.O2 .* s_react.O2...
-    + m_react.H2 .* s_react.H2 + m_react.H2O_vap .* s_react.H2O_vap;
-S.react = S.react / 1000;
-S.prod = m_prod.N2 .* s_prod.N2 +  m_prod.O2 .* s_prod.O2...
-    + m_prod.H2O_vap .* s_prod.H2O_vap + m_prod.H2O_liq .* s_prod.H2O_liq;
-S.prod = S.prod / 1000;
-S_gen = S.prod - S.react;
-irrev = T * S_gen;
+% S.react = m_react.N2 .* s_react.N2 + m_react.O2 .* s_react.O2...
+%     + m_react.H2 .* s_react.H2 + m_react.H2O_vap .* s_react.H2O_vap;
+% S.react = S.react / 1000;
+% S.prod = m_prod.N2 .* s_prod.N2 +  m_prod.O2 .* s_prod.O2...
+%     + m_prod.H2O_vap .* s_prod.H2O_vap + m_prod.H2O_liq .* s_prod.H2O_liq;
+% S.prod = S.prod / 1000;
+% S_gen = S.prod - S.react;
+% irrev = T * S_gen;
 
-deltaG_rxn = m_react.sum * (g.prod - g.react);
+deltaG_rxn = (m_react.sum/1000) * (g.prod - g.react);
 
 % Calculate efficiencies
-eta_1 = (-deltaG_rxn - irrev) ./ (m_react.H2 * LHV);
-eta_2 = (-deltaG_rxn - irrev) / -deltaG_rxn;
-eta_p_load = p_load / -deltaG_rxn;
-eta_p_stack = p_stack / -deltaG_rxn;
+% eta_1 = (-deltaG_rxn - irrev) ./ (m_react.H2 * LHV);
+% eta_2 = (-deltaG_rxn - irrev) / -deltaG_rxn;
+% eta_p_load = p_load / -deltaG_rxn;
+% eta_p_stack = p_stack / -deltaG_rxn;
 
 end
 
