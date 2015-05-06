@@ -9,8 +9,25 @@ MM.H2 = 2 * MM.H;
 MM.H2O = 18.016;
 MM.CO2 = MM.C + MM.O2;
 MM.air = 28.97;
+MM.CH4 = 16.0420;
+MM.CO = 28.0100;
 
-if strcmp(type,'CO2')
+
+if strcmp(type,'CO')
+    mm = MM.CO;
+    a = 28.16;
+    b = 0.1675*10^-2;
+    c = 0.5372*10^-5;
+    d = -2.222*10^-9;
+    
+elseif strcmp(type,'CH4')
+    mm = MM.CH4;
+    a = 19.89;
+    b = 5.024*10^-2;
+    c = 1.269*10^-5;
+    d = -11.01*10^-9;
+
+elseif strcmp(type,'CO2')
     mm = MM.CO2;
     a = 22.26;
     b = 5.981*10^-2;
