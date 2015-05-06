@@ -18,19 +18,8 @@ MM.H2 = 2 * MM.H;
 MM.H2O = 18.016;
 MM.CO2 = MM.C + MM.O2;
 MM.CO = MM.C + .5*MM.O2;
-MM.air = 28.97;
-
-Rvar.O2 = R / MM.O2 * 10^3;
-Rvar.H2 = R / MM.H2 * 10^3;
-Rvar.H2O = R / MM.H2O * 10^3;
-Rvar.CO2 = R / MM.CO2 * 10^3;
-Rvar.CO = R / MM.CO * 10^3;
 
 % Enthalpy (J/kg) and entropy (J/(kg*K)) of formation values
-% hf.H2O_vap = -241820 / MM.H2O * 1000;
-% sf.H2O_vap = 188.83 / MM.H2O * 1000;
-% hf.H2O_liq = -285830 / MM.H2O * 1000;
-% sf.H2O_liq = 69.92 / MM.H2O * 1000;
 hf.H2O = -285830 / MM.H2O * 1000; % based off liq water
 sf.H2O = 69.92 / MM.H2O * 1000; % based off liq water
 hf.H2 = 0;
@@ -39,9 +28,6 @@ hf.CO = -110527 / MM.CO * 1000;
 sf.CO = 197.653 / MM.CO * 1000;
 hf.CO2 = -393522 / MM.CO2 * 1000;
 sf.CO2 = 213.795 / MM.CO2 * 1000;
-
-% Fuel heating values for H2 (J/kg)
-LHV = 120 * 10^6;
 
 % Calculates the integrals
 fun_H2_h = @(T)sp_heats(T,'H2');
@@ -78,8 +64,6 @@ m_react.sum = m_react.CO + m_react.H2O;
 
 mf_react.CO = m_react.CO ./ m_react.sum;
 mf_react.H2O = m_react.H2O ./ m_react.sum;
-mf_prod.H2 = m_prod.H2 ./ m_prod.sum;
-mf_prod.CO2 = m_prod.CO2 ./ m_prod.sum;
 
 % Enthalpy and Gibbs free energy of prod and react - all in J / kg
 % react
