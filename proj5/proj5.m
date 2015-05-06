@@ -55,11 +55,11 @@ set(gcf, 'color', 'w');
 plotfixer;
 
 figure;
-plot(P_load, H2_flow, P_load, air_flow);
+[ax, h1, h2] = plotyy(P_load, H2_flow * 1000, P_load, air_flow * 1000);
 xlabel('Power to Resistor Bank (W)');
-ylabel('Mass flow rate (kg/s)');
-title('Mass flow rate of Hydrogen and Air vs. Load Power');
-legend('Hydrogen gas', 'Air','Location','northwest');
+ylabel(ax(1),'Mass Flow of Hydrogen (g/s)');
+ylabel(ax(2), 'Mass flow of Air (g/s)');
+title('Mass Flow Rate of Hydrogen and Air vs. Load Power');
 set(gcf, 'color', 'w');
 plotfixer; 
 
@@ -113,7 +113,7 @@ set(gcf, 'color', 'w');
 plotfixer;
 
 figure;
-plot (P_stack, eta_2_load * 100, P_stack, eta_2_stack * 100);
+plot (P_load, eta_2_load * 100, P_load, eta_2_stack * 100);
 xlabel('Power (W)');
 ylabel('\eta_2');
 title('Second Law Efficiency vs. Load');
@@ -148,7 +148,7 @@ end
 figure;
 semilogy(T_range, Kp_reform, T_range, Kp_wgs);
 xlabel('Temperature [^{\circ}C]');
-ylabel('K_p)');
+ylabel('K_p');
 title('Equilibrium Constant vs. Temperature');
 legend('K_p SMR','K_p WGS','Location','Northwest');
 axis([25 1200 10^-3 10^3]);
