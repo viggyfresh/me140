@@ -72,10 +72,10 @@ MM.H = 1.008;
 MM.H2 = 2 * MM.H;
 MM.air = 28.97;
 
-H2_flow_m_s = H2_flow ./ MM.H2 .* 1000;  %mol/sec
-Air_flow_m_s = air_flow ./MM.air .* 1000; %mol/sec
+H2_flow_mol_s = H2_flow ./ MM.H2 .* 1000;  %mol/sec
+Air_flow_mol_s = air_flow ./MM.air .* 1000; %mol/sec
 % divide by 4.76 to account for number of moles of air
-lambda = (2*Air_flow_m_s./H2_flow_m_s) ./ 4.76; % check with TA
+lambda = (2*Air_flow_mol_s./H2_flow_mol_s) ./ 4.76; % check with TA
 
 figure;
 plot(P_load, lambda);
@@ -91,7 +91,7 @@ for i=1:length(T_stack)
 end
 
 
-deltaG = deltaG_rxn .* H2_flow_m_s; % per mol H2 basis 
+deltaG = deltaG_rxn .* H2_flow_mol_s; % per mol H2 basis
 LHV = 120 * 10^6; 
 
 eta_1_load = P_load ./ (LHV.*H2_flow);
