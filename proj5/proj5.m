@@ -131,7 +131,7 @@ set(gcf, 'color', 'w');
 plotfixer;
 
 %% Part B1
-T_range = [(25+273):(1200+273)];
+T_range = (25+273):10:(1200+273);
 R = 8.3144621; %universal gas constant 
 
 % only supposed to plot 10^-3 < Kp < 10^3 
