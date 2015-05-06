@@ -192,11 +192,5 @@ g.prod = mf_prod.N2 .* g_prod.N2 +  mf_prod.O2 .* g_prod.O2...
 
 deltaG_rxn = (m_react.sum/1000) * (g.prod - g.react);
 
-% Calculate efficiencies
-% eta_1 = (-deltaG_rxn - irrev) ./ (m_react.H2 * LHV);
-% eta_2 = (-deltaG_rxn - irrev) / -deltaG_rxn;
-% eta_p_load = p_load / -deltaG_rxn;
-% eta_p_stack = p_stack / -deltaG_rxn;
-
 end
 

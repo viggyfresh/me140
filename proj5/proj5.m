@@ -91,11 +91,11 @@ for i=1:length(T_stack)
 end
 
 
-deltaG = deltaG_rxn .* H2_flow_m_s; % J/s * kg/s
+deltaG = deltaG_rxn .* H2_flow_m_s; % per mol H2 basis 
 LHV = 120 * 10^6; 
 
 eta_1_load = P_load ./ (LHV.*H2_flow);
-eta_2_load = P_load ./ (-deltaG_rxn.*H2_flow_m_s);
+eta_2_load = P_load ./ (-deltaG);
 
 eta_1_stack = P_stack ./ (LHV.*H2_flow);
 eta_2_stack = P_stack ./ (-deltaG_rxn.*H2_flow_m_s);
@@ -118,5 +118,28 @@ legend('First Law','Second Law');
 set(gcf, 'color', 'w');
 plotfixer;
 
-% n_2 vs. P_load 
+%% Part B1
+T_range = [(25+273):(1200+273)];
+R = 8.3144621; %universal gas constant 
+
+% only supposed to plot 10^-3 < Kp < 10^3 
+% maybe split into two for loops and insert if statements?
+% also could look into refining plot function
+for i = 1:length(T_range)
+    deltaG_reform(i) = lucio_reform(T_range(i));
+    deltaG_wgs(i) = lucio_wgs(T_range(i));
+    Kp_reform(i) = exp(-deltaG_reform(i) ./ (R*T_range(i)));
+    Kp_wgs(i) = exp(-deltaG_wgs(i) ./ (R*T_range(i)));
+    i
+end 
+
+figure;
+plotyy(T_range, Kp_reform, T_range, Kp_wgs);
+xlabel('Temperature [K]');
+ylabel('Equilibrium Constant (Kp)');
+title('Temp vs. Kp');
+set(gcf, 'color', 'w');
+legend('Kp reform','Kp wgs','Location','Northwest');
+plotfixer;
+
 
