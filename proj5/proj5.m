@@ -131,27 +131,28 @@ set(gcf, 'color', 'w');
 plotfixer;
 
 %% Part B1
-T_range = (25+273):10:(1200+273);
+T_range = 25:5:1200;
 R = 8.3144621; %universal gas constant 
 
 % only supposed to plot 10^-3 < Kp < 10^3 
 % maybe split into two for loops and insert if statements?
 % also could look into refining plot function
 for i = 1:length(T_range)
-    deltaG_reform(i) = lucio_smr(T_range(i));
-    deltaG_wgs(i) = lucio_wgs(T_range(i));
-    Kp_reform(i) = exp(-deltaG_reform(i) ./ (R*T_range(i)));
-    Kp_wgs(i) = exp(-deltaG_wgs(i) ./ (R*T_range(i)));
-    i
+    T = T_range(i) + 273.15;
+    deltaG_reform(i) = lucio_smr(T);
+    deltaG_wgs(i) = lucio_wgs(T);
+    Kp_reform(i) = exp(-deltaG_reform(i) ./ (R*T));
+    Kp_wgs(i) = exp(-deltaG_wgs(i) ./ (R*T));
 end 
 
 figure;
 semilogy(T_range, Kp_reform, T_range, Kp_wgs);
-xlabel('Temperature [K]');
-ylabel('Equilibrium Constant (Kp)');
-title('Temp vs. Kp');
-set(gcf, 'color', 'w');
+xlabel('Temperature [^{\circ}C]');
+ylabel('K_p)');
+title('Equilibrium Constant vs. Temperature');
 legend('K_p SMR','K_p WGS','Location','Northwest');
+axis([25 1200 10^-3 10^3]);
+set(gcf, 'color', 'w');
 plotfixer;
 
 
