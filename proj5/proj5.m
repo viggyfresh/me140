@@ -138,7 +138,7 @@ R = 8.3144621; %universal gas constant
 % maybe split into two for loops and insert if statements?
 % also could look into refining plot function
 for i = 1:length(T_range)
-    deltaG_reform(i) = lucio_reform(T_range(i));
+    deltaG_reform(i) = lucio_smr(T_range(i));
     deltaG_wgs(i) = lucio_wgs(T_range(i));
     Kp_reform(i) = exp(-deltaG_reform(i) ./ (R*T_range(i)));
     Kp_wgs(i) = exp(-deltaG_wgs(i) ./ (R*T_range(i)));
@@ -146,12 +146,12 @@ for i = 1:length(T_range)
 end 
 
 figure;
-plotyy(T_range, Kp_reform, T_range, Kp_wgs);
+semilogy(T_range, Kp_reform, T_range, Kp_wgs);
 xlabel('Temperature [K]');
 ylabel('Equilibrium Constant (Kp)');
 title('Temp vs. Kp');
 set(gcf, 'color', 'w');
-legend('Kp reform','Kp wgs','Location','Northwest');
+legend('K_p SMR','K_p WGS','Location','Northwest');
 plotfixer;
 
 

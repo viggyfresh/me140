@@ -31,8 +31,8 @@ Rvar.CO = R / MM.CO * 10^3;
 % sf.H2O_vap = 188.83 / MM.H2O * 1000;
 % hf.H2O_liq = -285830 / MM.H2O * 1000;
 % sf.H2O_liq = 69.92 / MM.H2O * 1000;
-hf.H2O = -285830 / MM.H2O * 1000; % based off liq water
-sf.H2O = 69.92 / MM.H2O * 1000; % based off liq water
+hf.H2O = -241820 / MM.H2O * 1000;
+sf.H2O = 188.83 / MM.H2O * 1000;
 hf.H2 = 0;
 sf.H2 = 130.68 / MM.H2 * 1000;
 hf.CO = -110527 / MM.CO * 1000;
@@ -40,8 +40,6 @@ sf.CO = 197.653 / MM.CO * 1000;
 hf.CO2 = -393522 / MM.CO2 * 1000;
 sf.CO2 = 213.795 / MM.CO2 * 1000;
 
-% Fuel heating values for H2 (J/kg)
-LHV = 120 * 10^6;
 
 % Calculates the integrals
 fun_H2_h = @(T)sp_heats(T,'H2');
@@ -103,15 +101,6 @@ g_prod.CO2 = H.CO2 - T * s_prod.CO2;
 % Reactants & Products:
 g.react = (mf_react.H2O .* g_react.H2O) + (mf_react.CO .* g_react.CO);
 g.prod = (mf_prod.H2 .* g_prod.H2) +  (mf_prod.CO2 .* g_prod.CO2);
-
-% S.react = m_react.N2 .* s_react.N2 + m_react.O2 .* s_react.O2...
-%     + m_react.H2 .* s_react.H2 + m_react.H2O_vap .* s_react.H2O_vap;
-% S.react = S.react / 1000;
-% S.prod = m_prod.N2 .* s_prod.N2 +  m_prod.O2 .* s_prod.O2...
-%     + m_prod.H2O_vap .* s_prod.H2O_vap + m_prod.H2O_liq .* s_prod.H2O_liq;
-% S.prod = S.prod / 1000;
-% S_gen = S.prod - S.react;
-% irrev = T * S_gen;
 
 deltaG_rxn = (m_react.sum/1000) * (g.prod - g.react);
 
