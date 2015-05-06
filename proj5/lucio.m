@@ -181,15 +181,6 @@ g.react = mf_react.N2 .* g_react.N2 + mf_react.O2 .* g_react.O2...
 g.prod = mf_prod.N2 .* g_prod.N2 +  mf_prod.O2 .* g_prod.O2...
     + mf_prod.H2O_vap .* g_prod.H2O_vap + mf_prod.H2O_liq .* g_prod.H2O_liq;
 
-S.react = m_react.N2 .* s_react.N2 + m_react.O2 .* s_react.O2...
-    + m_react.H2 .* s_react.H2 + m_react.H2O_vap .* s_react.H2O_vap;
-S.react = S.react / 1000;
-S.prod = m_prod.N2 .* s_prod.N2 +  m_prod.O2 .* s_prod.O2...
-    + m_prod.H2O_vap .* s_prod.H2O_vap + m_prod.H2O_liq .* s_prod.H2O_liq;
-S.prod = S.prod / 1000;
-S_gen = S.prod - S.react;
-irrev = T * S_gen;
-
 deltaG_rxn = (m_react.sum/1000) * (g.prod - g.react);
 
 end

@@ -98,23 +98,35 @@ eta_1_load = P_load ./ (LHV.*H2_flow);
 eta_2_load = P_load ./ (-deltaG);
 
 eta_1_stack = P_stack ./ (LHV.*H2_flow);
-eta_2_stack = P_stack ./ (-deltaG_rxn.*H2_flow_m_s);
+eta_2_stack = P_stack ./ (-deltaG);
+
+P_lost_load = -deltaG - P_load;
+P_lost_stack = -deltaG - P_stack;
 
 figure;
-plot(P_load, eta_1_load * 100, P_load, eta_2_load * 100);
-xlabel('Power to Resistor Bank (W)');
-ylabel('\eta');
-title('Efficiency vs. Load (Load)');
-legend('First Law', 'Second Law','Location','Southeast');
+plot(P_load, eta_1_load * 100, P_load, eta_1_stack * 100);
+xlabel('Power (W)');
+ylabel('\eta_1');
+title('First Law Efficiency vs. Load');
+legend('Load', 'Stack', 'Location', 'Southeast');
 set(gcf, 'color', 'w');
 plotfixer;
 
 figure;
-plot (P_stack, eta_1_stack * 100, P_stack, eta_2_stack * 100);
-xlabel('Power to Resistor Bank (W)');
-ylabel('\eta');
-title('Efficiency vs. Load (Stack)');
-legend('First Law','Second Law');
+plot (P_stack, eta_2_load * 100, P_stack, eta_2_stack * 100);
+xlabel('Power (W)');
+ylabel('\eta_2');
+title('Second Law Efficiency vs. Load');
+legend('Load','Stack');
+set(gcf, 'color', 'w');
+plotfixer;
+
+figure;
+plot(P_load, P_lost_load, P_load, P_lost_stack);
+xlabel('Power (W)');
+ylabel('Lost Power (W)');
+title('Lost Power vs. Load Power');
+legend('Load', 'Stack');
 set(gcf, 'color', 'w');
 plotfixer;
 
