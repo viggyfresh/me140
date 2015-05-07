@@ -1,5 +1,5 @@
 function [deltaG_rxn] = lucio_smr(T)
-% used to find deltaG_rxn of methane reformation process
+% used to find deltaG of the methane reaction
 % CH4 + H20 -> CO + 3*H2
 
 % pressure of hydrogen fuel line

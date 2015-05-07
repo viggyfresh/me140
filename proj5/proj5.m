@@ -190,7 +190,7 @@ plotfixer;
 
 %% Part B3
 for j = 1:length(T_range)
-    T = T_range(j) + 273.15
+    T = T_range(j) + 273.15;
     syms N_CO positive N_H2O positive N_CO2 positive N_H2 positive N_total positive
     eqns(1) = N_total == N_CO + N_H2O + N_CO2 + N_H2;
     eqns(2) = Kp_wgs(j) == ((N_CO2 * N_H2) / (N_CO * N_H2O));
@@ -238,10 +238,10 @@ eqns(3) = 1 == N_CH4_1 + N_CO_1;
 eqns(4) = 10 == 4 * N_CH4_1 + 2 * N_H2O_1 + 2 * N_H2_1;
 eqns(5) = 3 == N_H2O_1 + N_CO_1;
 S = solve(eqns, 'Real', true);
-CO = double(S.N_CO_1);
-H2 = double(S.N_H2_1);
-CH4 = double(S.N_CH4_1);
-H2O = double(S.N_H2O_1);
+CO.1 = double(S.N_CO_1);
+H2.1 = double(S.N_H2_1);
+CH4.1 = double(S.N_CH4_1);
+H2O.1 = double(S.N_H2O_1);
 total = min(double(S.N_total));
 r1.CO_1 = min(CO_1) / total;
 r1.H2_1 = min(H2_1) / total;
@@ -250,5 +250,11 @@ r1.H2O_1 = min(H2O_1) / total;
 
 % Calculations for Second Reformer (450 Celsius)
 
+
 % Look at the hint at the end of the assignment sheet
+
+
+%% Part B4 (John's) 
+% finds T2 and T3 after shift reactors if adiabatic
+
 
