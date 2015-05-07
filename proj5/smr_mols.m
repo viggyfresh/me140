@@ -17,7 +17,7 @@ assume(N_CH4 >= 0);
 assume(N_H2O >= 0);
 assume(N_total >= 0);
 eqns(1) = N_total == N_CO + N_H2 + N_CH4 + N_H2O;
-eqns(2) = Kp_smr(T) == ((N_CO * N_H2^3) / (N_CH4 * N_H2O))...
+eqns(2) = Kp_smr == ((N_CO * N_H2^3) / (N_CH4 * N_H2O))...
     * ((P / P_s) / N_total)^2;
 eqns(3) = 1 == N_CH4 + N_CO;
 eqns(4) = 10 == 4 * N_CH4 + 2 * N_H2O + 2 * N_H2;

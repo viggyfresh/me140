@@ -368,8 +368,20 @@ hold off
 %% Part B4 (John's) 
 % finds T2 and T3 after shift reactors if adiabatic
 
-[N_CO, N_H2O, N_CH4, N_H2] = smr_mols(1073,P_atm,Kp_smr); %K,Pa
-[h_CH4, h_H2O, h_CO, h_H2] = lucio_smr_n(N_CO, N_H2O, N_CH4, N_H2);
+[N_CO, N_H2O, N_CH4, N_H2] = smr_mols(1073,P_atm,Kp_smr.r1); %K,Pa
+[h_CH4, h_H2O, h_CO, h_H2] = lucio_smr_n(N_CO, N_H2O, N_CH4, N_H2, 1073);
 LHS = N_CH4 * h_CH4 + N_H2O * h_H2O + N_CO * h_CO + N_H2 * h_H2;
-[N_CO, N_H2O, N_CO2, N_H2] = wgs_mols(T(i),P,Kp_wgs(T(i)); %K,P
-[h_CO, h_H2O, h_CO2, h_H2] = lucio_wgs_n(N_CO, N_H2O, N_CO2, N_H2, T(i));
+
+T = 293;
+i = 1;
+RHS = 0;
+tol = .01;
+dT = 15; %K
+while abs(LHS - RHS)/LHS > tol
+    T = T + dT;
+    [N_CO, N_H2O, N_CO2, N_H2] = wgs_mols(T,P_atm,Kp_wgs.r2); %K,P
+    [h_CO, h_H2O, h_CO2, h_H2] = lucio_wgs_n(N_CO, N_H2O, N_CO2, N_H2, T);
+    RHS = N_CO * h_CO + N_H2O * h_H2O + N_CO2 * h_CO2 + N_H2 * h_H2;
+    i = i + 1;
+    abs(LHS - RHS)/LHS
+end 
