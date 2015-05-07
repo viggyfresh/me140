@@ -190,7 +190,7 @@ plotfixer;
 
 %% Part B3
 for j = 1:length(T_range)
-    T = T_range(j) + 273.15
+    T = T_range(j) + 273.15;
     syms N_CO positive N_H2O positive N_CO2 positive N_H2 positive N_total positive
     eqns(1) = N_total == N_CO + N_H2O + N_CO2 + N_H2;
     eqns(2) = Kp_wgs(j) == ((N_CO2 * N_H2) / (N_CO * N_H2O));
@@ -225,7 +225,6 @@ T.r1 = 1073; % K, temperature for reformer 1 (r1)
 deltaG_smr.r1 = lucio_smr(T.r1);
 Kp_smr.r1 = exp(-deltaG_smr.r1 ./ (R*T.r1));
 
-
 syms N_CO_1  N_H2_1  N_CH4_1  N_H2O_1  N_total
 assume(N_CO_1,'positive')
 assume(N_H2_1,'positive')
@@ -248,7 +247,32 @@ r1.H2_1 = min(H2_1) / total;
 r1.CH4_1 = min(CH4_1) / total;
 r1.H2O_1 = min(H2O_1) / total;
 
-% Calculations for Second Reformer (450 Celsius)
+%% Calculations for Second Reformer (450 Celsius)
+T.r2 = 673; %K second reformer temperature
+deltaG_wgs.r2 = lucio_wgs(T.r2);
+Kp_wgs.r2 = exp(-deltaG_wgs.r2 / (R*T.r2));
+
+syms N_CO_2 N_H2O_2  N_CO2_2  N_H2_2 N_total 
+assume(N_CO_2,'positive')
+assume(N_CO2_2,'positive')
+assume(N_H2_2,'positive')
+assume(N_H2O_2,'positive')
+assume(N_total,'positive')
+eqns(1) = N_total == N_CO_2 + N_H2O_2 + N_CO2_2 + N_H2_2;
+eqns(2) = Kp_wgs.r2 == ((N_CO2_2 * N_H2_2) / (N_CO_2 * N_H2O_2));
+eqns(3) = 1 == N_CO_2 + N_CO2_2;
+eqns(4) = 10 == 2 * N_H2O_2 + 2 * N_H2_2;
+eqns(5) = 3 == N_CO_2 + N_H2O_2 + 2 * N_CO2_2;
+S_2 = solve(eqns, 'Real', true);
+CO_2 = double(S.N_CO_2);
+H2O_2 = double(S.N_H2O_2);
+CO2_2 = double(S.N_CO2_2);
+H2_2 = double(S.N_H2_1);
+total = min(double(S.N_total));
+r2.CO_2 = min(CO_2) / total;
+r2.H2O(j) = min(H2O_2) / total;
+r2.CO2(j) = min(CO2_2) / total;
+r2.H2(j) = min(H2_2) / total;
 
 % Look at the hint at the end of the assignment sheet
 
