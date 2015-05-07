@@ -34,7 +34,7 @@ ylabel('Current (A)');
 title('Load and Stack Currents vs. Load Power');
 legend('Load current', 'Stack current','Location','northwest');
 set(gcf, 'color', 'w');
-plotfixer; %% this must be added
+plotfixer;
 
 figure;
 plot(P_load, V_load, P_load, V_stack);
@@ -131,7 +131,7 @@ set(gcf, 'color', 'w');
 plotfixer;
 
 %% Part B1
-T_range = linspace(25, 1200, 100);
+T_range = linspace(25, 1200, 20);
 R = 8.3144621; %universal gas constant
 
 % only supposed to plot 10^-3 < Kp < 10^3
@@ -162,11 +162,17 @@ P_s = 1;
 
 for i = 1:length(P_range)
     for j = 1:length(T_range)
-        T = T_range(j) + 273.15
+        T = T_range(j) + 273.15;
         P = P_range(i);
-        syms N_CO positive N_H2 positive N_CH4 positive N_H2O positive N_total positive
+        syms N_CO N_H2 N_CH4 N_H2O N_total
+        assume(N_CO >= 0);
+        assume(N_H2 >= 0);
+        assume(N_CH4 >= 0);
+        assume(N_H2O >= 0);
+        assume(N_total >= 0);
         eqns(1) = N_total == N_CO + N_H2 + N_CH4 + N_H2O;
-        eqns(2) = Kp_smr(j) == ((N_CO * N_H2^3) / (N_CH4 * N_H2O)) * ((P / P_s) / N_total)^2;
+        eqns(2) = Kp_smr(j) == ((N_CO * N_H2^3) / (N_CH4 * N_H2O))...
+                  * ((P / P_s) / N_total)^2;
         eqns(3) = 1 == N_CH4 + N_CO;
         eqns(4) = 10 == 4 * N_CH4 + 2 * N_H2O + 2 * N_H2;
         eqns(5) = 3 == N_H2O + N_CO;
@@ -184,14 +190,30 @@ for i = 1:length(P_range)
     
 end
 
-plot(T_range, B2.CO(1, :), T_range, B2.H2(1, :), T_range, B2.CH4(1, :), T_range, B2.H2O(1, :));
+figure;
+plot(T_range, B2.CO(1, :), '-g', T_range, B2.H2(1, :), '-r', T_range, B2.CH4(1, :), '-c', T_range, B2.H2O(1, :), '-y',...
+     T_range, B2.CO(2, :), '-go', T_range, B2.H2(2, :), '-ro', T_range, B2.CH4(2, :), '-co', T_range, B2.H2O(2, :), '-yo', ...
+     T_range, B2.CO(3, :), '-g+', T_range, B2.H2(3, :), '-r+', T_range, B2.CH4(3, :), '-c+', T_range, B2.H2O(3, :), '-y+');
+legend('CO 1 atm', 'H_2 1 atm', 'CH_4 1 atm', 'H_2O 1 atm',...
+       'CO 10 atm', 'H_2 10 atm', 'CH_4 10 atm', 'H_2O 10 atm',...
+       'CO 100 atm', 'H_2 100 atm', 'CH_4 100 atm', 'H_2O 100 atm',...
+       'Location', 'bestoutside');
+title('Equilibrium Composition of SMR vs. Temperature');
+xlabel('Temperature [^{\circ}C]');
+ylabel('Mole Fraction');
+set(gcf, 'color', 'w');
 plotfixer;
 
 
 %% Part B3
 for j = 1:length(T_range)
     T = T_range(j) + 273.15;
-    syms N_CO positive N_H2O positive N_CO2 positive N_H2 positive N_total positive
+    syms N_CO N_H2O N_CO2 N_H2 N_total
+    assume(N_CO >= 0);
+    assume(N_H2O >= 0);
+    assume(N_CO2 >= 0);
+    assume(N_H2 >= 0);
+    assume(N_total >= 0);
     eqns(1) = N_total == N_CO + N_H2O + N_CO2 + N_H2;
     eqns(2) = Kp_wgs(j) == ((N_CO2 * N_H2) / (N_CO * N_H2O));
     eqns(3) = 1 == N_CO + N_CO2;
@@ -209,7 +231,14 @@ for j = 1:length(T_range)
     B3.H2(j) = min(H2) / total;
 end
 
+figure;
 plot(T_range, B3.CO(:), T_range, B3.H2O(:), T_range, B3.CO2(:), T_range, B3.H2(:));
+legend('CO 1 atm', 'H_2O 1 atm', 'CO_2 1 atm', 'H_2 1 atm',...
+       'Location', 'bestoutside');
+title('Equilibrium Composition of WGS vs. Temperature');
+xlabel('Temperature [^{\circ}C]');
+ylabel('Mole Fraction');
+set(gcf, 'color', 'w');
 plotfixer;
 
 %% Part B4
@@ -227,21 +256,21 @@ Kp_smr.r1 = exp(-deltaG_smr.r1 ./ (R*T.r1));
 
 
 syms N_CO_1  N_H2_1  N_CH4_1  N_H2O_1  N_total
-assume(N_CO_1,'positive')
-assume(N_H2_1,'positive')
-assume(N_CH4_1,'positive')
-assume(N_H2O_1,'positive')
-assume(N_total,'positive')
+assume(N_CO_1 >= 0);
+assume(N_H2_1 >= 0);
+assume(N_CH4_1 >= 0);
+assume(N_H2O_1 >= 0);
+assume(N_total >= 0);
 eqns(1) = N_total == N_CO_1 + N_H2_1 + N_CH4_1 + N_H2O_1;
 eqns(2) = Kp_smr.r1 == ((N_CO_1 * N_H2_1^3) / (N_CH4_1 * N_H2O_1)) * ((P / P_s) / N_total)^2;
 eqns(3) = 1 == N_CH4_1 + N_CO_1;
 eqns(4) = 10 == 4 * N_CH4_1 + 2 * N_H2O_1 + 2 * N_H2_1;
 eqns(5) = 3 == N_H2O_1 + N_CO_1;
 S = solve(eqns, 'Real', true);
-CO.1 = double(S.N_CO_1);
-H2.1 = double(S.N_H2_1);
-CH4.1 = double(S.N_CH4_1);
-H2O.1 = double(S.N_H2O_1);
+CO_1 = double(S.N_CO_1);
+H2_1 = double(S.N_H2_1);
+CH4_1 = double(S.N_CH4_1);
+H2O_1 = double(S.N_H2O_1);
 total = min(double(S.N_total));
 r1.CO_1 = min(CO_1) / total;
 r1.H2_1 = min(H2_1) / total;
@@ -253,8 +282,5 @@ r1.H2O_1 = min(H2O_1) / total;
 
 % Look at the hint at the end of the assignment sheet
 
-
 %% Part B4 (John's) 
 % finds T2 and T3 after shift reactors if adiabatic
-
-
