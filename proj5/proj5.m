@@ -256,11 +256,11 @@ P = 101325; % Pa
 
 % Calculations for First Reformer (800 Celsius)
 
-T.r1 = 1073; % K, temperature for reformer 1 (r1)
-deltaG_smr.r1 = lucio_smr(T.r1);
-Kp_smr.r1 = exp(-deltaG_smr.r1 ./ (R*T.r1));
+temp.r1 = 1073; % K, temperature for reformer 1 (r1)
+gibbs.r1 = lucio_smr(temp.r1);
+Kp.r1 = exp(-gibbs.r1 ./ (R*temp.r1));
 
-syms N_CO_1  N_H2_1  N_CH4_1  N_H2O_1  N_CO2_1  N_total 
+syms N_CO_1 N_H2_1 N_CH4_1 N_H2O_1 N_CO2_1 N_total 
 
 assume(N_CO_1 >= 0);
 assume(N_H2_1 >= 0);
@@ -269,7 +269,7 @@ assume(N_H2O_1 >= 0);
 assume(N_CO2_1 >= 0);
 assume(N_total >= 0);
 eqns(1) = N_total == N_CO_1 + N_H2_1 + N_CH4_1 + N_H2O_1 + N_CO2_1;
-eqns(2) = Kp_smr.r1 == ((N_CO_1 * N_H2_1^3) / (N_CH4_1 * N_H2O_1)) * ((P / P_s) / N_total)^2;
+eqns(2) = Kp.r1 == ((N_CO_1 * N_H2_1^3) / (N_CH4_1 * N_H2O_1)) * ((P / P_s) / N_total)^2;
 eqns(3) = 1 == N_CH4_1 + N_CO_1;
 eqns(4) = 10 == 4 * N_CH4_1 + 2 * N_H2O_1 + 2 * N_H2_1;
 eqns(5) = 3 == N_H2O_1 + N_CO_1;
@@ -287,13 +287,13 @@ r1.CH4_1 = min(CH4_1) / total;
 r1.H2O_1 = min(H2O_1) / total;
 r1.CO2_1 = min(CO2_1) / total;
 
-%%
-% Calculations for First Shift Reactor (400 Celsius)
-T.r2 = 673; %K second reformer temperature
-deltaG_wgs.r2 = lucio_wgs(T.r2);
-Kp_wgs.r2 = exp(-deltaG_wgs.r2 / (R*T.r2));
 
-syms N_CO_2 N_H2O_2  N_CO2_2  N_H2_2  N_CH4_2 N_total 
+% Calculations for First Shift Reactor (400 Celsius)
+temp.r2 = 673; %K second reformer temperature
+gibbs.r2 = lucio_wgs(temp.r2);
+Kp.r2 = exp(-gibbs.r2 / (R*temp.r2));
+
+syms N_CO_2 N_H2O_2 N_CO2_2 N_H2_2 N_CH4_2 N_total 
 assume(N_CO_2 >= 0);
 assume(N_H2O_2 >= 0);
 assume(N_CO2_2 >= 0);
@@ -301,7 +301,7 @@ assume(N_H2_2 >= 0);
 assume(N_CH4_2 >= 0);
 assume(N_total >= 0);
 eqns(1) = N_total == N_CO_2 + N_H2O_2 + N_CO2_2 + N_H2_2 + N_CH4_2;
-eqns(2) = Kp_wgs.r2 == ((N_CO2_2 * N_H2_2) / (N_CO_2 * N_H2O_2));
+eqns(2) = Kp.r2 == ((N_CO2_2 * N_H2_2) / (N_CO_2 * N_H2O_2));
 eqns(3) = 1 == N_CO_2 + N_CO2_2;
 eqns(4) = 10 == 2 * N_H2O_2 + 2 * N_H2_2;
 eqns(5) = 3 == N_CO_2 + N_H2O_2 + 2 * N_CO2_2;
@@ -321,11 +321,11 @@ r2.CH4_2 = min(CH4_2) / total;
 
 % Calculations for Second Shift Reactor (250 Celsius)
 
-T.r2 = 523; %K second reformer temperature
-deltaG_wgs.r2 = lucio_wgs(T.r2);
-Kp_wgs.r3 = exp(-deltaG_wgs.r2 / (R*T.r2));
+temp.r2 = 523; %K second reformer temperature
+gibbs.r2 = lucio_wgs(temp.r2);
+Kp.r3 = exp(-gibbs.r2 / (R*temp.r2));
 
-syms N_CO_3 N_H2O_3  N_CO2_3  N_H2_3  N_CH4_3  N_total 
+syms N_CO_3 N_H2O_3 N_CO2_3 N_H2_3 N_CH4_3 N_total 
 assume(N_CO_3 >= 0);
 assume(N_H2O_3 >= 0);
 assume(N_CO2_3 >= 0);
@@ -333,7 +333,7 @@ assume(N_H2_3 >= 0);
 assume(N_CH4_3 >= 0);
 assume(N_total >= 0);
 eqns(1) = N_total == N_CO_3 + N_H2O_3 + N_CO2_3 + N_H2_3 + N_CH4_3;
-eqns(2) = Kp_wgs.r3 == ((N_CO2_3 * N_H2_3) / (N_CO_3 * N_H2O_3));
+eqns(2) = Kp.r3 == ((N_CO2_3 * N_H2_3) / (N_CO_3 * N_H2O_3));
 eqns(3) = 1 == N_CO_3 + N_CO2_3;
 eqns(4) = 10 == 2 * N_H2O_3 + 2 * N_H2_3;
 eqns(5) = 3 == N_CO_3 + N_H2O_3 + 2 * N_CO2_3;
