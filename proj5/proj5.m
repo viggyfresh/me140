@@ -368,6 +368,4 @@ hold off
 %% Part B4 (John's) 
 % finds T2 and T3 after shift reactors if adiabatic
 
-[ , , , ] = smr_mols(1073,P_atm);
-
-
+%[ , , , ] = smr_mols(1073,P_atm);
