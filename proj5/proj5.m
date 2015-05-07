@@ -131,7 +131,7 @@ set(gcf, 'color', 'w');
 plotfixer;
 
 %% Part B1
-T_range = linspace(25, 1200, 100);
+T_range = linspace(25, 1200, 20);
 R = 8.3144621; %universal gas constant
 
 % only supposed to plot 10^-3 < Kp < 10^3
@@ -191,9 +191,17 @@ for i = 1:length(P_range)
 end
 
 figure;
-plot(T_range, B2.CO(1, :), T_range, B2.H2(1, :), T_range, B2.CH4(1, :), T_range, B2.H2O(1, :),...
-     T_range, B2.CO(2, :), T_range, B2.H2(2, :), T_range, B2.CH4(2, :), T_range, B2.H2O(2, :),...
-     T_range, B2.CO(3, :), T_range, B2.H2(3, :), T_range, B2.CH4(3, :), T_range, B2.H2O(3, :));
+plot(T_range, B2.CO(1, :), '-g', T_range, B2.H2(1, :), '-r', T_range, B2.CH4(1, :), '-c', T_range, B2.H2O(1, :), '-y',...
+     T_range, B2.CO(2, :), '-go', T_range, B2.H2(2, :), '-ro', T_range, B2.CH4(2, :), '-co', T_range, B2.H2O(2, :), '-yo', ...
+     T_range, B2.CO(3, :), '-g+', T_range, B2.H2(3, :), '-r+', T_range, B2.CH4(3, :), '-c+', T_range, B2.H2O(3, :), '-y+');
+legend('CO 1 atm', 'H_2 1 atm', 'CH_4 1 atm', 'H_2O 1 atm',...
+       'CO 10 atm', 'H_2 10 atm', 'CH_4 10 atm', 'H_2O 10 atm',...
+       'CO 100 atm', 'H_2 100 atm', 'CH_4 100 atm', 'H_2O 100 atm',...
+       'Location', 'bestoutside');
+title('Equilibrium Composition of SMR vs. Temperature');
+xlabel('Temperature [^{\circ}C]');
+ylabel('Mole Fraction');
+set(gcf, 'color', 'w');
 plotfixer;
 
 
@@ -225,6 +233,12 @@ end
 
 figure;
 plot(T_range, B3.CO(:), T_range, B3.H2O(:), T_range, B3.CO2(:), T_range, B3.H2(:));
+legend('CO 1 atm', 'H_2O 1 atm', 'CO_2 1 atm', 'H_2 1 atm',...
+       'Location', 'bestoutside');
+title('Equilibrium Composition of WGS vs. Temperature');
+xlabel('Temperature [^{\circ}C]');
+ylabel('Mole Fraction');
+set(gcf, 'color', 'w');
 plotfixer;
 
 %% Part B4
