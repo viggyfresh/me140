@@ -1,12 +1,11 @@
-function [N_CO, N_H2O, N_CH4, N_H2] = smr_mols(T,P,Kp_smr)
-% used to find enthalpys of all components in WGS reaction,
+function [N_CH4, N_H2O, N_CO, N_H2] = smr_mols(T,P,Kp_smr)
+% used to find enthalpys of all components in SMR reaction,
 % INPUT: T,P
-% OUTPUT: mole fractions (N_i - N_n) 
-% CO + H2O -> CO2 + H2
+% OUTPUT: mole fractions (N_i - N_n)
+% CH4 + H2O -> CO2 + H2
 
 % Universal gas constant R
 R = 8.3144621;
-T_standard = 298; %K
 P_s = 101325; %Pa
 
 % SOLVE system of equations

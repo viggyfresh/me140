@@ -257,36 +257,34 @@ P = 101325; % Pa
 % Calculations for First Reformer (800 Celsius)
 
 temp.r1 = 1073; % K, temperature for reformer 1 (r1)
-gibbs.r1 = lucio_smr(temp.r1);
+gibbs.r1 = lucio_wgs(temp.r1);
 Kp.r1 = exp(-gibbs.r1 ./ (R*temp.r1));
 
-syms N_CO_1 N_H2_1 N_CH4_1 N_H2O_1 N_CO2_1 N_total 
-
+syms N_CO_1 N_H2O_1 N_CO2_1 N_H2_1 N_CH4_1 N_total 
 assume(N_CO_1 >= 0);
-assume(N_H2_1 >= 0);
-assume(N_CH4_1 >= 0);
 assume(N_H2O_1 >= 0);
 assume(N_CO2_1 >= 0);
+assume(N_H2_1 >= 0);
+assume(N_CH4_1 >= 0);
 assume(N_total >= 0);
-eqns(1) = N_total == N_CO_1 + N_H2_1 + N_CH4_1 + N_H2O_1 + N_CO2_1;
-eqns(2) = Kp.r1 == ((N_CO_1 * N_H2_1^3) / (N_CH4_1 * N_H2O_1)) * ((P / P_s) / N_total)^2;
-eqns(3) = 1 == N_CH4_1 + N_CO_1;
-eqns(4) = 10 == 4 * N_CH4_1 + 2 * N_H2O_1 + 2 * N_H2_1;
-eqns(5) = 3 == N_H2O_1 + N_CO_1;
-eqns(6) = 0 == N_CO2_1;
-S = solve(eqns, 'Real', true);
-CO_1 = double(S.N_CO_1);
-H2_1 = double(S.N_H2_1);
-CH4_1 = double(S.N_CH4_1);
-H2O_1 = double(S.N_H2O_1);
-CO2_1 = double(S.N_CO2_1);
-total = min(double(S.N_total));
+eqns(1) = N_total == N_CO_1 + N_H2O_1 + N_CO2_1 + N_H2_1 + N_CH4_1;
+eqns(2) = Kp.r1 == ((N_CO2_1 * N_H2_1) / (N_CO_1 * N_H2O_1));
+eqns(3) = 1 == N_CO_1 + N_CO2_1;
+eqns(4) = 10 == 2 * N_H2O_1 + 2 * N_H2_1;
+eqns(5) = 3 == N_CO_1 + N_H2O_1 + 2 * N_CO2_1;
+eqns(6) = 0 == N_CH4_1;
+S_1 = solve(eqns, 'Real', true);
+CO_1 = double(S_1.N_CO_1);
+H2O_1 = double(S_1.N_H2O_1);
+CO2_1 = double(S_1.N_CO2_1);
+H2_1 = double(S_1.N_H2_1);
+CH4_1 = double(S_1.N_CH4_1);
+total = min(double(S_1.N_total));
 r1.CO_1 = min(CO_1) / total;
-r1.H2_1 = min(H2_1) / total;
-r1.CH4_1 = min(CH4_1) / total;
 r1.H2O_1 = min(H2O_1) / total;
 r1.CO2_1 = min(CO2_1) / total;
-
+r1.H2_1 = min(H2_1) / total;
+r1.CH4_1 = min(CH4_1) / total;
 
 % Calculations for First Shift Reactor (400 Celsius)
 temp.r2 = 673; %K second reformer temperature
@@ -368,19 +366,28 @@ hold off
 %% Part B4 (John's) 
 % finds T2 and T3 after shift reactors if adiabatic
 
-[N_CO, N_H2O, N_CH4, N_H2] = smr_mols(1073,P_atm,Kp.r1); %K,Pa
-[h_CH4, h_H2O, h_CO, h_H2] = lucio_smr_n(N_CO, N_H2O, N_CH4, N_H2, 1073);
-LHS = N_CH4 * h_CH4 + N_H2O * h_H2O + N_CO * h_CO + N_H2 * h_H2;
+R = 8.3144621; %universal gas constant
 
-T = 293;
-i = 1;
+[N_CO, N_H2O, N_CO2, N_H2, total] = wgs_mols(P_atm, Kp.r1); %K,Pa
+a1.CO_1 = N_CO;
+a1.H2O_1 = N_H2O;
+a1.CO2_1 = N_CO2;
+a1.H2_1 = N_H2;
+
+LHS = lucio_wgs_n(a1.CO_1, a1.H2O_1, a1.CO2_1, a1.H2_1, 400)
+%LHS = N_CH4 * h_CH4 + N_H2O * h_H2O + N_CO * h_CO + N_H2 * h_H2;
+
+T = 400;
 RHS = 0;
-tol = .01;
-dT = 15; %K
-while abs(LHS - RHS)/LHS > tol
+tol = .001;
+dT = 10; %K
+while (1)
     T = T + dT;
-    [N_CO, N_H2O, N_CO2, N_H2] = wgs_mols(T,P_atm,Kp.r2); %K,P
-    [h_CO, h_H2O, h_CO2, h_H2] = lucio_wgs_n(N_CO, N_H2O, N_CO2, N_H2, T);
-    RHS = N_CO * h_CO + N_H2O * h_H2O + N_CO2 * h_CO2 + N_H2 * h_H2;
-    abs(LHS - RHS)/LHS
+    temp_Kp = exp(-lucio_wgs(T) / (R*T));
+    [N_CO, N_H2O, N_CO2, N_H2, total] = wgs_mols(P_atm,temp_Kp); %K,P
+    RHS = lucio_wgs_n(N_CO, N_H2O, N_CO2, N_H2, T)
+    %RHS = N_CO * h_CO + N_H2O * h_H2O + N_CO2 * h_CO2 + N_H2 * h_H2;
+    if abs(LHS - RHS)/LHS > tol
+        break
+    end
 end 
