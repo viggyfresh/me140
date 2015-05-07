@@ -288,4 +288,8 @@ r1.CO2_1 = min(CO2_1) / total;
 
 % Calculations for Second Reformer (450 Celsius)
 
+
 % Look at the hint at the end of the assignment sheet
+
+%% Part B4 (John's) 
+% finds T2 and T3 after shift reactors if adiabatic
