@@ -227,43 +227,42 @@ figure;
 plot(T_range, B3.CO(:), T_range, B3.H2O(:), T_range, B3.CO2(:), T_range, B3.H2(:));
 plotfixer;
 
-% %% Part B4
-% 
-% R = 8.3144621; %universal gas constant
-% P_s = 101325; % Pa
-% P = 101325; % Pa
-% 
-% 
-% % Calculations for First Reformer (800 Celsius)
-% 
-% T.r1 = 1073; % K, temperature for reformer 1 (r1)
-% deltaG_smr.r1 = lucio_smr(T.r1);
-% Kp_smr.r1 = exp(-deltaG_smr.r1 ./ (R*T.r1));
-% 
-% 
-% syms N_CO_1  N_H2_1  N_CH4_1  N_H2O_1  N_total
-% assume(N_CO_1,'positive')
-% assume(N_H2_1,'positive')
-% assume(N_CH4_1,'positive')
-% assume(N_H2O_1,'positive')
-% assume(N_total,'positive')
-% eqns(1) = N_total == N_CO_1 + N_H2_1 + N_CH4_1 + N_H2O_1;
-% eqns(2) = Kp_smr.r1 == ((N_CO_1 * N_H2_1^3) / (N_CH4_1 * N_H2O_1)) * ((P / P_s) / N_total)^2;
-% eqns(3) = 1 == N_CH4_1 + N_CO_1;
-% eqns(4) = 10 == 4 * N_CH4_1 + 2 * N_H2O_1 + 2 * N_H2_1;
-% eqns(5) = 3 == N_H2O_1 + N_CO_1;
-% S = solve(eqns, 'Real', true);
-% CO = double(S.N_CO_1);
-% H2 = double(S.N_H2_1);
-% CH4 = double(S.N_CH4_1);
-% H2O = double(S.N_H2O_1);
-% total = min(double(S.N_total));
-% r1.CO_1 = min(CO_1) / total;
-% r1.H2_1 = min(H2_1) / total;
-% r1.CH4_1 = min(CH4_1) / total;
-% r1.H2O_1 = min(H2O_1) / total;
-% 
-% % Calculations for Second Reformer (450 Celsius)
-% 
-% % Look at the hint at the end of the assignment sheet
+%% Part B4
 
+R = 8.3144621; %universal gas constant
+P_s = 101325; % Pa
+P = 101325; % Pa
+
+
+% Calculations for First Reformer (800 Celsius)
+
+T.r1 = 1073; % K, temperature for reformer 1 (r1)
+deltaG_smr.r1 = lucio_smr(T.r1);
+Kp_smr.r1 = exp(-deltaG_smr.r1 ./ (R*T.r1));
+
+
+syms N_CO_1  N_H2_1  N_CH4_1  N_H2O_1  N_total
+assume(N_CO_1 >= 0);
+assume(N_H2_1 >= 0);
+assume(N_CH4_1 >= 0);
+assume(N_H2O_1 >= 0);
+assume(N_total >= 0);
+eqns(1) = N_total == N_CO_1 + N_H2_1 + N_CH4_1 + N_H2O_1;
+eqns(2) = Kp_smr.r1 == ((N_CO_1 * N_H2_1^3) / (N_CH4_1 * N_H2O_1)) * ((P / P_s) / N_total)^2;
+eqns(3) = 1 == N_CH4_1 + N_CO_1;
+eqns(4) = 10 == 4 * N_CH4_1 + 2 * N_H2O_1 + 2 * N_H2_1;
+eqns(5) = 3 == N_H2O_1 + N_CO_1;
+S = solve(eqns, 'Real', true);
+CO_1 = double(S.N_CO_1);
+H2_1 = double(S.N_H2_1);
+CH4_1 = double(S.N_CH4_1);
+H2O_1 = double(S.N_H2O_1);
+total = min(double(S.N_total));
+r1.CO_1 = min(CO_1) / total;
+r1.H2_1 = min(H2_1) / total;
+r1.CH4_1 = min(CH4_1) / total;
+r1.H2O_1 = min(H2O_1) / total;
+
+% Calculations for Second Reformer (450 Celsius)
+
+% Look at the hint at the end of the assignment sheet
