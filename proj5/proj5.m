@@ -45,8 +45,9 @@ legend('Load potential', 'Stack potential','Location','southwest');
 set(gcf, 'color', 'w');
 plotfixer;
 
+% TODO: need to put where net power is zero
 figure;
-plot(P_load, P_stack, P_load, P_accessory); % need to put where net power is zero
+plot(P_load, P_stack, P_load, P_accessory);
 xlabel('Power to Resistor Bank (W)');
 ylabel('Power (W)');
 title('Stack and Accessory Power vs. Load Power');
@@ -75,7 +76,7 @@ MM.air = 28.97;
 H2_flow_mol_s = H2_flow ./ MM.H2 .* 1000;  %mol/sec
 Air_flow_mol_s = air_flow ./MM.air .* 1000; %mol/sec
 % divide by 4.76 to account for number of moles of air
-lambda = (2*Air_flow_mol_s./H2_flow_mol_s) ./ 4.76; % check with TA
+lambda = (2*Air_flow_mol_s./H2_flow_mol_s) ./ 4.76; % TODO: check with TA
 
 figure;
 plot(P_load, lambda);
@@ -87,7 +88,8 @@ plotfixer;
 % n_1 vs. P_load
 for i=1:length(T_stack)
     alpha(i) = john(T_stack(i), lambda(i), P_air_in(i));
-    [deltaG_rxn(i)] = lucio(T_stack(i),P_air_in(i),P_H2_in(i),alpha(i),lambda(i));
+    [deltaG_rxn(i)] = lucio(T_stack(i), P_air_in(i),...
+                            P_H2_in(i),alpha(i),lambda(i));
 end
 
 
@@ -131,7 +133,7 @@ set(gcf, 'color', 'w');
 plotfixer;
 
 %% Part B1
-T_range = linspace(25, 1200, 100);
+T_range = linspace(25, 1200, 20);
 R = 8.3144621; %universal gas constant
 
 % only supposed to plot 10^-3 < Kp < 10^3
@@ -191,9 +193,20 @@ for i = 1:length(P_range)
 end
 
 figure;
-plot(T_range, B2.CO(1, :), T_range, B2.H2(1, :), T_range, B2.CH4(1, :), T_range, B2.H2O(1, :),...
-     T_range, B2.CO(2, :), T_range, B2.H2(2, :), T_range, B2.CH4(2, :), T_range, B2.H2O(2, :),...
-     T_range, B2.CO(3, :), T_range, B2.H2(3, :), T_range, B2.CH4(3, :), T_range, B2.H2O(3, :));
+plot(T_range, B2.CO(1, :), '-g', T_range, B2.H2(1, :), '-r',...
+     T_range, B2.CH4(1, :), '-c', T_range, B2.H2O(1, :), '-y',...
+     T_range, B2.CO(2, :), '-go', T_range, B2.H2(2, :), '-ro',...
+     T_range, B2.CH4(2, :), '-co', T_range, B2.H2O(2, :), '-yo', ...
+     T_range, B2.CO(3, :), '-g+', T_range, B2.H2(3, :), '-r+',...
+     T_range, B2.CH4(3, :), '-c+', T_range, B2.H2O(3, :), '-y+');
+legend('CO 1 atm', 'H_2 1 atm', 'CH_4 1 atm', 'H_2O 1 atm',...
+       'CO 10 atm', 'H_2 10 atm', 'CH_4 10 atm', 'H_2O 10 atm',...
+       'CO 100 atm', 'H_2 100 atm', 'CH_4 100 atm', 'H_2O 100 atm',...
+       'Location', 'bestoutside');
+title('Equilibrium Composition of SMR vs. Temperature');
+xlabel('Temperature [^{\circ}C]');
+ylabel('Mole Fraction');
+set(gcf, 'color', 'w');
 plotfixer;
 
 
@@ -224,7 +237,14 @@ for j = 1:length(T_range)
 end
 
 figure;
-plot(T_range, B3.CO(:), T_range, B3.H2O(:), T_range, B3.CO2(:), T_range, B3.H2(:));
+plot(T_range, B3.CO(:), T_range, B3.H2O(:), T_range, B3.CO2(:),...
+     T_range, B3.H2(:));
+legend('CO 1 atm', 'H_2O 1 atm', 'CO_2 1 atm', 'H_2 1 atm',...
+       'Location', 'bestoutside');
+title('Equilibrium Composition of WGS vs. Temperature');
+xlabel('Temperature [^{\circ}C]');
+ylabel('Mole Fraction');
+set(gcf, 'color', 'w');
 plotfixer;
 
 %% Part B4
@@ -241,6 +261,7 @@ deltaG_smr.r1 = lucio_smr(T.r1);
 Kp_smr.r1 = exp(-deltaG_smr.r1 ./ (R*T.r1));
 
 syms N_CO_1  N_H2_1  N_CH4_1  N_H2O_1  N_CO2_1  N_total 
+
 assume(N_CO_1 >= 0);
 assume(N_H2_1 >= 0);
 assume(N_CH4_1 >= 0);
@@ -248,11 +269,11 @@ assume(N_H2O_1 >= 0);
 assume(N_CO2_1 >= 0);
 assume(N_total >= 0);
 eqns(1) = N_total == N_CO_1 + N_H2_1 + N_CH4_1 + N_H2O_1 + N_CO2_1;
-eqns(2) = Kp_smr.r1 == ((N_CO_1 * N_H2_1^3) / (N_CH4_1 * N_H2O_1)) ...
-    * ((P / P_s) / N_total)^2;
+eqns(2) = Kp_smr.r1 == ((N_CO_1 * N_H2_1^3) / (N_CH4_1 * N_H2O_1)) * ((P / P_s) / N_total)^2;
 eqns(3) = 1 == N_CH4_1 + N_CO_1;
 eqns(4) = 10 == 4 * N_CH4_1 + 2 * N_H2O_1 + 2 * N_H2_1;
 eqns(5) = 3 == N_H2O_1 + N_CO_1;
+eqns(6) = 0 == N_CO2_1;
 S = solve(eqns, 'Real', true);
 CO_1 = double(S.N_CO_1);
 H2_1 = double(S.N_H2_1);
@@ -343,3 +364,6 @@ plot(x,data.CO2)
 plot(x,data.H2)
 plot(x,data.CH4)
 hold off
+
+%% Part B4 (John's) 
+% finds T2 and T3 after shift reactors if adiabatic
