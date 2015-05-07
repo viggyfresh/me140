@@ -34,7 +34,7 @@ ylabel('Current (A)');
 title('Load and Stack Currents vs. Load Power');
 legend('Load current', 'Stack current','Location','northwest');
 set(gcf, 'color', 'w');
-plotfixer; %% this must be added
+plotfixer;
 
 figure;
 plot(P_load, V_load, P_load, V_stack);
@@ -162,11 +162,17 @@ P_s = 1;
 
 for i = 1:length(P_range)
     for j = 1:length(T_range)
-        T = T_range(j) + 273.15
+        T = T_range(j) + 273.15;
         P = P_range(i);
-        syms N_CO positive N_H2 positive N_CH4 positive N_H2O positive N_total positive
+        syms N_CO N_H2 N_CH4 N_H2O N_total
+        assume(N_CO >= 0);
+        assume(N_H2 >= 0);
+        assume(N_CH4 >= 0);
+        assume(N_H2O >= 0);
+        assume(N_total >= 0);
         eqns(1) = N_total == N_CO + N_H2 + N_CH4 + N_H2O;
-        eqns(2) = Kp_smr(j) == ((N_CO * N_H2^3) / (N_CH4 * N_H2O)) * ((P / P_s) / N_total)^2;
+        eqns(2) = Kp_smr(j) == ((N_CO * N_H2^3) / (N_CH4 * N_H2O))...
+                  * ((P / P_s) / N_total)^2;
         eqns(3) = 1 == N_CH4 + N_CO;
         eqns(4) = 10 == 4 * N_CH4 + 2 * N_H2O + 2 * N_H2;
         eqns(5) = 3 == N_H2O + N_CO;
@@ -184,14 +190,22 @@ for i = 1:length(P_range)
     
 end
 
-plot(T_range, B2.CO(1, :), T_range, B2.H2(1, :), T_range, B2.CH4(1, :), T_range, B2.H2O(1, :));
+figure;
+plot(T_range, B2.CO(1, :), T_range, B2.H2(1, :), T_range, B2.CH4(1, :), T_range, B2.H2O(1, :),...
+     T_range, B2.CO(2, :), T_range, B2.H2(2, :), T_range, B2.CH4(2, :), T_range, B2.H2O(2, :),...
+     T_range, B2.CO(3, :), T_range, B2.H2(3, :), T_range, B2.CH4(3, :), T_range, B2.H2O(3, :));
 plotfixer;
 
 
 %% Part B3
 for j = 1:length(T_range)
-    T = T_range(j) + 273.15
-    syms N_CO positive N_H2O positive N_CO2 positive N_H2 positive N_total positive
+    T = T_range(j) + 273.15;
+    syms N_CO N_H2O N_CO2 N_H2 N_total
+    assume(N_CO >= 0);
+    assume(N_H2O >= 0);
+    assume(N_CO2 >= 0);
+    assume(N_H2 >= 0);
+    assume(N_total >= 0);
     eqns(1) = N_total == N_CO + N_H2O + N_CO2 + N_H2;
     eqns(2) = Kp_wgs(j) == ((N_CO2 * N_H2) / (N_CO * N_H2O));
     eqns(3) = 1 == N_CO + N_CO2;
@@ -209,46 +223,47 @@ for j = 1:length(T_range)
     B3.H2(j) = min(H2) / total;
 end
 
+figure;
 plot(T_range, B3.CO(:), T_range, B3.H2O(:), T_range, B3.CO2(:), T_range, B3.H2(:));
 plotfixer;
 
-%% Part B4
-
-R = 8.3144621; %universal gas constant
-P_s = 101325; % Pa
-P = 101325; % Pa
-
-
-% Calculations for First Reformer (800 Celsius)
-
-T.r1 = 1073; % K, temperature for reformer 1 (r1)
-deltaG_smr.r1 = lucio_smr(T.r1);
-Kp_smr.r1 = exp(-deltaG_smr.r1 ./ (R*T.r1));
-
-
-syms N_CO_1  N_H2_1  N_CH4_1  N_H2O_1  N_total
-assume(N_CO_1,'positive')
-assume(N_H2_1,'positive')
-assume(N_CH4_1,'positive')
-assume(N_H2O_1,'positive')
-assume(N_total,'positive')
-eqns(1) = N_total == N_CO_1 + N_H2_1 + N_CH4_1 + N_H2O_1;
-eqns(2) = Kp_smr.r1 == ((N_CO_1 * N_H2_1^3) / (N_CH4_1 * N_H2O_1)) * ((P / P_s) / N_total)^2;
-eqns(3) = 1 == N_CH4_1 + N_CO_1;
-eqns(4) = 10 == 4 * N_CH4_1 + 2 * N_H2O_1 + 2 * N_H2_1;
-eqns(5) = 3 == N_H2O_1 + N_CO_1;
-S = solve(eqns, 'Real', true);
-CO = double(S.N_CO_1);
-H2 = double(S.N_H2_1);
-CH4 = double(S.N_CH4_1);
-H2O = double(S.N_H2O_1);
-total = min(double(S.N_total));
-r1.CO_1 = min(CO_1) / total;
-r1.H2_1 = min(H2_1) / total;
-r1.CH4_1 = min(CH4_1) / total;
-r1.H2O_1 = min(H2O_1) / total;
-
-% Calculations for Second Reformer (450 Celsius)
-
-% Look at the hint at the end of the assignment sheet
+% %% Part B4
+% 
+% R = 8.3144621; %universal gas constant
+% P_s = 101325; % Pa
+% P = 101325; % Pa
+% 
+% 
+% % Calculations for First Reformer (800 Celsius)
+% 
+% T.r1 = 1073; % K, temperature for reformer 1 (r1)
+% deltaG_smr.r1 = lucio_smr(T.r1);
+% Kp_smr.r1 = exp(-deltaG_smr.r1 ./ (R*T.r1));
+% 
+% 
+% syms N_CO_1  N_H2_1  N_CH4_1  N_H2O_1  N_total
+% assume(N_CO_1,'positive')
+% assume(N_H2_1,'positive')
+% assume(N_CH4_1,'positive')
+% assume(N_H2O_1,'positive')
+% assume(N_total,'positive')
+% eqns(1) = N_total == N_CO_1 + N_H2_1 + N_CH4_1 + N_H2O_1;
+% eqns(2) = Kp_smr.r1 == ((N_CO_1 * N_H2_1^3) / (N_CH4_1 * N_H2O_1)) * ((P / P_s) / N_total)^2;
+% eqns(3) = 1 == N_CH4_1 + N_CO_1;
+% eqns(4) = 10 == 4 * N_CH4_1 + 2 * N_H2O_1 + 2 * N_H2_1;
+% eqns(5) = 3 == N_H2O_1 + N_CO_1;
+% S = solve(eqns, 'Real', true);
+% CO = double(S.N_CO_1);
+% H2 = double(S.N_H2_1);
+% CH4 = double(S.N_CH4_1);
+% H2O = double(S.N_H2O_1);
+% total = min(double(S.N_total));
+% r1.CO_1 = min(CO_1) / total;
+% r1.H2_1 = min(H2_1) / total;
+% r1.CH4_1 = min(CH4_1) / total;
+% r1.H2O_1 = min(H2O_1) / total;
+% 
+% % Calculations for Second Reformer (450 Celsius)
+% 
+% % Look at the hint at the end of the assignment sheet
 
