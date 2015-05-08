@@ -374,14 +374,15 @@ plot(x,data.H2)
 plot(x,data.CH4)
 hold off
 
-title('Mole Fractions for Stations 0 - 3')
+title('Isothermal Mole Fractions for Stations 0 - 3')
 xlabel('Stations [-]')
 stations = ['Station 0'; 'Station 1'; 'Station 2'; 'Station 3'];
 set(gca,'xtick',0:1:3)
 set(gca,'XTickLabel',stations)
 ylabel('Mole Fraction [-]')
 legend('CO', 'H_2O', 'CO_2', 'H_2', 'CH_4')
-
+set(gcf, 'color', 'white');
+plotfixer;
 
 %% Part B4 (John's) 
 % finds T2 and T3 after shift reactors if adiabatic
@@ -434,6 +435,31 @@ a3.temp = T;
 a3.total = total;
 a3
 
+x = [0 1 2 3];
+data2.CO = [0 a1.CO a2.CO a3.CO];
+data2.H2O = [.75 a1.H2O a2.H2O a3.H2O];
+data2.CO2 = [0 a1.CO2 a2.CO2 a3.CO2];
+data2.H2 = [0 a1.H2 a2.H2 a3.H2];
+data2.CH4 = [.25 0 0 0];
+
+figure;
+plot(x,data2.CO)
+hold all
+plot(x,data2.H2O)
+plot(x,data2.CO2)
+plot(x,data2.H2)
+plot(x,data2.CH4)
+hold off
+
+title('Adiabatic Mole Fractions for Stations 0 - 3')
+xlabel('Stations [-]')
+stations = ['Station 0'; 'Station 1'; 'Station 2'; 'Station 3'];
+set(gca,'xtick',0:1:3)
+set(gca,'XTickLabel',stations)
+ylabel('Mole Fraction [-]')
+legend('CO', 'H_2O', 'CO_2', 'H_2', 'CH_4')
+set(gcf, 'color', 'white');
+plotfixer;
 
 %% Heat Addition Shit
 total = r1.total;
