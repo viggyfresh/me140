@@ -358,12 +358,12 @@ r3.H2_3 = min(H2_3) / total;
 r3.CH4_3 = min(CH4_3) / total;
 r3.total = total;
 
-x = [1 2 3];
-data.CO = [r1.CO_1 r2.CO_2 r3.CO_3];
-data.H2O = [r1.H2O_1 r2.H2O_2 r3.H2O_3];
-data.CO2 = [r1.CO2_1 r2.CO2_2 r3.CO2_3];
-data.H2 = [r1.H2_1 r2.H2_2 r3.H2_3];
-data.CH4 = [r1.CH4_1 r2.CH4_2 r3.CH4_3];
+x = [0 1 2 3];
+data.CO = [0 r1.CO_1 r2.CO_2 r3.CO_3];
+data.H2O = [.75 r1.H2O_1 r2.H2O_2 r3.H2O_3];
+data.CO2 = [0 r1.CO2_1 r2.CO2_2 r3.CO2_3];
+data.H2 = [0 r1.H2_1 r2.H2_2 r3.H2_3];
+data.CH4 = [.25 r1.CH4_1 r2.CH4_2 r3.CH4_3];
 
 figure;
 plot(x,data.CO)
@@ -373,6 +373,15 @@ plot(x,data.CO2)
 plot(x,data.H2)
 plot(x,data.CH4)
 hold off
+
+title('Mole Fractions for Stations 0 - 3')
+xlabel('Stations [-]')
+stations = ['Station 0'; 'Station 1'; 'Station 2'; 'Station 3'];
+set(gca,'xtick',0:1:3)
+set(gca,'XTickLabel',stations)
+ylabel('Mole Fraction [-]')
+legend('CO', 'H_2O', 'CO_2', 'H_2', 'CH_4')
+
 
 %% Part B4 (John's) 
 % finds T2 and T3 after shift reactors if adiabatic
@@ -384,6 +393,7 @@ a1.CO = N_CO / total;
 a1.H2O = N_H2O / total;
 a1.CO2 = N_CO2 / total;
 a1.H2 = N_H2 / total;
+a1.total = total;
 
 % First Shift Reactor
 LHS = lucio_wgs_n(N_CO, N_H2O, N_CO2, N_H2, 400 + 273);
@@ -402,6 +412,7 @@ a2.H2O = N_H2O / total;
 a2.CO2 = N_CO2 / total;
 a2.H2 = N_H2 / total;
 a2.temp = T;
+a2.total = total;
 a2
 
 % Second Shift Reactor
@@ -420,6 +431,7 @@ a3.H2O = N_H2O / total;
 a3.CO2 = N_CO2 / total;
 a3.H2 = N_H2 / total;
 a3.temp = T;
+a3.total = total;
 a3
 
 
@@ -441,4 +453,10 @@ H_add.shift2 = (lucio_wgs_n(r3.CO_3 * total, r3.H2O_3 * total, r3.CO2_3 * total,
            
 LHV_CH4 = 50050 * 10^3;
 burn = (raw_H_add_reform / LHV_CH4);
-methane_percent = burn / (burn + MM.CH4 / 1000)
+methane_percent = burn / (burn + MM.CH4 / 1000);
+
+num_iso = r3.H2_3 * r3.total * MM.H2 / 1000 * LHV_H2;
+num_adi = a3.H2 * a3.total * MM.H2 / 1000 * LHV_H2;
+den = (burn + MM.CH4 / 1000) * LHV_CH4;
+eta_iso = num_iso / den
+eta_adi = num_adi / den
