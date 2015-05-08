@@ -442,7 +442,7 @@ set(gca,'xtick',0:1:3);
 set(gca,'XTickLabel',stations);
 ylabel('Mole Fraction [-]')
 legend('CH_4', 'CO Isothermal', 'H_2O Isothermal', 'CO_2 Isothermal', 'H_2 Isothermal',...
-       'CO Adiabatic', 'H_2O Adiabatic', 'CO_2 Adiabatic', 'H_2 Adiabatic');
+       'CO Adiabatic', 'H_2O Adiabatic', 'CO_2 Adiabatic', 'H_2 Adiabatic', 'Location', 'bestoutside');
 set(gcf, 'color', 'white');
 plotfixer;
 
