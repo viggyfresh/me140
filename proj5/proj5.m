@@ -69,9 +69,15 @@ plotfixer;
 % lambda vs. P_load
 MM.O2 = 32;
 MM.N2 = 28.02;
+MM.C = 12.01;
 MM.H = 1.008;
 MM.H2 = 2 * MM.H;
+MM.H2O = 18.016;
+MM.CH4 = MM.C + 4*MM.H;
+MM.CO = MM.C + .5*MM.O2;
+MM.CO2 = MM.C + MM.O2;
 MM.air = 28.97;
+
 
 H2_flow_mol_s = H2_flow ./ MM.H2 .* 1000;  %mol/sec
 Air_flow_mol_s = air_flow ./MM.air .* 1000; %mol/sec
@@ -285,6 +291,7 @@ r1.H2O_1 = min(H2O_1) / total;
 r1.CO2_1 = min(CO2_1) / total;
 r1.H2_1 = min(H2_1) / total;
 r1.CH4_1 = min(CH4_1) / total;
+r1.total = total;
 
 % Calculations for First Shift Reactor (400 Celsius)
 temp.r2 = 673; %K second reformer temperature
@@ -316,6 +323,7 @@ r2.H2O_2 = min(H2O_2) / total;
 r2.CO2_2 = min(CO2_2) / total;
 r2.H2_2 = min(H2_2) / total;
 r2.CH4_2 = min(CH4_2) / total;
+r2.total = total;
 
 % Calculations for Second Shift Reactor (250 Celsius)
 
@@ -348,6 +356,8 @@ r3.H2O_3 = min(H2O_3) / total;
 r3.CO2_3 = min(CO2_3) / total;
 r3.H2_3 = min(H2_3) / total;
 r3.CH4_3 = min(CH4_3) / total;
+r3.total = total;
+
 x = [1 2 3];
 data.CO = [r1.CO_1 r2.CO_2 r3.CO_3];
 data.H2O = [r1.H2O_1 r2.H2O_2 r3.H2O_3];
@@ -355,6 +365,7 @@ data.CO2 = [r1.CO2_1 r2.CO2_2 r3.CO2_3];
 data.H2 = [r1.H2_1 r2.H2_2 r3.H2_3];
 data.CH4 = [r1.CH4_1 r2.CH4_2 r3.CH4_3];
 
+figure;
 plot(x,data.CO)
 hold all
 plot(x,data.H2O)
@@ -369,25 +380,61 @@ hold off
 R = 8.3144621; %universal gas constant
 
 [N_CO, N_H2O, N_CO2, N_H2, total] = wgs_mols(P_atm, Kp.r1); %K,Pa
-a1.CO_1 = N_CO;
-a1.H2O_1 = N_H2O;
-a1.CO2_1 = N_CO2;
-a1.H2_1 = N_H2;
+a1.CO = N_CO / total;
+a1.H2O = N_H2O / total;
+a1.CO2 = N_CO2 / total;
+a1.H2 = N_H2 / total;
 
-LHS = lucio_wgs_n(a1.CO_1, a1.H2O_1, a1.CO2_1, a1.H2_1, 400)
-%LHS = N_CH4 * h_CH4 + N_H2O * h_H2O + N_CO * h_CO + N_H2 * h_H2;
+% First Shift Reactor
+LHS = lucio_wgs_n(N_CO, N_H2O, N_CO2, N_H2, 400 + 273);
 
-T = 400;
-RHS = 0;
-tol = .001;
-dT = 10; %K
-while (1)
+T = 400 + 273;
+RHS = -Inf;
+dT = 1; %K
+while LHS > RHS
     T = T + dT;
     temp_Kp = exp(-lucio_wgs(T) / (R*T));
     [N_CO, N_H2O, N_CO2, N_H2, total] = wgs_mols(P_atm,temp_Kp); %K,P
-    RHS = lucio_wgs_n(N_CO, N_H2O, N_CO2, N_H2, T)
-    %RHS = N_CO * h_CO + N_H2O * h_H2O + N_CO2 * h_CO2 + N_H2 * h_H2;
-    if abs(LHS - RHS)/LHS > tol
-        break
-    end
-end 
+    RHS = lucio_wgs_n(N_CO, N_H2O, N_CO2, N_H2, T);
+end
+a2.CO = N_CO / total;
+a2.H2O = N_H2O / total;
+a2.CO2 = N_CO2 / total;
+a2.H2 = N_H2 / total;
+a2.temp = T;
+a2
+
+% Second Shift Reactor
+LHS = lucio_wgs_n(N_CO, N_H2O, N_CO2, N_H2, 250 + 273);
+T = 250 + 273;
+RHS = -Inf;
+dT = 1; %K
+while LHS > RHS
+    T = T + dT;
+    temp_Kp = exp(-lucio_wgs(T) / (R*T));
+    [N_CO, N_H2O, N_CO2, N_H2, total] = wgs_mols(P_atm,temp_Kp); %K,P
+    RHS = lucio_wgs_n(N_CO, N_H2O, N_CO2, N_H2, T);
+end
+a3.CO = N_CO / total;
+a3.H2O = N_H2O / total;
+a3.CO2 = N_CO2 / total;
+a3.H2 = N_H2 / total;
+a3.temp = T;
+a3
+
+
+%% Heat Addition Shit
+total = r1.total;
+H_add.reform = (lucio_wgs_n(r1.CO_1 * total, r1.H2O_1 * total, r1.CO2_1 * total, r1.H2_1 * total, 1073) ...
+               - lucio_smr_n(1, 3, 0, 0, 1073)) ...
+               / ((MM.CH4 + 3 * MM.H2O) / 1000) / 10^6;
+           
+total = r2.total;
+H_add.shift1 = (lucio_wgs_n(r2.CO_2 * total, r2.H2O_2 * total, r2.CO2_2 * total, r2.H2_2 * total, 400 + 273) ...
+               - lucio_wgs_n(r1.CO_1 * total, r1.H2O_1 * total, r1.CO2_1 * total, r1.H2_1 * total, 400 + 273)) ...
+               / ((MM.CH4 + 3 * MM.H2O) / 1000) / 10^6;
+
+total = r3.total;
+H_add.shift2 = (lucio_wgs_n(r3.CO_3 * total, r3.H2O_3 * total, r3.CO2_3 * total, r3.H2_3 * total, 250 + 273) ...
+               - lucio_wgs_n(r2.CO_2 * total, r2.H2O_2 * total, r2.CO2_2 * total, r2.H2_2 * total, 250 + 273)) ...
+               / ((MM.CH4 + 3 * MM.H2O) / 1000) / 10^6;

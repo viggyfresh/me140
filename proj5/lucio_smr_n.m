@@ -56,55 +56,24 @@ T_standard = 298;
 % mols 
 N_prod.H2 = N_H2;
 N_prod.CO = N_CO;
-N_prod.sum = N_prod.H2 + N_prod.CO;
-
-y_prod.H2 = N_prod.H2 ./ N_prod.sum;
-y_prod.CO = N_prod.CO ./ N_prod.sum;
 
 m_prod.H2 = N_prod.H2 * MM.H2;
 m_prod.CO = N_prod.CO * MM.CO;
-m_prod.sum = m_prod.H2 + m_prod.CO;
-
-mf_prod.H2 = m_prod.H2 ./ m_prod.sum;
-mf_prod.CO = m_prod.CO ./ m_prod.sum;
 
 N_react.H2O = N_H2O;
 N_react.CH4 = N_CH4;
-N_react.sum = N_react.H2O + N_react.CH4;
-
-y_react.H2O = N_react.H2O ./ N_react.sum;
-y_react.CH4 = N_react.CH4 ./ N_react.sum;
 
 m_react.H2O = N_react.H2O * MM.H2O;
 m_react.CH4 = N_react.CH4 * MM.CH4;
-m_react.sum = m_react.H2O + m_react.CH4;
-
-mf_react.H2O = m_react.H2O ./ m_react.sum;
-mf_react.CH4 = m_react.CH4 ./ m_react.sum;
 
 % Enthalpy and Gibbs free energy of prod and react - all in J / kg
-H.H2O = (hf.H2O + integral(fun_H2O_h, T_standard, T)) * m_react.H2O;
-% s_react.H2O = (sf.H2O + integral(fun_H2O_s, T_standard, T));
-% g_react.H2O = H.H2O - T * s_react.H2O;
+H.H2O = (hf.H2O + integral(fun_H2O_h, T_standard, T)) * m_react.H2O / 1000;
 
-H.CH4 = hf.CH4 + integral(fun_CH4_h, T_standard, T) * m_react.CH4;
-% s_react.CH4 = (sf.CH4 + integral(fun_CH4_s, T_standard, T));
-% g_react.CH4 = H.CH4 - T * s_react.CH4;
+H.CH4 = (hf.CH4 + integral(fun_CH4_h, T_standard, T)) * m_react.CH4 / 1000;
 
-H.H2 = hf.H2 + integral(fun_H2_h, T_standard, T) * m_prod.H2;
-% s_prod.H2 = (sf.H2 + integral(fun_H2_s, T_standard, T));
-% g_prod.H2 = H.H2 - T * s_prod.H2;
+H.H2 = (hf.H2 + integral(fun_H2_h, T_standard, T)) * m_prod.H2 / 1000;
 
-H.CO = hf.CO + integral(fun_CO_h, T_standard, T) * m_prod.CO;
-% s_prod.CO = (sf.CO + integral(fun_CO_s, T_standard, T));
-% g_prod.CO = H.CO - T * s_prod.CO;
-
-% Reactants & Products:
-% g.react = (mf_react.CH4 .* g_react.CH4) + (mf_react.H2O .* g_react.H2O);
-% 
-% g.prod = (mf_prod.CO .* g_prod.CO) +  (mf_prod.H2 .* g_prod.H2);
-% 
-% deltaG_rxn = (m_react.sum/1000) * (g.prod - g.react);
+H.CO = (hf.CO + integral(fun_CO_h, T_standard, T)) * m_prod.CO / 1000;
 
 h_CH4 = H.CH4;
 h_H2O = H.H2O;
