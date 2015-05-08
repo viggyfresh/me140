@@ -100,12 +100,12 @@ end
 
 
 deltaG = deltaG_rxn .* H2_flow_mol_s; % per mol H2 basis
-LHV = 120 * 10^6;
+LHV_H2 = 120 * 10^6;
 
-eta_1_load = P_load ./ (LHV.*H2_flow);
+eta_1_load = P_load ./ (LHV_H2.*H2_flow);
 eta_2_load = P_load ./ (-deltaG);
 
-eta_1_stack = P_stack ./ (LHV.*H2_flow);
+eta_1_stack = P_stack ./ (LHV_H2.*H2_flow);
 eta_2_stack = P_stack ./ (-deltaG);
 
 P_lost_load = -deltaG - P_load;
@@ -425,9 +425,9 @@ a3
 
 %% Heat Addition Shit
 total = r1.total;
-H_add.reform = (lucio_wgs_n(r1.CO_1 * total, r1.H2O_1 * total, r1.CO2_1 * total, r1.H2_1 * total, 1073) ...
-               - lucio_smr_n(1, 3, 0, 0, 1073)) ...
-               / ((MM.CH4 + 3 * MM.H2O) / 1000) / 10^6;
+raw_H_add_reform = (lucio_wgs_n(r1.CO_1 * total, r1.H2O_1 * total, r1.CO2_1 * total, r1.H2_1 * total, 1073) ...
+               - lucio_smr_n(1, 3, 0, 0, 1073));
+H_add.reform = raw_H_add_reform / ((MM.CH4 + 3 * MM.H2O) / 1000) / 10^6;
            
 total = r2.total;
 H_add.shift1 = (lucio_wgs_n(r2.CO_2 * total, r2.H2O_2 * total, r2.CO2_2 * total, r2.H2_2 * total, 400 + 273) ...
@@ -438,3 +438,7 @@ total = r3.total;
 H_add.shift2 = (lucio_wgs_n(r3.CO_3 * total, r3.H2O_3 * total, r3.CO2_3 * total, r3.H2_3 * total, 250 + 273) ...
                - lucio_wgs_n(r2.CO_2 * total, r2.H2O_2 * total, r2.CO2_2 * total, r2.H2_2 * total, 250 + 273)) ...
                / ((MM.CH4 + 3 * MM.H2O) / 1000) / 10^6;
+           
+LHV_CH4 = 50050 * 10^3;
+burn = (raw_H_add_reform / LHV_CH4);
+methane_percent = burn / (burn + MM.CH4 / 1000)
