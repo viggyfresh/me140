@@ -401,7 +401,7 @@ LHS = lucio_wgs_n(N_CO, N_H2O, N_CO2, N_H2, 400 + 273);
 
 T = 400 + 273;
 RHS = -Inf;
-dT = 1; %K
+dT = .1; %K
 while LHS > RHS
     T = T + dT;
     temp_Kp = exp(-lucio_wgs(T) / (R*T));
@@ -420,7 +420,7 @@ a2
 LHS = lucio_wgs_n(N_CO, N_H2O, N_CO2, N_H2, 250 + 273);
 T = 250 + 273;
 RHS = -Inf;
-dT = 1; %K
+dT = .1; %K
 while LHS > RHS
     T = T + dT;
     temp_Kp = exp(-lucio_wgs(T) / (R*T));
@@ -476,10 +476,11 @@ total = r3.total;
 H_add.shift2 = (lucio_wgs_n(r3.CO_3 * total, r3.H2O_3 * total, r3.CO2_3 * total, r3.H2_3 * total, 250 + 273) ...
                - lucio_wgs_n(r2.CO_2 * total, r2.H2O_2 * total, r2.CO2_2 * total, r2.H2_2 * total, 250 + 273)) ...
                / ((MM.CH4 + 3 * MM.H2O) / 1000) / 10^6;
-           
+
+H_add
 LHV_CH4 = 50050 * 10^3;
 burn = (raw_H_add_reform / LHV_CH4);
-methane_percent = burn / (burn + MM.CH4 / 1000);
+methane_percent = burn / (burn + MM.CH4 / 1000)
 
 num_iso = r3.H2_3 * r3.total * MM.H2 / 1000 * LHV_H2;
 num_adi = a3.H2 * a3.total * MM.H2 / 1000 * LHV_H2;
