@@ -365,26 +365,6 @@ data.CO2 = [0 r1.CO2_1 r2.CO2_2 r3.CO2_3];
 data.H2 = [0 r1.H2_1 r2.H2_2 r3.H2_3];
 data.CH4 = [.25 r1.CH4_1 r2.CH4_2 r3.CH4_3];
 
-figure;
-plot(x,data.CO)
-hold all
-plot(x,data.H2O)
-plot(x,data.CO2)
-plot(x,data.H2)
-plot(x,data.CH4)
-hold off
-
-title('Isothermal Mole Fractions for Stations 0 - 3')
-xlabel('Stations [-]')
-stations = ['Station 0'; 'Station 1'; 'Station 2'; 'Station 3'];
-set(gca,'xtick',0:1:3)
-set(gca,'XTickLabel',stations)
-ylabel('Mole Fraction [-]')
-legend('CO', 'H_2O', 'CO_2', 'H_2', 'CH_4')
-set(gcf, 'color', 'white');
-plotfixer;
-
-%% Part B4 (John's) 
 % finds T2 and T3 after shift reactors if adiabatic
 
 R = 8.3144621; %universal gas constant
@@ -443,21 +423,26 @@ data2.H2 = [0 a1.H2 a2.H2 a3.H2];
 data2.CH4 = [.25 0 0 0];
 
 figure;
-plot(x,data2.CO)
+plot(x, data.CH4, '-k');
 hold all
-plot(x,data2.H2O)
-plot(x,data2.CO2)
-plot(x,data2.H2)
-plot(x,data2.CH4)
+plot(x, data.CO, '-r');
+plot(x, data.H2O, '-g');
+plot(x, data.CO2, '-c');
+plot(x, data.H2, '-y');
+plot(x, data2.CO, '--r');
+plot(x, data2.H2O, '--g');
+plot(x, data2.CO2, '--c');
+plot(x, data2.H2, '--y');
 hold off
 
-title('Adiabatic Mole Fractions for Stations 0 - 3')
-xlabel('Stations [-]')
-stations = ['Station 0'; 'Station 1'; 'Station 2'; 'Station 3'];
-set(gca,'xtick',0:1:3)
-set(gca,'XTickLabel',stations)
+title('Exit Compositions for Hydrogen Production Process')
+xlabel('Stations [-]');
+stations = {'Pre-Reformer','Reformer Exit','Shift Reactor 1','Shift Reactor 2'};
+set(gca,'xtick',0:1:3);
+set(gca,'XTickLabel',stations);
 ylabel('Mole Fraction [-]')
-legend('CO', 'H_2O', 'CO_2', 'H_2', 'CH_4')
+legend('CH_4', 'CO Isothermal', 'H_2O Isothermal', 'CO_2 Isothermal', 'H_2 Isothermal',...
+       'CO Adiabatic', 'H_2O Adiabatic', 'CO_2 Adiabatic', 'H_2 Adiabatic');
 set(gcf, 'color', 'white');
 plotfixer;
 
