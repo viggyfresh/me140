@@ -30,18 +30,32 @@ x_p(iH2O) = 2;
 x_p(iCO2) = 2;
 
 %Initialize gas properties
-set(gas,'T',To,'P',Po,'X',x_r);
+set(gas, 'T', To, 'P', Po, 'X', x_r);
 
 %Equilibrate reaction
 equilibrate(gas,'TP');
 
-%Declare range of equivalence ratio
+%Declare range of equivalence ratios
 mixRatio = 1:0.1:10;
 
 %Find heat of formation of CH2
-h1 = enthalpy_mole(gas);
 
-ao_over_ko = zeros(mixRatio,1);
+
+
+h_r = enthalpy_mole(gas);
+
+h_p = 0;
+T = To;
+dT = 0.1;
+
+while h_p < h_r
+    T = T + dT;
+    set(gas, 'T', T, 'P', P, 'X', x_p);
+    h_p = enthalpy_mole(gas);
+end
+
+
+ao_over_ko = zeros(length(mixRatio),1);
 for i = 1:length(mixRatio)
     R_hat = 0;
     Mo_hat = 0;
