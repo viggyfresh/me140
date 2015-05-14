@@ -6,9 +6,13 @@ clear
 gas = IdealGasMix('gri30.xml');
 
 %Stagnation values
-Po = pressure(gas);
-To = temperature(gas);
-a_o = soundspeed(gas); %speed of sound
+% Po = pressure(gas)
+% To = temperature(gas
+
+%Reference not stagnation????
+Po = 101325; % Pa
+To = 298; % K
+a_o = soundspeed(gas); % speed of sound
 rho_o = density(gas);
 
 %Number of species in gas solution
@@ -39,10 +43,11 @@ x_p(iCO2) = 2;
 mixRatio = 1:0.1:10;
 
 % Molar masses (kg / mol)
-MM.C2H4 = 28.06 / 1000;
+MM.C2H4 = 28.052 / 1000;
 MM.CH2 = MM.C2H4 / 2;
 MM.H2O = 18.02 / 1000;
 MM.CO2 = 44.01 / 1000;
+MM.O2 = 32 / 1000;
 
 % Heat of formations
 hf.C2H4 = 52280 / MM.C2H4; % J/kg
@@ -52,35 +57,47 @@ hf.H2O =  -285830 / MM.H2O; % J/kg
 % Find heat of formation of CH2
 HHV_CH2 = 46.5 * 10^6; % J/kg
 hf.CH2 = (2 * MM.CO2 * hf.CO2 + 2 * MM.H2O * hf.H2O + HHV_CH2 * 2 * MM.CH2) / (2 * MM.CH2)
-% set(gas, 'T', To, 'P', Po, 'X', x_r);
-% equilibrate(gas, 'TP');
 
 for i=1:length(mixRatio)
+    %Declare mole ratios
+    x_r       = zeros(nsp,1);
+    x_r(iCH2) = mixRatio(i) * MM.O2 / MM.C2H4;  % Need to covert to molar ratio
+    x_r(iO2)  = 3;
     
-    h1 = enthalpy_mass(gas);
-    h_correct = h1 + (hf.CH2 - hf.C2H4) * massFraction(gas, iCH2);
-    setState_HP(gas, [h_correct, Po]);
+    x_p       = zeros(nsp,1);
+    x_p(iH2O) = 2;
+    x_p(iCO2) = 2;
+    
+    set(gas, 'T', To, 'P', Po, 'X', x_r); 
     equilibrate(gas, 'HP');
     
+    h1 = enthalpy_mass(gas);
+    h_correct = h1 + (hf.CH2 - hf.C2H4) * massFraction(gas, iCH2) %in a mass basis
+    setState_HP(gas, [h_correct, Po]);
     
+    equilibrate(gas, 'HP');
     
+    % h_r = enthalpy_mass(gas);
+    h_r = h_correct;
+    
+    h_p = 0;
+    T = To;
+    dT = 1;
+    
+    while h_p < h_r
+        T = T + dT;
+        set(gas, 'T', T, 'P', Po, 'X', x_p);
+        h_p = enthalpy_mass(gas);
+    end
+    
+    T_nozzle_throat(i) = T
+   
+    %Is To temperature(gas)?
     
 end
 
 
 
-
-% h_r = enthalpy_mole(gas);
-%
-% h_p = 0;
-% T = To;
-% dT = 0.1;
-%
-% while h_p < h_r
-%     T = T + dT;
-%     set(gas, 'T', T, 'P', P, 'X', x_p);
-%     h_p = enthalpy_mole(gas);
-% end
 %
 %
 % ao_over_ko = zeros(length(mixRatio),1);
