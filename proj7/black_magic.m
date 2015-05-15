@@ -61,12 +61,11 @@ function [To, T, c_star] = black_magic(gas, P1, phi, hf, type)
             h2 = enthalpy_mass(gas);
             V2 = Ma * c;
             ho2 = h2 + 0.5 * V2^2;
+            a_t = soundspeed(gas);
+            rho_t = density(gas);
         end
         s2 = entropy_mass(gas);
     end
-    
-    a_t = soundspeed(gas);
-    rho_t = density(gas);
     
     %Get c_star
     c_star = a_o / k_o * (rho_o / rho_t) * (a_o / a_t);
