@@ -1,4 +1,4 @@
-function [To, T, c_star, T_e, V_e] = black_magic(gas, P1, phi, hf, type)
+function [To, T, c_star, T_e, V_e, gas] = black_magic(gas, P1, phi, hf, type)
 % Reference state
 Tref = 298;
 P_e = 101325; %Pa
@@ -54,7 +54,7 @@ while abs(s2 - s1) / abs(s1) > 0.0001
     P = P - dP;
     ho2 = 0;
     T = To;
-    while abs(ho2 - ho1) / abs(ho1) > 0.03
+    while abs(ho2 - ho1) / abs(ho1) > 0.01
         T = T - dT;
         set(gas, 'T', T, 'P', P);
         if strcmp(type, 'dissoc')
@@ -75,7 +75,7 @@ c_star = a_o / k_o * (rho_o / rho_t) * (a_o / a_t);
 %Get Temperature Exit
 T_e = T;
 s3 = 0;
-while abs(s3-s2) / abs(s2) > 0.03
+while abs(s3-s2) / abs(s2) > 0.01
     T_e = T_e - dT;
     set(gas, 'T', T_e, 'P', P_e);
     if strcmp(type, 'dissoc')
