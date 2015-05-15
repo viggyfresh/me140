@@ -44,17 +44,17 @@ cv_o = cv_mass(gas);
 k_o = cp_o / cv_o;
 
 
-dT = 0.5;
+dT = 1;
 dP = 10000;
 s2 = 0;
 
 % Iterate T and P to convergence of enthalpy and entropy
 while abs(s2 - s1) / abs(s1) > 0.0001
-    %abs(s2 - s1) / abs(s1)
+    %abs(s2 - s1) / abs(s1) 
     P = P - dP;
     ho2 = 0;
     T = To;
-    while abs(ho2 - ho1) / abs(ho1) > 0.001
+    while abs(ho2 - ho1) / abs(ho1) > 0.005
         T = T - dT;
         set(gas, 'T', T, 'P', P);
         if strcmp(type, 'dissoc')
@@ -76,7 +76,7 @@ c_star = a_o / k_o * (rho_o / rho_t) * (a_o / a_t);
 %Get Temperature Exit
 T_e = T;
 s3 = 0;
-while abs(s3-s2) / abs(s2) > 0.001
+while abs(s3-s2) / abs(s2) > 0.005
     T_e = T_e - dT;
     set(gas, 'T', T_e, 'P', P_e);
     if strcmp(type, 'dissoc')
