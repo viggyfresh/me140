@@ -37,14 +37,16 @@ hf.CH2 = (2 * MM.CO2 * hf.CO2 + 2 * MM.H2O * hf.H2O + HHV_CH2 * 2 * MM.CH2) / (2
 phi = mixRatio * MM.C2H4 / MM.O2;
 
 %% Combustor and Nozzle
+tic
 for i=1:length(mixRatio)
+    i
     [To(i), T_t_frozen(i), c_star_frozen(i), T_e_frozen(i), V_e_frozen(i)] = black_magic(gas, P1, phi(i), hf, 'frozen');
     [~, T_t_dissoc(i), c_star_dissoc(i), T_e_dissoc(i), V_e_dissoc(i)] = black_magic(gas, P1, phi(i), hf, 'dissoc');
     X(:, i) = moleFractions(gas);
 end
+toc
 
 %% Plots
-
 
 % Plot of mole ratios
 % figure;
@@ -75,7 +77,7 @@ hold on;
 plot(mixRatio, c_star_frozen, '--k', mixRatio, c_star_dissoc, 'k');
 xlabel('Mixture Ratio');
 ylabel('c^* (m/s)');
-title('Mixture Ratio vs. c^*');
+title('c^* vs. Mixture Ratio');
 % legend('Frozen', 'Dissociative');
 ylim([0 6000])
 set(gcf, 'color', 'white');
@@ -83,7 +85,6 @@ set(gcf, 'color', 'white');
 %Plot of Velocity
 hold on;
 plot(mixRatio, V_e_frozen, '--m', mixRatio, V_e_dissoc, 'm');
-
 
 legend('T_0', 'T_t frozen', 'T_t dissociative', 'T_e frozen', 'T_e dissociative', ...
     'C^* frozen', 'c^* dissociative', 'V_e frozen', 'V_e dissociative');

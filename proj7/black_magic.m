@@ -45,11 +45,11 @@ k_o = cp_o / cv_o;
 
 
 dT = 1;
-dP = 1000;
+dP = 10000;
 s2 = 0;
 
 % Iterate T and P to convergence of enthalpy and entropy
-while abs(s2 - s1) / abs(s1) > 0.03
+while abs(s2 - s1) / abs(s1) > 0.0001
     P = P - dP;
     ho2 = 0;
     T = To;
