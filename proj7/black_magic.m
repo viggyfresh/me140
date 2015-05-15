@@ -54,7 +54,7 @@ while abs(s2 - s1) / abs(s1) > 0.0001
     P = P - dP;
     ho2 = 0;
     T = To;
-    while abs(ho2 - ho1) / abs(ho1) > 0.005
+    while abs(ho2 - ho1) / abs(ho1) > 0.03
         T = T - dT;
         set(gas, 'T', T, 'P', P);
         if strcmp(type, 'dissoc')
@@ -71,12 +71,11 @@ rho_t = density(gas);
 
 % Get c_star
 c_star = a_o / k_o * (rho_o / rho_t) * (a_o / a_t);
-%c_star = Po / (rho_t * V2);
 
 %Get Temperature Exit
 T_e = T;
 s3 = 0;
-while abs(s3-s2) / abs(s2) > 0.005
+while abs(s3-s2) / abs(s2) > 0.03
     T_e = T_e - dT;
     set(gas, 'T', T_e, 'P', P_e);
     if strcmp(type, 'dissoc')
