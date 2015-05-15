@@ -67,11 +67,8 @@ set(gcf, 'color', 'white');
 plotfixer;
 
 % ao_over_ko = zeros(length(mixRatio),1);
-% for i = 1:length(mixRatio)
 %     R_hat = 0;
 %     Mo_hat = 0;
 %     ao_over_ko(i) = sqrt((R_hat * To) / (ko * Mo_hat));
-% end
-%
 % %Calculate c*
 % c_star = (ao_over_ko) * (rho_o / rho_t) * (a_o / at);
