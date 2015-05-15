@@ -11,7 +11,7 @@ P1 = 6800000; %Pa
 Tref = 298;
 
 % Declare range of mixture ratios
-mixRatio = 1:3;
+mixRatio = 1:10;
 
 % Declare species indices
 iC2H4 = speciesIndex(gas,'C2H4');
@@ -47,7 +47,7 @@ tic
 for i=1:length(mixRatio)
     i
     [To(i), T_t_frozen(i), c_star_frozen(i), T_e_frozen(i), V_e_frozen(i),...
-        gas_frozen, epsilon_frozen(i), Cf_frozen(i)] = black_magic(gas, P1, phi(i), hf, 'frozen');
+        gas_frozen, ~, ~] = black_magic(gas, P1, phi(i), hf, 'frozen');
     [~, T_t_dissoc(i), c_star_dissoc(i), T_e_dissoc(i), V_e_dissoc(i),...
         gas_dissoc, epsilon_dissoc(i), Cf_dissoc(i)] = black_magic(gas, P1, phi(i), hf, 'dissoc');
     X_frozen(:, i) = moleFractions(gas_frozen);
@@ -124,4 +124,18 @@ plot(mixRatio, V_e_frozen, '--m', mixRatio, V_e_dissoc, 'm');
 legend('T_0', 'T_t frozen', 'T_t dissociative', 'T_e frozen', 'T_e dissociative', ...
     'C^* frozen', 'c^* dissociative', 'V_e frozen', 'V_e dissociative');
 
+plotfixer;
+
+figure;
+plot(mixRatio, Cf_dissoc);
+xlabel('Mixture Ratio');
+ylabel('Thrust Coefficient');
+title('Thrust Coefficient vs. Mixture Ratio');
+plotfixer;
+
+figure;
+plot(mixRation, epsilon);
+xlabel('Mixture Ratio');
+ylabel('Ratio');
+title('Optimal Nozzle Expansion Ratio');
 plotfixer;
