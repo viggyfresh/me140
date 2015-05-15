@@ -1,4 +1,4 @@
-function [To, T] = black_magic(gas, P1, phi, hf, type)
+function [To, T, c_star] = black_magic(gas, P1, phi, hf, type)
     % Reference state
     Tref = 298;
 
@@ -33,7 +33,15 @@ function [To, T] = black_magic(gas, P1, phi, hf, type)
     ho2 = 0;
     s1 = entropy_mass(gas);
     P = P1;
+    
     To = temperature(gas);
+    a_o = soundspeed(gas);
+    rho_o = density(gas);
+    cp_o = cp_mass(gas);
+    cv_o = cv_mass(gas);
+    k_o = cp_o / cv_o;
+    
+    
     dT = 1;
     dP = 1000;
     s2 = 0;
@@ -56,5 +64,12 @@ function [To, T] = black_magic(gas, P1, phi, hf, type)
         end
         s2 = entropy_mass(gas);
     end
+    
+    a_t = soundspeed(gas);
+    rho_t = density(gas);
+    
+    %Get c_star
+    c_star = a_o / k_o * (rho_o / rho_t) * (a_o / a_t);
+
 end
 

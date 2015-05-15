@@ -38,32 +38,46 @@ phi = mixRatio * MM.C2H4 / MM.O2;
 
 %% Combustor and Nozzle
 for i=1:length(mixRatio)
-    [To(i), T_t_frozen(i)] = black_magic(gas, P1, phi(i), hf, 'frozen');
-    [~, T_t_dissoc(i)] = black_magic(gas, P1, phi(i), hf, 'dissoc');
+    [To(i), T_t_frozen(i), c_star_frozen(i)] = black_magic(gas, P1, phi(i), hf, 'frozen');
+    [~, T_t_dissoc(i), c_star_dissoc(i)] = black_magic(gas, P1, phi(i), hf, 'dissoc');
     X(:, i) = moleFractions(gas);
 end
 
 %% Plots
+
+% Plot of Throat temperature and stag temperature
 figure;
 plot(mixRatio, To, mixRatio, T_t_frozen, mixRatio, T_t_dissoc);
-xlabel('Mix Ratio');
+xlabel('Mixture Ratio');
 ylabel('Temperature (K)');
-title('Mix Ratio vs. Various Temperatures');
+title('Mixture Ratio vs. Various Temperatures');
 legend('T_0', 'T_t frozen', 'T_t dissociative');
 set(gcf, 'color', 'white');
 plotfixer;
 
+% Plot of mole ratios
 figure;
 plot(mixRatio, X(iC2H4,:),'g')
 hold on;
 plot(mixRatio, X(iO2,:),'b')
 plot(mixRatio, X(iCO2,:),'r')
 plot(mixRatio, X(iH2O,:),'c')
-xlabel('Mix Ratio');
+xlabel('Mixture Ratio');
 ylabel('Mole Fraction');
-title('Mix Ratio vs. Mole Fractions');
+title('Mixture Ratio vs. Mole Fractions');
 legend('C_2H_4', 'O_2', 'CO_2', 'H_2O');
 set(gcf, 'color', 'white');
+plotfixer;
+
+% Plot of c star
+figure;
+plot(mixRatio, c_star_frozen, mixRatio, c_star_dissoc);
+xlabel('Mixture Ratio');
+ylabel('c^* (m/s)');
+title('Mixture Ratio vs. c^*');
+legend('Frozen', 'Dissociative');
+set(gcf, 'color', 'white');
+
 plotfixer;
 
 % ao_over_ko = zeros(length(mixRatio),1);
