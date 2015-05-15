@@ -1,30 +1,23 @@
-clc
-close all
-clear
+clc;
+close all;
+clear;
 
-%%Part 1
-%Initialize gas object
-gas = IdealGasMix('gri30.xml');
+%% Part 1
+% Initialize gas object
+gas = IdealGasMix('me140_species.xml');
 
-%Stagnation values???
+% Some values
 P1 = 6800000; %Pa
 Tref = 298;
 
+% Declare range of mixture ratios
+mixRatio = 1:0.25:10;
 
-a_o = soundspeed(gas); % speed of sound
-rho_o = density(gas);
-
-%Number of species in gas solution
-nsp = nSpecies(gas);
-
-%Find relevant species
+% Declare species indices
 iC2H4 = speciesIndex(gas,'C2H4');
 iO2  = speciesIndex(gas,'O2');
 iCO2 = speciesIndex(gas,'CO2');
 iH2O = speciesIndex(gas,'H2O');
-
-% Declare range of equivalence ratios
-mixRatio = 1:10;
 
 % Molar masses (kg / mol)
 MM.C2H4 = 28.052 / 1000;
@@ -43,102 +36,42 @@ HHV_CH2 = 46.5 * 10^6; % J/kg
 hf.CH2 = (2 * MM.CO2 * hf.CO2 + 2 * MM.H2O * hf.H2O + HHV_CH2 * 2 * MM.CH2) / (2 * MM.CH2)
 phi = mixRatio * MM.C2H4 / MM.O2;
 
-%%Combustor and Nozzle
+%% Combustor and Nozzle
 for i=1:length(mixRatio)
-    % Declare mole ratios
-    % Combustor
-    x1       = zeros(nsp,1);
-    x1(iC2H4) = 1;  % Need to covert to molar ratio
-    x1(iO2)  = phi(i);
-    
-    set(gas, 'T', Tref, 'P', P1, 'X', x1); 
-    equilibrate(gas, 'HP');
-    
-    h1 = enthalpy_mass(gas);
-    h_correct = h1 + (hf.CH2 - hf.C2H4) * massFraction(gas, iC2H4); %in a mass basis
-    setState_HP(gas, [h_correct, P1]);
-    equilibrate(gas, 'HP');
-    
-    %Combustor Outlet/ Nozzle Inlet
-    To(i) = temperature(gas); 
-    
-    %% Frozen Flow
-%     %Stagnation enthalpy is constant
-%     h1 = enthalpy_mass(gas);
-%     ho1 = h1; %assuming v1 about 0
-%     
-%     
-    %Frozen Flow
-    %Stagnation Enthalpy is constant
-    % Stage One is before Nozzle
-    % Stage 2 is at throat
-    Ma = 1;
-    P = P1;
-    ho1 = h1;
-    ho2 = 0;
-    s1 = entropy_mass(gas); %%is this what we want?
-    dT = 1;
-    dP = 10;
-    s2 = 0;
-    
-    
-    while s2 < s1
-        P = P - dP;
-        ho2 = 0;
-        T = To(i);
-        while ho2 < ho1
-            T = T - dT;
-            if (T < 0)
-                break;
-            end
-            set(gas, 'T', T, 'P', P);
-            c = soundspeed(gas);
-            h2 = enthalpy_mass(gas);
-            V2 = Ma * c;
-            ho2 = h2 + 0.5 * V2^2;
-        end
-        s2 = entropy_mass(gas)
-    end
-    
-    
-    T_t_frozen(i) = T;
-    
-
-
-
-    
-    
-    %% Chemical Equilbrium
-     
+    [To(i), T_t_frozen(i)] = black_magic(gas, P1, phi(i), hf, 'frozen');
+    [~, T_t_dissoc(i)] = black_magic(gas, P1, phi(i), hf, 'dissoc');
+    X(:, i) = moleFractions(gas);
 end
 
-
-
-% 
+%% Plots
 figure;
-plot(mixRatio, To);
+plot(mixRatio, To, mixRatio, T_t_frozen, mixRatio, T_t_dissoc);
 xlabel('Mix Ratio');
-ylabel('Nozzle Stagnation Temperature (K)');
-title('Mix Ratio vs. Nozzle Stagnation Temperature');
+ylabel('Temperature (K)');
+title('Mix Ratio vs. Various Temperatures');
+legend('T_0', 'T_t frozen', 'T_t dissociative');
 set(gcf, 'color', 'white');
-% 
+plotfixer;
+
 figure;
-plot(mixRatio, T_t_frozen);
+plot(mixRatio, X(iC2H4,:),'g')
+hold on;
+plot(mixRatio, X(iO2,:),'b')
+plot(mixRatio, X(iCO2,:),'r')
+plot(mixRatio, X(iH2O,:),'c')
 xlabel('Mix Ratio');
-ylabel('Nozzle Throat Temperature (K)');
-title('Mix Ratio vs. Nozzle Throat Temperature');
+ylabel('Mole Fraction');
+title('Mix Ratio vs. Mole Fractions');
+legend('C_2H_4', 'O_2', 'CO_2', 'H_2O');
 set(gcf, 'color', 'white');
+plotfixer;
 
-% 
-% %
-% %
-% % ao_over_ko = zeros(length(mixRatio),1);
-% % for i = 1:length(mixRatio)
-% %     R_hat = 0;
-% %     Mo_hat = 0;
-% %     ao_over_ko(i) = sqrt((R_hat * To) / (ko * Mo_hat));
-% % end
-% %
-% % %Calculate c*
-% % c_star = (ao_over_ko) * (rho_o / rho_t) * (a_o / at);
-
+% ao_over_ko = zeros(length(mixRatio),1);
+% for i = 1:length(mixRatio)
+%     R_hat = 0;
+%     Mo_hat = 0;
+%     ao_over_ko(i) = sqrt((R_hat * To) / (ko * Mo_hat));
+% end
+%
+% %Calculate c*
+% c_star = (ao_over_ko) * (rho_o / rho_t) * (a_o / at);
