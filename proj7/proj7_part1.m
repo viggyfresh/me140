@@ -47,9 +47,9 @@ tic
 for i=1:length(mixRatio)
     i
     [To(i), T_t_frozen(i), c_star_frozen(i), T_e_frozen(i), V_e_frozen(i),...
-        gas_frozen] = black_magic(gas, P1, phi(i), hf, 'frozen');
+        gas_frozen, epsilon_frozen(i), Cf_frozen(i)] = black_magic(gas, P1, phi(i), hf, 'frozen');
     [~, T_t_dissoc(i), c_star_dissoc(i), T_e_dissoc(i), V_e_dissoc(i),...
-        gas_dissoc] = black_magic(gas, P1, phi(i), hf, 'dissoc');
+        gas_dissoc, epsilon_dissoc(i), Cf_dissoc(i)] = black_magic(gas, P1, phi(i), hf, 'dissoc');
     X_frozen(:, i) = moleFractions(gas_frozen);
     X_dissoc(:, i) = moleFractions(gas_dissoc);
 end

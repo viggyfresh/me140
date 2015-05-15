@@ -1,4 +1,4 @@
-function [To, T, c_star, T_e, V_e, gas] = black_magic(gas, P1, phi, hf, type)
+function [To, T, c_star, T_e, V_e, gas, epsilon, Cf] = black_magic(gas, P1, phi, hf, type)
 % Reference state
 Tref = 298;
 P_e = 101325; %Pa
@@ -86,6 +86,11 @@ end
 
 h3 = enthalpy_mass(gas);
 V_e = sqrt(2 * (ho2 - h3));
+
+%Calculate epsilon
+%V2 is Vthroat
+epsilon = rho_t * V2 / (rho_e * V_e);
+Cf = V_e / c_star + (P_e / Po - Pamb / Po) * epsilon;
 
 end
 
