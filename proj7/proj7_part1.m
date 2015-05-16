@@ -126,6 +126,7 @@ legend('T_0', 'T_t frozen', 'T_t dissociative', 'T_e frozen', 'T_e dissociative'
 
 plotfixer;
 
+%Plot thrust coefficient
 figure;
 plot(mixRatio, Cf_dissoc);
 xlabel('Mixture Ratio');
@@ -133,8 +134,9 @@ ylabel('Thrust Coefficient');
 title('Thrust Coefficient vs. Mixture Ratio');
 plotfixer;
 
+%Plot optimal nozzle expansion ratio
 figure;
-plot(mixRation, epsilon);
+plot(mixRatio, epsilon_dissoc);
 xlabel('Mixture Ratio');
 ylabel('Ratio');
 title('Optimal Nozzle Expansion Ratio');
