@@ -65,14 +65,14 @@ plot(mixRatio, X_frozen(iO2,:),'b')
 plot(mixRatio, X_frozen(iCO2,:),'r')
 plot(mixRatio, X_frozen(iH2O,:),'c')
 plot(mixRatio, X_frozen(iCO,:),'k')
-plot(mixRatio, X_frozen(iC,:),'-g')
-plot(mixRatio, X_frozen(iH2,:),'-b')
-plot(mixRatio, X_frozen(iH,:),'-r')
-plot(mixRatio, X_frozen(iO,:),'-c')
-plot(mixRatio, X_frozen(iOH,:),'-k')
+plot(mixRatio, X_frozen(iC,:),'--g')
+plot(mixRatio, X_frozen(iH2,:),'--b')
+plot(mixRatio, X_frozen(iH,:),'--r')
+plot(mixRatio, X_frozen(iO,:),'--c')
+plot(mixRatio, X_frozen(iOH,:),'--k')
 xlabel('Mixture Ratio');
-ylabel('Mole Fraction');
-title('Mixture Ratio vs. Mole Fractions, Frozen');
+ylabel('Mole Fraction at Nozzle Throat');
+title('Mixture Ratio vs. Mole Fractions at Nozzle Throat, Frozen');
 legend('C_2H_4', 'O_2', 'CO_2', 'H_2O', 'CO', 'C', 'H_2', 'H', 'O', 'OH');
 set(gcf, 'color', 'white');
 plotfixer;
@@ -85,14 +85,14 @@ plot(mixRatio, X_dissoc(iO2,:),'b')
 plot(mixRatio, X_dissoc(iCO2,:),'r')
 plot(mixRatio, X_dissoc(iH2O,:),'c')
 plot(mixRatio, X_dissoc(iCO,:),'k')
-plot(mixRatio, X_dissoc(iC,:),'-g')
-plot(mixRatio, X_dissoc(iH2,:),'-b')
-plot(mixRatio, X_dissoc(iH,:),'-r')
-plot(mixRatio, X_dissoc(iO,:),'-c')
-plot(mixRatio, X_dissoc(iOH,:),'-k')
+plot(mixRatio, X_dissoc(iC,:),'--g')
+plot(mixRatio, X_dissoc(iH2,:),'--b')
+plot(mixRatio, X_dissoc(iH,:),'--r')
+plot(mixRatio, X_dissoc(iO,:),'--c')
+plot(mixRatio, X_dissoc(iOH,:),'--k')
 xlabel('Mixture Ratio');
-ylabel('Mole Fraction');
-title('Mixture Ratio vs. Mole Fractions, Dissociated');
+ylabel('Mole Fraction at Nozzle Throat');
+title('Mixture Ratio vs. Mole Fractions at Nozzle Throat, Chemical Equilbrium');
 legend('C_2H_4', 'O_2', 'CO_2', 'H_2O', 'CO', 'C', 'H_2', 'H', 'O', 'OH');
 set(gcf, 'color', 'white');
 plotfixer;
@@ -103,7 +103,7 @@ plot(mixRatio, To, 'r', mixRatio, T_t_frozen, '--b', mixRatio, T_t_dissoc, 'b', 
 xlabel('Mixture Ratio');
 ylabel('Temperature (K)');
 title('Mixture Ratio vs. Various Temperatures');
-%legend('T_0', 'T_t frozen', 'T_t dissociative', 'T_e frozen', 'T_e dissociative');
+%legend('T_0', 'T_t frozen', 'T_t', 'T_e frozen', 'T_e);
 set(gcf, 'color', 'white');
 plotfixer;
 
@@ -113,7 +113,7 @@ plot(mixRatio, c_star_frozen, '--k', mixRatio, c_star_dissoc, 'k');
 xlabel('Mixture Ratio');
 ylabel('c^* (m/s)');
 title('c^* vs. Mixture Ratio');
-% legend('Frozen', 'Dissociative');
+% legend('c^* Frozen', 'c^*');
 ylim([0 6000])
 set(gcf, 'color', 'white');
 
@@ -121,8 +121,8 @@ set(gcf, 'color', 'white');
 hold on;
 plot(mixRatio, V_e_frozen, '--m', mixRatio, V_e_dissoc, 'm');
 
-legend('T_0', 'T_t frozen', 'T_t dissociative', 'T_e frozen', 'T_e dissociative', ...
-    'C^* frozen', 'c^* dissociative', 'V_e frozen', 'V_e dissociative');
+legend('T_0', 'T_t frozen', 'T_t', 'T_e frozen', 'T_e', ...
+    'C^* frozen', 'c^*', 'V_e frozen', 'V_e');
 
 plotfixer;
 

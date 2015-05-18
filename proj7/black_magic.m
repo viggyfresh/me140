@@ -1,4 +1,4 @@
-function [To, T, c_star, T_e, V_e, gas, epsilon, Cf] = black_magic(gas, P1, phi, hf, type)
+function [To, T, c_star, T_e, V_e, gas_throat, epsilon, Cf] = black_magic(gas, P1, phi, hf, type)
 % Reference state
 Tref = 298;
 P_e = 101325; %Pa
@@ -72,6 +72,9 @@ rho_t = density(gas);
 
 % Get c_star
 c_star = a_o / k_o * (rho_o / rho_t) * (a_o / a_t);
+
+%Pass gas back at throat
+gas_throat = gas;
 
 %Get Temperature Exit
 T_e = T;
