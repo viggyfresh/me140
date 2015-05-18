@@ -1,8 +1,23 @@
-function [ ] = graphthethings( file )
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+function [ ] = graphthethings()
 
-load(file);
+% Cstar and mix ratio for lab data
+load('bradycheated.mat');
+i1 = start_index;
+i2 = final_index;
+
+Po = mean(chamP(i1:i2)) * 1000 + 101325;
+D = 0.605; %inches
+D = D / 39.370; %meters
+At = pi * D^2 / 4;
+t = time(i2) - time(i1); %secs
+m_dot_fuel = mfuel / 10^3 / t; %kg
+m_dot_O2 = mean(m_dot_O2(i1:i2)); 
+mdot = m_dot_fuel + m_dot_O2;
+
+cstar_lab = Po / (mdot / At);
+mixRatio_lab = m_dot_O2 / m_dot_fuel;
+
+load('final.mat');
 
 figure;
 plot(mixRatio, X_frozen_t(iC2H4,:),'g')
@@ -160,7 +175,6 @@ legend('T_0', 'T_t frozen', 'T_t', 'T_e frozen', 'T_e', ...
     'C^* frozen', 'c^*', 'V_e frozen', 'V_e');
 
 plotfixer;
-
 
 end
 
