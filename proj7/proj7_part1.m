@@ -11,7 +11,7 @@ P1 = 6800000; %Pa
 Tref = 298;
 
 % Declare range of mixture ratios
-mixRatio = 1:1:10;
+mixRatio = 1:0.5:30;
 
 % Declare species indices
 iC2H4 = speciesIndex(gas,'C2H4');
@@ -52,6 +52,25 @@ for i=1:length(mixRatio)
         X_dissoc_t(:, i), epsilon_dissoc(i), Cf_dissoc(i), X_dissoc_e(:, i)] = black_magic(gas, P1, phi(i), hf, 'dissoc');
 end
 toc
+
+%%Cstar and mix ratio for lab data
+load('bradycheated.mat');
+% i1 = 38;
+% i2 = 6384;
+i1 = start_index;
+i2 = final_index;
+
+Po = mean(chamP(i1:i2)) * 1000 + 101325;
+D = 0.605; %inches
+D = D / 39.370; %meters
+At = pi * D^2 / 4;
+t = time(i2) - time(i1) %secs
+m_dot_fuel = mfuel / 10^3 / t; %kg
+m_dot_O2 = mean(m_dot_O2(i1:i2)); 
+mdot = m_dot_fuel + m_dot_O2;
+
+cstar_lab = Po / (mdot / At)
+mixRatio_lab = m_dot_O2 / m_dot_fuel
 
 %% Plots
 
@@ -141,27 +160,37 @@ plot(mixRatio, To, 'r', mixRatio, T_t_frozen, '--b', mixRatio, T_t_dissoc, 'b', 
 xlabel('Mixture Ratio');
 ylabel('Temperature (K)');
 title('Mixture Ratio vs. Various Temperatures');
-%legend('T_0', 'T_t frozen', 'T_t', 'T_e frozen', 'T_e);
+legend('T_0', 'T_t frozen', 'T_t', 'T_e frozen', 'T_e');
 set(gcf, 'color', 'white');
 plotfixer;
 
 % Plot of c star
-hold on;
+figure;
 plot(mixRatio, c_star_frozen, '--k', mixRatio, c_star_dissoc, 'k');
+hold on;
+plot(mixRatio_lab, cstar_lab, '*', 'markersize', 25);
 xlabel('Mixture Ratio');
 ylabel('c^* (m/s)');
 title('c^* vs. Mixture Ratio');
-% legend('c^* Frozen', 'c^*');
+legend('c^* Frozen', 'c^*', 'c^* stock motor run');
 ylim([0 6000])
 set(gcf, 'color', 'white');
+plotfixer;
+yL = get(gca, 'YLim');
+line([mixRatio_lab, mixRatio_lab], yL, 'Linestyle', '--');
+plotfixer;
+
+hold off;
 
 %Plot of Velocity
-hold on;
+figure;
 plot(mixRatio, V_e_frozen, '--m', mixRatio, V_e_dissoc, 'm');
 
-legend('T_0', 'T_t frozen', 'T_t', 'T_e frozen', 'T_e', ...
-    'C^* frozen', 'c^*', 'V_e frozen', 'V_e');
+% legend('T_0', 'T_t frozen', 'T_t', 'T_e frozen', 'T_e', ...
+%     'C^* frozen', 'c^*', 'V_e frozen', 'V_e');
+% set(gcf, 'color', 'white');
 
+set(gcf, 'color', 'white');
 plotfixer;
 
 %Plot thrust coefficient
@@ -170,6 +199,7 @@ plot(mixRatio, Cf_dissoc);
 xlabel('Mixture Ratio');
 ylabel('Thrust Coefficient');
 title('Thrust Coefficient vs. Mixture Ratio');
+set(gcf, 'color', 'white');
 plotfixer;
 
 %Plot optimal nozzle expansion ratio
@@ -178,4 +208,5 @@ plot(mixRatio, epsilon_dissoc);
 xlabel('Mixture Ratio');
 ylabel('Ratio');
 title('Optimal Nozzle Expansion Ratio');
+set(gcf, 'color', 'white');
 plotfixer;
