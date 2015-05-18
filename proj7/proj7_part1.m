@@ -213,16 +213,13 @@ plotfixer;
 figure;
 plot(mixRatio, To, 'r', mixRatio, T_t_frozen, '--b', mixRatio, T_t_dissoc, 'b', mixRatio, T_e_frozen, '--g', mixRatio, T_e_dissoc, 'g');
 xlabel('Mixture Ratio');
-ylabel('Temperature (K)');
+ylabel('Temperature (K), Speed (m/s)');
 title('Mixture Ratio vs. Various Quantities');
 %legend('T_0', 'T_t frozen', 'T_t', 'T_e frozen', 'T_e);
 set(gcf, 'color', 'white');
 % Plot of c star
 hold on;
 plot(mixRatio, c_star_frozen, '--k', mixRatio, c_star_dissoc, 'k');
-xlabel('Mixture Ratio');
-ylabel('c^* (m/s)');
-title('c^* vs. Mixture Ratio');
 % legend('c^* Frozen', 'c^*');
 ylim([0 6000])
 set(gcf, 'color', 'white');
@@ -232,16 +229,5 @@ plot(mixRatio, V_e_frozen, '--m', mixRatio, V_e_dissoc, 'm');
 
 legend('T_0', 'T_t frozen', 'T_t', 'T_e frozen', 'T_e', ...
     'C^* frozen', 'c^*', 'V_e frozen', 'V_e');
-%Plot thrust coefficient
-figure;
-plot(mixRatio, Cf_dissoc);
-xlabel('Mixture Ratio');
-ylabel('Thrust Coefficient');
-title('Thrust Coefficient vs. Mixture Ratio');
-%Plot optimal nozzle expansion ratio
-figure;
-plot(mixRatio, epsilon_dissoc);
-xlabel('Mixture Ratio');
-ylabel('Ratio');
-title('Optimal Nozzle Expansion Ratio');
+
 plotfixer;
