@@ -1,4 +1,4 @@
-function [To, T, c_star, T_e, V_e, gas_throat, epsilon, Cf, gas] = black_magic(gas, P1, phi, hf, type)
+function [To, T, c_star, T_e, V_e, X_throat, epsilon, Cf, X_exit] = black_magic(gas, P1, phi, hf, type)
 % Reference state
 Tref = 298;
 P_e = 101325; %Pa
@@ -55,7 +55,7 @@ while abs(s2 - s1) / abs(s1) > 0.0001
     P = P - dP;
     ho2 = 0;
     T = To;
-    while abs(ho2 - ho1) / abs(ho1) > 0.01
+    while abs(ho2 - ho1) / abs(ho1) > 0.05
         T = T - dT;
         set(gas, 'T', T, 'P', P);
         if strcmp(type, 'dissoc')
@@ -73,13 +73,13 @@ rho_t = density(gas);
 % Get c_star
 c_star = a_o / k_o * (rho_o / rho_t) * (a_o / a_t);
 
-%Save gas at throat
-gas_throat = gas;
+% Save gas at throat
+X_throat = moleFractions(gas);
 
-%Get Temperature Exit
+% Get Temperature Exit
 T_e = T;
 s3 = 0;
-while abs(s3-s2) / abs(s2) > 0.01
+while abs(s3-s2) / abs(s2) > 0.02
     T_e = T_e - dT;
     set(gas, 'T', T_e, 'P', P_e);
     if strcmp(type, 'dissoc')
@@ -92,10 +92,13 @@ h3 = enthalpy_mass(gas);
 V_e = sqrt(2 * (ho2 - h3));
 rho_e = density(gas);
 
-%Calculate epsilon
-%V2 is Vthroat
+% Calculate epsilon
+% V2 is Vthroat
 epsilon = rho_t * V2 / (rho_e * V_e);
 Cf = V_e / c_star + (P_e / Po - P_amb / Po) * epsilon;
+
+% Get exit
+X_exit = moleFractions(gas);
 
 end
 

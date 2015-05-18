@@ -11,7 +11,7 @@ P1 = 6800000; %Pa
 Tref = 298;
 
 % Declare range of mixture ratios
-mixRatio = 1:0.25:10;
+mixRatio = 1:1:10;
 
 % Declare species indices
 iC2H4 = speciesIndex(gas,'C2H4');
@@ -47,13 +47,9 @@ tic
 for i=1:length(mixRatio)
     i
     [To(i), T_t_frozen(i), c_star_frozen(i), T_e_frozen(i), V_e_frozen(i),...
-        gas_frozen_t, ~, ~, gas_frozen_exit] = black_magic(gas, P1, phi(i), hf, 'frozen');
+        X_frozen_t(:, i), ~, ~, X_frozen_e(:, i)] = black_magic(gas, P1, phi(i), hf, 'frozen');
     [~, T_t_dissoc(i), c_star_dissoc(i), T_e_dissoc(i), V_e_dissoc(i),...
-        gas_dissoc_t, epsilon_dissoc(i), Cf_dissoc(i), gas_dissoc_exit] = black_magic(gas, P1, phi(i), hf, 'dissoc');
-    X_frozen_t(:, i) = moleFractions(gas_frozen_t);
-    X_dissoc_t(:, i) = moleFractions(gas_dissoc_t);
-    X_frozen_e(:, i) = moleFractions(gas_frozen_exit);
-    X_dissoc_e(:, i) = moleFractions(gas_dissoc_exit);
+        X_dissoc_t(:, i), epsilon_dissoc(i), Cf_dissoc(i), X_dissoc_e(:, i)] = black_magic(gas, P1, phi(i), hf, 'dissoc');
 end
 toc
 
