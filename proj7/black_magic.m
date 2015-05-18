@@ -1,4 +1,4 @@
-function [To, T, c_star, T_e, V_e, gas_throat, epsilon, Cf] = black_magic(gas, P1, phi, hf, type)
+function [To, T, c_star, T_e, V_e, gas_throat, epsilon, Cf, gas] = black_magic(gas, P1, phi, hf, type)
 % Reference state
 Tref = 298;
 P_e = 101325; %Pa
