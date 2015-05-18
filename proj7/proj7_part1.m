@@ -11,7 +11,7 @@ P1 = 6800000; %Pa
 Tref = 298;
 
 % Declare range of mixture ratios
-mixRatio = 1:1:10;
+mixRatio = 20:0.5:30;
 
 % Declare species indices
 iC2H4 = speciesIndex(gas,'C2H4');
