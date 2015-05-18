@@ -3,8 +3,8 @@ clear all;
 load('bradycheated.mat');
 % i1 = 38;
 % i2 = 6384;
-i1 = 2403;
-i2 = 5046;
+i1 = start_index;
+i2 = final_index;
 
 Po = mean(chamP(i1:i2)) * 1000 + 101325;
 D = 0.605; %inches
