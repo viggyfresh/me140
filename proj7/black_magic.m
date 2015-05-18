@@ -73,7 +73,7 @@ rho_t = density(gas);
 % Get c_star
 c_star = a_o / k_o * (rho_o / rho_t) * (a_o / a_t);
 
-%Pass gas back at throat
+%Save gas at throat
 gas_throat = gas;
 
 %Get Temperature Exit
