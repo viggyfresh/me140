@@ -47,11 +47,13 @@ tic
 for i=1:length(mixRatio)
     i
     [To(i), T_t_frozen(i), c_star_frozen(i), T_e_frozen(i), V_e_frozen(i),...
-        gas_frozen, ~, ~] = black_magic(gas, P1, phi(i), hf, 'frozen');
+        gas_frozen_t, ~, ~, gas_frozen_exit] = black_magic(gas, P1, phi(i), hf, 'frozen');
     [~, T_t_dissoc(i), c_star_dissoc(i), T_e_dissoc(i), V_e_dissoc(i),...
-        gas_dissoc, epsilon_dissoc(i), Cf_dissoc(i)] = black_magic(gas, P1, phi(i), hf, 'dissoc');
-    X_frozen(:, i) = moleFractions(gas_frozen);
-    X_dissoc(:, i) = moleFractions(gas_dissoc);
+        gas_dissoc_t, epsilon_dissoc(i), Cf_dissoc(i), gas_dissoc_exit] = black_magic(gas, P1, phi(i), hf, 'dissoc');
+    X_frozen_t(:, i) = moleFractions(gas_frozen_t);
+    X_dissoc_t(:, i) = moleFractions(gas_dissoc_t);
+    X_frozen_e(:, i) = moleFractions(gas_frozen_exit);
+    X_dissoc_e(:, i) = moleFractions(gas_dissoc_exit);
 end
 toc
 
@@ -59,17 +61,17 @@ toc
 
 % Plot of mole ratios for frozen case
 figure;
-plot(mixRatio, X_frozen(iC2H4,:),'g')
+plot(mixRatio, X_frozen_t(iC2H4,:),'g')
 hold on;
-plot(mixRatio, X_frozen(iO2,:),'b')
-plot(mixRatio, X_frozen(iCO2,:),'r')
-plot(mixRatio, X_frozen(iH2O,:),'c')
-plot(mixRatio, X_frozen(iCO,:),'k')
-plot(mixRatio, X_frozen(iC,:),'--g')
-plot(mixRatio, X_frozen(iH2,:),'--b')
-plot(mixRatio, X_frozen(iH,:),'--r')
-plot(mixRatio, X_frozen(iO,:),'--c')
-plot(mixRatio, X_frozen(iOH,:),'--k')
+plot(mixRatio, X_frozen_t(iO2,:),'b')
+plot(mixRatio, X_frozen_t(iCO2,:),'r')
+plot(mixRatio, X_frozen_t(iH2O,:),'c')
+plot(mixRatio, X_frozen_t(iCO,:),'k')
+plot(mixRatio, X_frozen_t(iC,:),'--g')
+plot(mixRatio, X_frozen_t(iH2,:),'--b')
+plot(mixRatio, X_frozen_t(iH,:),'--r')
+plot(mixRatio, X_frozen_t(iO,:),'--c')
+plot(mixRatio, X_frozen_t(iOH,:),'--k')
 xlabel('Mixture Ratio');
 ylabel('Mole Fraction at Nozzle Throat');
 title('Mixture Ratio vs. Mole Fractions at Nozzle Throat, Frozen');
@@ -79,20 +81,60 @@ plotfixer;
 
 % Plot of mole ratios for dissociated case
 figure;
-plot(mixRatio, X_dissoc(iC2H4,:),'g')
+plot(mixRatio, X_dissoc_t(iC2H4,:),'g')
 hold on;
-plot(mixRatio, X_dissoc(iO2,:),'b')
-plot(mixRatio, X_dissoc(iCO2,:),'r')
-plot(mixRatio, X_dissoc(iH2O,:),'c')
-plot(mixRatio, X_dissoc(iCO,:),'k')
-plot(mixRatio, X_dissoc(iC,:),'--g')
-plot(mixRatio, X_dissoc(iH2,:),'--b')
-plot(mixRatio, X_dissoc(iH,:),'--r')
-plot(mixRatio, X_dissoc(iO,:),'--c')
-plot(mixRatio, X_dissoc(iOH,:),'--k')
+plot(mixRatio, X_dissoc_t(iO2,:),'b')
+plot(mixRatio, X_dissoc_t(iCO2,:),'r')
+plot(mixRatio, X_dissoc_t(iH2O,:),'c')
+plot(mixRatio, X_dissoc_t(iCO,:),'k')
+plot(mixRatio, X_dissoc_t(iC,:),'--g')
+plot(mixRatio, X_dissoc_t(iH2,:),'--b')
+plot(mixRatio, X_dissoc_t(iH,:),'--r')
+plot(mixRatio, X_dissoc_t(iO,:),'--c')
+plot(mixRatio, X_dissoc_t(iOH,:),'--k')
 xlabel('Mixture Ratio');
 ylabel('Mole Fraction at Nozzle Throat');
 title('Mixture Ratio vs. Mole Fractions at Nozzle Throat, Chemical Equilbrium');
+legend('C_2H_4', 'O_2', 'CO_2', 'H_2O', 'CO', 'C', 'H_2', 'H', 'O', 'OH');
+set(gcf, 'color', 'white');
+plotfixer;
+
+% Plot of mole ratios for frozen case
+figure;
+plot(mixRatio, X_frozen_e(iC2H4,:),'g')
+hold on;
+plot(mixRatio, X_frozen_e(iO2,:),'b')
+plot(mixRatio, X_frozen_e(iCO2,:),'r')
+plot(mixRatio, X_frozen_e(iH2O,:),'c')
+plot(mixRatio, X_frozen_e(iCO,:),'k')
+plot(mixRatio, X_frozen_e(iC,:),'--g')
+plot(mixRatio, X_frozen_e(iH2,:),'--b')
+plot(mixRatio, X_frozen_e(iH,:),'--r')
+plot(mixRatio, X_frozen_e(iO,:),'--c')
+plot(mixRatio, X_frozen_e(iOH,:),'--k')
+xlabel('Mixture Ratio');
+ylabel('Mole Fraction at Nozzle Exit');
+title('Mixture Ratio vs. Mole Fractions at Nozzle Exit, Frozen');
+legend('C_2H_4', 'O_2', 'CO_2', 'H_2O', 'CO', 'C', 'H_2', 'H', 'O', 'OH');
+set(gcf, 'color', 'white');
+plotfixer;
+
+% Plot of mole ratios for dissociated case
+figure;
+plot(mixRatio, X_dissoc_e(iC2H4,:),'g')
+hold on;
+plot(mixRatio, X_dissoc_e(iO2,:),'b')
+plot(mixRatio, X_dissoc_e(iCO2,:),'r')
+plot(mixRatio, X_dissoc_e(iH2O,:),'c')
+plot(mixRatio, X_dissoc_e(iCO,:),'k')
+plot(mixRatio, X_dissoc_e(iC,:),'--g')
+plot(mixRatio, X_dissoc_e(iH2,:),'--b')
+plot(mixRatio, X_dissoc_e(iH,:),'--r')
+plot(mixRatio, X_dissoc_e(iO,:),'--c')
+plot(mixRatio, X_dissoc_e(iOH,:),'--k')
+xlabel('Mixture Ratio');
+ylabel('Mole Fraction at Nozzle Exit');
+title('Mixture Ratio vs. Mole Fractions at Nozzle Exit, Chemical Equilbrium');
 legend('C_2H_4', 'O_2', 'CO_2', 'H_2O', 'CO', 'C', 'H_2', 'H', 'O', 'OH');
 set(gcf, 'color', 'white');
 plotfixer;
