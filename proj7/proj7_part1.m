@@ -7,11 +7,11 @@ clear;
 gas = IdealGasMix('me140_species.xml');
 
 % Some values
-P1 = 6800000; %Pa
+P1 = 1000000; %Pa
 Tref = 298;
 
 % Declare range of mixture ratios
-mixRatio = 1:0.5:10;
+mixRatio = 1:1:10;
 
 % Declare species indices
 iC2H4 = speciesIndex(gas,'C2H4');

@@ -46,7 +46,7 @@ k_o = cp_o / cv_o;
 
 
 dT = 1;
-dP = 10000;
+dP = 2000;
 s2 = 0;
 
 % Iterate T and P to convergence of enthalpy and entropy
@@ -55,7 +55,7 @@ while abs(s2 - s1) / abs(s1) > 0.0001
     P = P - dP;
     ho2 = 0;
     T = To;
-    while abs(ho2 - ho1) / abs(ho1) > 0.03
+    while abs(ho2 - ho1) / abs(ho1) > 0.05
         T = T - dT;
         set(gas, 'T', T, 'P', P);
         if strcmp(type, 'dissoc')
@@ -79,7 +79,7 @@ X_throat = moleFractions(gas);
 % Get Temperature Exit
 T_e = T;
 s3 = 0;
-while abs(s3-s2) / abs(s2) > 0.02
+while abs(s3-s2) / abs(s2) > 0.05
     T_e = T_e - dT;
     set(gas, 'T', T_e, 'P', P_e);
     if strcmp(type, 'dissoc')
