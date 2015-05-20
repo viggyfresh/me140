@@ -11,7 +11,7 @@ P1 = 6800000; %Pa
 Tref = 298;
 
 % Declare range of mixture ratios
-mixRatio = 1:0.5:30;
+mixRatio = 1:0.5:10;
 
 % Declare species indices
 iC2H4 = speciesIndex(gas,'C2H4');
@@ -47,7 +47,7 @@ tic
 for i=1:length(mixRatio)
     i
     [To(i), T_t_frozen(i), c_star_frozen(i), T_e_frozen(i), V_e_frozen(i),...
-        X_frozen_t(:, i), ~, ~, X_frozen_e(:, i)] = black_magic(gas, P1, phi(i), hf, 'frozen');
+        X_frozen_t(:, i), epsilon_frozen(i), Cf_frozen(i), X_frozen_e(:, i)] = black_magic(gas, P1, phi(i), hf, 'frozen');
     [~, T_t_dissoc(i), c_star_dissoc(i), T_e_dissoc(i), V_e_dissoc(i),...
         X_dissoc_t(:, i), epsilon_dissoc(i), Cf_dissoc(i), X_dissoc_e(:, i)] = black_magic(gas, P1, phi(i), hf, 'dissoc');
 end
@@ -192,19 +192,21 @@ plotfixer;
 
 %Plot thrust coefficient
 figure;
-plot(mixRatio, Cf_dissoc);
+plot(mixRatio, Cf_frozen, mixRatio, Cf_dissoc);
 xlabel('Mixture Ratio');
 ylabel('Thrust Coefficient');
 title('Thrust Coefficient vs. Mixture Ratio');
+legend('Cf Frozen', 'Cf');
 set(gcf, 'color', 'white');
 plotfixer;
 
 %Plot optimal nozzle expansion ratio
 figure;
-plot(mixRatio, epsilon_dissoc);
+plot(mixRatio, epsilon_frozen, mixRatio, epsilon_dissoc);
 xlabel('Mixture Ratio');
 ylabel('Ratio');
 title('Optimal Nozzle Expansion Ratio');
+legend('Epsilon Frozen', 'Epsilon');
 set(gcf, 'color', 'white');
 plotfixer;
 

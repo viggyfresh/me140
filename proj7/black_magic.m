@@ -95,7 +95,8 @@ rho_e = density(gas);
 % Calculate epsilon
 % V2 is Vthroat
 epsilon = rho_t * V2 / (rho_e * V_e);
-Cf = V_e / c_star + (P_e / Po - P_amb / Po) * epsilon;
+%Cf = V_e / c_star + (P_e / Po - P_amb / Po) * epsilon;
+Cf = V_e / c_star;
 
 % Get exit
 X_exit = moleFractions(gas);
