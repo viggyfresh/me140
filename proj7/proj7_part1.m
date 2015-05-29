@@ -7,7 +7,8 @@ clear;
 gas = IdealGasMix('me140_species.xml');
 
 % Some values
-P1 = 1000000; %Pa
+% P1 = 1000000; %Pa
+P1 =  1.3365e+06; 
 Tref = 298;
 
 % Declare range of mixture ratios
