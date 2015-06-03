@@ -1,6 +1,10 @@
 clc;
 clear all;
-load('bradyfire1.mat');
+
+fireNum = input('Enter fire to analyze: ');
+
+path = [cd '/LabData/Fire ',num2str(fireNum), '/bradyfire', num2str(fireNum),'.mat'];
+load(path);
 % i1 = 38;
 % i2 = 6384;
 i1 = start_index;
