@@ -46,28 +46,42 @@ k_o = cp_o / cv_o;
 
 
 dT = 1;
-dP = 2000;
+dP = 100;
 s2 = 0;
 
 % Iterate T and P to convergence of enthalpy and entropy
-while abs(s2 - s1) / abs(s1) > 0.0001
-    %abs(s2 - s1) / abs(s1) 
+% while abs(s2 - s1) / abs(s1) > 0.0001
+%     %abs(s2 - s1) / abs(s1) 
+%     P = P - dP;
+%     ho2 = 0;
+%     T = To;
+%     while abs(ho2 - ho1) / abs(ho1) > 0.08
+%         T = T - dT;
+%         set(gas, 'T', T, 'P', P);
+%         if strcmp(type, 'dissoc')
+%             equilibrate(gas, 'HP');
+%         end
+%         a_t = soundspeed(gas);
+%         h2 = enthalpy_mass(gas);
+%         V2 = Ma * a_t;
+%         ho2 = h2 + 0.5 * V2^2;
+%     end
+%     s2 = entropy_mass(gas);
+% end
+
+while abs(ho2 - ho1) / abs(ho1) > 0.01
     P = P - dP;
-    ho2 = 0;
-    T = To;
-    while abs(ho2 - ho1) / abs(ho1) > 0.08
-        T = T - dT;
-        set(gas, 'T', T, 'P', P);
-        if strcmp(type, 'dissoc')
-            equilibrate(gas, 'HP');
-        end
-        a_t = soundspeed(gas);
-        h2 = enthalpy_mass(gas);
-        V2 = Ma * a_t;
-        ho2 = h2 + 0.5 * V2^2;
+    set(gas, 'P', P, 'S', s1);
+    if strcmp(type, 'dissoc')
+        equilibrate(gas, 'HP');
     end
-    s2 = entropy_mass(gas);
+    a_t = soundspeed(gas);
+    h2 = enthalpy_mass(gas);
+    V2 = Ma * a_t;
+    ho2 = h2 + 0.5 * V2^2;
 end
+s2 = entropy_mass(gas);
+
 rho_t = density(gas);
 
 % Get c_star
@@ -77,9 +91,10 @@ c_star = a_o / k_o * (rho_o / rho_t) * (a_o / a_t);
 X_throat = moleFractions(gas);
 
 % Get Temperature Exit
+T = temperature(gas);
 T_e = T;
 s3 = 0;
-while abs(s3-s2) / abs(s2) > 0.08
+while abs(s3-s2) / abs(s2) > 0.01
     T_e = T_e - dT;
     set(gas, 'T', T_e, 'P', P_e);
     if strcmp(type, 'dissoc')
@@ -102,4 +117,3 @@ Cf = V_e / c_star;
 X_exit = moleFractions(gas);
 
 end
-
