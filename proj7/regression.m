@@ -109,15 +109,19 @@ L = 5.375;
 %First Mix Ratio
 p_1 = pi * D_center + 8 * pi * D_outer_1;
 m_fuel_dot_1 = rho * L * p_1 * a * (m_dot_O2_1 / A_port_1) ^ n;
-mixRatio_1 = m_dot_O2_1 / m_fuel_dot_1 
+mixRatio_1 = m_dot_O2_1 / m_fuel_dot_1 * 10
 
 %Second Mix ratio
 p_2 = pi * D_center + 8 * pi * D_outer_2;
 m_fuel_dot_2 = rho * L * p_2 * a * (m_dot_O2_2 / A_port_2) ^ n;
-mixRatio_2 = m_dot_O2_2 / m_fuel_dot_2
+mixRatio_2 = m_dot_O2_2 / m_fuel_dot_2 * 10
 
 %3rd Mix Ratio
 p_3 = pi * D_center + 7 * pi * D_outer_3 + 7 * pi * D_outer_3_2;
 m_fuel_dot_3 = rho * L * p_3 * a * (m_dot_O2_3 / A_port_3) ^ n;
-mixRatio_3 = m_dot_O2_3 / m_fuel_dot_3
+mixRatio_3 = m_dot_O2_3 / m_fuel_dot_3 * 10
 
+%%get surface areas
+% SA_1 = p_1 * L
+SA_2 = p_2 * L
+SA_3 = p_3 * L

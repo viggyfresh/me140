@@ -69,7 +69,7 @@ s2 = 0;
 %     s2 = entropy_mass(gas);
 % end
 
-while abs(ho2 - ho1) / abs(ho1) > 0.01
+while abs(ho2 - ho1) / abs(ho1) > 0.001
     P = P - dP;
     set(gas, 'P', P, 'S', s1);
     if strcmp(type, 'dissoc')
@@ -94,7 +94,7 @@ X_throat = moleFractions(gas);
 T = temperature(gas);
 T_e = T;
 s3 = 0;
-while abs(s3-s2) / abs(s2) > 0.01
+while abs(s3-s2) / abs(s2) > 0.001
     T_e = T_e - dT;
     set(gas, 'T', T_e, 'P', P_e);
     if strcmp(type, 'dissoc')

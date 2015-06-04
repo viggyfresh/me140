@@ -9,7 +9,8 @@ gas = IdealGasMix('me140_species.xml');
 % Some values
 % P1 = 1000000; %Pa
 % P1 =  1.3365e+06; 
-P1 = 6800000;
+% P1 = 6800000;
+P1 = 8.4444e+05;
 Tref = 298;
 
 % Declare range of mixture ratios
@@ -56,14 +57,16 @@ end
 toc
 
 %%Cstar and mix ratio for lab data
-load('bradycheated.mat');
+%load('bradycheated.mat');
+load('bradyfire3.mat')
 % i1 = 38;
 % i2 = 6384;
 i1 = start_index;
 i2 = final_index;
 
 Po = mean(chamP(i1:i2)) * 1000 + 101325;
-D = 0.605; %inches
+%D = 0.605; %inches
+D = 0.61;
 D = D / 39.370; %meters
 At = pi * D^2 / 4;
 t = time(i2) - time(i1); %secs
