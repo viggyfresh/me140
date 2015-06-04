@@ -5,6 +5,12 @@ fireNum = input('Enter fire to analyze: ');
 
 path = [cd '/LabData/Fire ',num2str(fireNum), '/bradyfire', num2str(fireNum),'.mat'];
 load(path);
+
+D = 23/64; %first fire
+if fireNum == 3
+    D = 0.61;
+end
+
 % i1 = 38;
 % i2 = 6384;
 i1 = start_index;
@@ -15,7 +21,6 @@ legend('Chamber [kPa gage]', '10*Thrust [N]', 'Reservoir [kPa gage]', 'Unchoked 
 
 Po = mean(chamP(i1:i2)) * 1000 + 101325
 %D = 0.605; %inches, original
-D = 23/64; %first fire
 D = D / 39.370; %meters
 At = pi * D^2 / 4;
 t = time(i2) - time(i1) %secs
