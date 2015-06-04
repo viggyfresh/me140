@@ -12,6 +12,7 @@ i2 = final_index;
 
 plot(time, chamP, 'r', time, 10*thrust, 'b:', time, resP, 'k--', time, P_choked_min, 'g-')
 legend('Chamber [kPa gage]', '10*Thrust [N]', 'Reservoir [kPa gage]', 'Unchoked orifice pressure')
+set(gcf, 'color', 'white');
 
 Po = mean(chamP(i1:i2)) * 1000 + 101325
 %D = 0.605; %inches, original
